@@ -1,4 +1,6 @@
-#include "display.h"
+#include <display_old.h>
+#include <groups_old.h>
+#include <menu_old.h>
 #include "usertasks.h"
 #include "ST7565.h"
 #include "stm32f1xx_hal.h"
@@ -6,9 +8,6 @@
 #include "usbh_def.h"
 #include "usb_user.h"
 #include "usb_host.h"
-#include "groups.h"
-#include "menu.h"
-//#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
@@ -1662,7 +1661,7 @@ uint16_t KeypadRefRead(uint16_t dataAdress)
 
 
 
-void DisplayStatic(void) {
+void DisplayStaticOld(void) {
     uint16_t groupNumber = Groups_list->Value - 1;
     uint16_t paramNumber = Group[Groups_list->Value - 1]->Value - 1;
     uint16_t paramNumberPointer = Group[Groups_list->Value - 1]->Pointer - 1;

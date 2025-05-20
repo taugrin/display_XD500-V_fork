@@ -1,7 +1,8 @@
-#ifndef GROUPS_H_
-#define GROUPS_H_
+#ifndef GROUPS_OLD_H_
+#define GROUPS_OLD_H_
 
 #include <stdbool.h>
+#include <stdint.h>
 
 #define MAX_PARAM 24
 

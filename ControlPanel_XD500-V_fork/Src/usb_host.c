@@ -49,13 +49,13 @@
 
 /* Includes ------------------------------------------------------------------*/
 
+#include <display_old.h>
 #include "usb_host.h"
 #include "usbh_core.h"
 #include "usbh_cdc.h"
 
 /* USER CODE BEGIN Includes */
 #include "usb_user.h"
-#include "display.h"
 #include "stdbool.h"
 /* USER CODE END Includes */
 

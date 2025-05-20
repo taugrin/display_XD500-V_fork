@@ -29,5 +29,4 @@ typedef struct
 
 void KeyChekUp_AutoScroll (uint8_t state,  pkey_t* Key,  SemaphoreHandle_t xButton);
 void KeyChekUp_RiseFront (uint8_t state,  pkey_t* Key,  SemaphoreHandle_t xButton);
-void KeyChekUp_FallFront(uint8_t state, pkey_t* Key, SemaphoreHandle_t xButton, SemaphoreHandle_t xButton_alarm);
 void KeyFunction (keypad_t* pKeyPad);

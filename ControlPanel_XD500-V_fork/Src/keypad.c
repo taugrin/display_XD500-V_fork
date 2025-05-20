@@ -1,5 +1,5 @@
+#include <display_old.h>
 #include "stdbool.h"
-#include "display.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 #include "usertasks.h"
@@ -99,37 +99,7 @@ void KeyChekUp_RiseFront(uint8_t state, pkey_t* Key, SemaphoreHandle_t xButton)
     }
 }
 
-void KeyChekUp_FallFront(uint8_t state, pkey_t* Key, SemaphoreHandle_t xButton, SemaphoreHandle_t xButton_alarm)
-{
 
-    KeyDeBounce(state, delay_time_max, Key);
-
-    if (Key->state == true)
-    {
-        if (Key->pushCount < 65535)
-        {
-            Key->pushCount++;
-        } else
-        {
-            Key->pushCount = 0;
-        }
-
-    }
-
-    if (Key->P_fall == true)
-    {
-        if (Key->pushCount < 350)
-        {
-
-            xSemaphoreGive(xButton);
-            Key->pushCount = 0;
-        } else
-        {
-            xSemaphoreGive(xButton_alarm);
-            Key->pushCount = 0;
-        }
-    }
-}
 
 void KeyFunction(keypad_t* pKeyPad)
 {

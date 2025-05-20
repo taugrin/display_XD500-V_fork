@@ -1,6 +1,6 @@
+#include <groups_old.h>
+#include <menu_old.h>
 #include "cmsis_os.h"
-#include "groups.h"
-#include "menu.h"
 
 
 #define VERSION "01.00.09"
@@ -260,7 +260,7 @@ int16_t IntDataRequest(uint16_t dataAdress);
 
 void MenuInit(Menu_t * obj);
 
-void DisplayStatic();
+void DisplayStaticOld();
 
 void RefInit();
 

@@ -1,3 +1,4 @@
+#include <display_old.h>
 #include "usertasks.h"
 #include "usb_host.h"
 #include "usb_user.h"
@@ -6,11 +7,8 @@
 #include "lcd.h"
 #include "dwt_stm32_delay.h"
 #include "ST7565.h"
-#include "display.h"
 #include "usb_host.h"
 
-//extern IWDG_HandleTypeDef hiwdg;
-//extern osTimerId osProgTimer1;
 
 SemaphoreHandle_t xButtonUpSemaphore = NULL;
 SemaphoreHandle_t xButtonDownSemaphore = NULL;
@@ -21,18 +19,6 @@ SemaphoreHandle_t xButtonRunSemaphore = NULL;
 SemaphoreHandle_t xButtonStoptSemaphore = NULL;
 
 
-
-//void vTaskLED1(void *pvParameters)
-//{
-//    for (;;)
-//    {
-//        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_5);
-//        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_2);
-//        HAL_GPIO_TogglePin(GPIOB, GPIO_PIN_14);
-//
-//        vTaskDelay(1000);
-//    }
-//}
 
 //uint16_t debugAdr = 0x0104;
 //int16_t debugDataReq = 0;
@@ -67,7 +53,7 @@ void vTaskDisplay(void const * argument)
 
         ST7565_clear();
 
-        DisplayStatic();
+        DisplayStaticOld(); // оригинальная функция обработки связи, кнопок и дисплея
 
         ST7565_display();
 

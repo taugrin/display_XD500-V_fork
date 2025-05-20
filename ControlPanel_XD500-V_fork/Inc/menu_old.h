@@ -1,5 +1,5 @@
-#ifndef MENU_H_
-#define MENU_H_
+#ifndef MENU_OLD_H_
+#define MENU_OLD_H_
 
 #define SW_ADR                  0x4200
 #define FW_ADR                  0x4202

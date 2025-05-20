@@ -47,6 +47,7 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
+#include <display_old.h>
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
@@ -58,9 +59,6 @@
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
 #include "keypad.h"
-//#include "usb_host.h"
-#include "display.h"
-
 #include "usb_user.h"
 
 /* USER CODE END Includes */
@@ -68,7 +66,7 @@
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 ADC_HandleTypeDef hadc2;
-//test
+
 I2C_HandleTypeDef hi2c1;
 
 IWDG_HandleTypeDef hiwdg;
@@ -184,14 +182,10 @@ int main(void)
 
   /* Create the thread(s) */
   /* definition and creation of defaultTask */
-  //osThreadDef(defaultTask, StartDefaultTask, osPriorityNormal, 0, 128);
   //defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
-  // xTaskCreate(vTaskUSBCDC, (signed char *) "USB", configMINIMAL_STACK_SIZE, NULL, 1, ( xTaskHandle *) NULL);
-
-  //xTaskCreate(vTaskDisplay, "Display", configMINIMAL_STACK_SIZE*2, NULL, 2, NULL);
   osThreadDef(DisplayTaskName, vTaskDisplay, osPriorityNormal, 0, 128*2);
   osThreadCreate(osThread(DisplayTaskName), NULL);
 
