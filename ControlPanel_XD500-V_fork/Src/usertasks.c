@@ -1,4 +1,8 @@
 #include <display_old.h>
+
+#include "menu.h"
+#include "display.h"
+
 #include "usertasks.h"
 #include "usb_host.h"
 #include "usb_user.h"
@@ -19,10 +23,6 @@ SemaphoreHandle_t xButtonRunSemaphore = NULL;
 SemaphoreHandle_t xButtonStoptSemaphore = NULL;
 
 
-
-//uint16_t debugAdr = 0x0104;
-//int16_t debugDataReq = 0;
-//extern ApplicationTypeDef Appli_state;
 void vTaskDisplay(void const * argument)
 {
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET); //ToDo: Отладка! Начало инициализации дисплея.
@@ -43,6 +43,9 @@ void vTaskDisplay(void const * argument)
 	uint8_t i; // отправляю те самые 150 запросов, после которых USB падает и переинициализируется
 	for (i = 0; i < 151; i++) IntDataRequest(0x0000); // всё, дальше USB падать не должно
 
+	// инициализация структуры экранов
+	InitScreens();
+
     RefInit(); // считывание задания пульта из eeprom
     	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //ToDo: Отладка! Конец инициализации.
 
@@ -53,7 +56,8 @@ void vTaskDisplay(void const * argument)
 
         ST7565_clear();
 
-        DisplayStaticOld(); // оригинальная функция обработки связи, кнопок и дисплея
+        //DisplayStaticOld(); // оригинальная функция обработки связи, кнопок и дисплея
+        DisplayStatic(); // моя функция
 
         ST7565_display();
 

@@ -60,6 +60,7 @@
 #include "cmsis_os.h"
 #include "keypad.h"
 #include "usb_user.h"
+#include "menu.h"
 
 /* USER CODE END Includes */
 
@@ -153,7 +154,6 @@ int main(void)
   MX_IWDG_Init();
 
   /* USER CODE BEGIN 2 */
-
 
   MenuInit(&Display);
 
@@ -577,7 +577,6 @@ static void osProgTimer1Callback(void const *argument) {
 	(void) argument;
     HAL_IWDG_Refresh(&hiwdg);      //wdt reset
     KeyFunction(&KeyPad);          //keys press function
-    //KeyFunction_old ();            //old press function
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET); //ToDo: Отладка! Конец работы таймера.
 }
 
