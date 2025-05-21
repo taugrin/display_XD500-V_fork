@@ -36,6 +36,24 @@ void DisplayStatic(void)
 	UsbReadData(0x4200, 5, ReadData);
 
 
+
+
+	// отрисовка экранов
+	switch (MainScreen)
+	{
+	case MonitorScreen:
+		ST7565_drawstring(20, 3, "Экран Монитор");
+		break;
+
+	case ReferenceScreen:
+		ST7565_drawstring(20, 3, "Экран Задание");
+		break;
+
+	case SettingsScreen:
+		ST7565_drawstring(20, 3, "Экран Настройки");
+		break;
+	}
+
 }
 //--------------------------------------------------------------------
 

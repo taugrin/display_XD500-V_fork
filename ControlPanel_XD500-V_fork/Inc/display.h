@@ -11,6 +11,8 @@
 
 #include "usertasks.h"
 
+#include "ST7565.h"
+
 #include "usb_funcs.h"
 
 #include "menu.h"
@@ -21,7 +23,15 @@
 //
 // Defines
 //
+#define FONT_SIZE 5
+#define CHAR_GAP  1
+#define FONT_GAP (FONT_SIZE+1*CHAR_GAP)
 
+#define NUM_MAX_LEN 6
+
+#define DISP_RIGHT_BOUND 127
+#define DISP_LEFT_BOUND 2
+#define DISP_CENTR 64
 
 //
 // TypeDefs

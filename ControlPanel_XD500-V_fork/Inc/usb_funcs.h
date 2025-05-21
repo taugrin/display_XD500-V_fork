@@ -8,13 +8,17 @@
 #include "stdint.h"
 #include "stddef.h"
 
+
 #include "usb_user.h"
 
+#include "ST7565.h"
 
 //
 // Defines
 //
-#define USB_ANSWER_DELAY 30
+#define USB_ANSWER_DELAY 	30
+
+#define USB_MAX_REQUEST		50
 
 //
 // TypeDefs
