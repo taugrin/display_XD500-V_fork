@@ -32,7 +32,8 @@ struct Menu
 	struct Menu	*Next;
 	struct Menu	*Parent;
 	struct Menu	*Child;
-	uint8_t		id;
+	uint8_t		lvl; //ToDo: возможно лишнее поле
+	uint16_t	id; //ToDo: возможно лишнее поле
 
 	//char  			Name[MENU_NAME_MAXLENGTH];
 };

@@ -79,7 +79,7 @@ ApplicationTypeDef Appli_state = APPLICATION_IDLE;
 /* USER CODE BEGIN 0 */
 
 //uint8_t rx_buffer[RXREADLENGTH] = {0,0};
-uint8_t rx_buffer[RXBUFLENGTH*2] = {0, 0, 0, 0, 0, 1};
+uint8_t rx_buffer[RXBUFLENGTH] = {0, 0, 0, 0, 0, 1};
 //uint8_t tx_buffer[TXREADLENGTH] = {0,0,0,0,0};
 uint8_t tx_buffer[TXBUFLENGTH];
 

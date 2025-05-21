@@ -16,6 +16,7 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore);
 //
 // Local Variables
 //
+uint16_t ReadData[64];
 
 
 //--------------------------------------------------------------------
@@ -24,10 +25,17 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore);
 */
 void DisplayStatic(void)
 {
+
+	// Переключение между экранами по нажатию кнопки F.
 	if (CheckKeySem(xButtonFuncSemaphore))
 	{
 		NextScreen();
 	}
+
+	// Вычитываю SW, SW1, FW, FW1, AW.
+	UsbReadData(0x4200, 5, ReadData);
+
+
 }
 //--------------------------------------------------------------------
 
