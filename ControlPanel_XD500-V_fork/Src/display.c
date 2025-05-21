@@ -16,6 +16,8 @@ void ReferenceScreenDraw(void);
 
 void SettingsScreenDraw(void);
 
+void DrawMenu(void);
+
 //
 // Global Variables
 //
@@ -25,6 +27,9 @@ void SettingsScreenDraw(void);
 // Local Variables
 //
 uint16_t ReadData[64];
+
+int16_t currentSelection = 0; // Индекс выбранного пункта в текущем уровне
+int16_t currentLevelStart = 0; // Индекс первого пункта текущего уровня
 
 
 //--------------------------------------------------------------------
@@ -172,9 +177,10 @@ void ReferenceScreenDraw(void)
 */
 void SettingsScreenDraw(void)
 {
+	//ST7565_drawstring(20, 3, "Экран Настройки");
 
+	DrawMenu();
 
-	ST7565_drawstring(20, 3, "Экран Настройки");
 }
 //--------------------------------------------------------------------
 
@@ -182,7 +188,25 @@ void SettingsScreenDraw(void)
 /*
 *
 */
+void DrawMenu(void)
+{
+    // Отображаем пункты текущего уровня
+    int16_t itemIdx = currentLevelStart;
+    uint8_t j = 2;
+    for(uint8_t i = 0; i < currentLevelCount && i < VISIBLE_ITEMS; i++)
+    {
+        // Отображение названия пункта
+        ST7565_drawstring(2, j, menuItems[itemIdx].name);
+        j+=2;
 
+        // Выделение текущего выбранного пункта
+        /*if(i == currentSelection) {
+            ST7565_inv_fillrect(0, 10 + i*10, 128, 8, 1);
+        }*/
+
+        itemIdx = menuItems[itemIdx].nextIdx;
+    }
+}
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------

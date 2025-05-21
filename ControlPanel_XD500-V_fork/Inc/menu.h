@@ -7,13 +7,15 @@
 #include "stdbool.h"
 #include "stdint.h"
 #include "stddef.h"
-
+#include "string.h"
 
 
 //
 // Defines
 //
 #define MENU_NAME_MAXLENGTH	20
+
+#define MAX_MENU_ITEMS 64   // Максимум пунктов меню
 
 //
 // TypeDefs
@@ -26,18 +28,14 @@ typedef enum
 }tMainScreen;
 
 
-struct Menu
+typedef struct
 {
-	struct Menu	*Previous;
-	struct Menu	*Next;
-	struct Menu	*Parent;
-	struct Menu	*Child;
-	uint8_t		lvl; //ToDo: возможно лишнее поле
-	uint16_t	id; //ToDo: возможно лишнее поле
-
-	//char  			Name[MENU_NAME_MAXLENGTH];
-};
-
+    char 		name[MENU_NAME_MAXLENGTH];	// Название пункта
+    int8_t      parentIdx;  // Индекс родителя (-1 для корня)
+    int8_t      childIdx;   // Индекс первого ребёнка (-1 если нет)
+    int8_t      nextIdx;    // Индекс следующего пункта (-1 если нет)
+    void*       data;       // Указатель на связанные данные (группы/параметры)
+} MenuItem;
 
 
 //
@@ -50,11 +48,17 @@ struct Menu
 //
 extern tMainScreen MainScreen;
 
+extern MenuItem menuItems[MAX_MENU_ITEMS];
+extern uint16_t menuItemsCount;
+
+extern int16_t currentMenuIdx;
+extern int16_t currentParent;
+extern int16_t currentLevelCount;
 
 //
 // Functions for other files
 //
-void InitMenu(void);
+void InitBasicMenu(void);
 
 void NextScreen(void);
 

@@ -40,6 +40,8 @@
 #define DISP_LEFT_BOUND 2
 #define DISP_CENTR 64
 
+#define VISIBLE_ITEMS 3 //  оличество отображаемых пунктов за раз
+
 //
 // TypeDefs
 //
