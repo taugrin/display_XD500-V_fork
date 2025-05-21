@@ -8,6 +8,14 @@
 //
 int8_t CheckKeySem(SemaphoreHandle_t semaphore);
 
+void StatusBarDraw(void);
+
+void MonitorScreenDraw(void);
+
+void ReferenceScreenDraw(void);
+
+void SettingsScreenDraw(void);
+
 //
 // Global Variables
 //
@@ -34,23 +42,26 @@ void DisplayStatic(void)
 
 	// Вычитываю SW, SW1, FW, FW1, AW.
 	UsbReadData(0x4200, 5, ReadData);
-
-
+	StatusWord.all = ReadData[0];
+	StatusWord1.all = ReadData[1];
+	FaultWord.all = ReadData[2];
+	FaultWord1.all = ReadData[3];
+	AlarmWord.all = ReadData[4];
 
 
 	// отрисовка экранов
 	switch (MainScreen)
 	{
 	case MonitorScreen:
-		ST7565_drawstring(20, 3, "Экран Монитор");
+		MonitorScreenDraw();
 		break;
 
 	case ReferenceScreen:
-		ST7565_drawstring(20, 3, "Экран Задание");
+		ReferenceScreenDraw();
 		break;
 
 	case SettingsScreen:
-		ST7565_drawstring(20, 3, "Экран Настройки");
+		SettingsScreenDraw();
 		break;
 	}
 
@@ -78,8 +89,81 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore)
 
 //--------------------------------------------------------------------
 /*
+* StatusBar - отрисовка строки статуса
+*/
+void StatusBarDraw(void)
+{
+	ST7565_drawline(0, 10, 128, 10, 1);
+
+	//Вывод номера преобразователя//
+	char modbusADR[12];
+	UsbReadData(MODBUSADR_ADR, 1, ReadData);
+	my_itoa(ReadData[0], modbusADR);
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 0,  modbusADR);
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* MonitorScreenDraw - отрисовка экрана Монитор
+*/
+void MonitorScreenDraw(void)
+{
+	StatusBarDraw();
+
+	ST7565_drawstring(20, 3, "Экран Монитор");
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* ReferenceScreenDraw - отрисока экрана Задание
+*/
+void ReferenceScreenDraw(void)
+{
+
+
+	ST7565_drawstring(20, 3, "Экран Задание");
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 *
 */
 
 //--------------------------------------------------------------------
 
+//--------------------------------------------------------------------
+/*
+* SettingsScreenDraw - отрисовка экрана Настройки
+*/
+void SettingsScreenDraw(void)
+{
+
+
+	ST7565_drawstring(20, 3, "Экран Настройки");
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
+//--------------------------------------------------------------------

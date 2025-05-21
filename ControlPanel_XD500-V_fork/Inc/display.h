@@ -15,6 +15,10 @@
 
 #include "usb_funcs.h"
 
+#include "string_funcs.h"
+
+#include "parameters.h"
+
 #include "menu.h"
 
 
