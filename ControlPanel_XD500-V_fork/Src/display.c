@@ -111,21 +111,26 @@ void StatusBarDraw(void)
 	//if (StatusWord.bit.fault)
 	//{
 		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 5, 0, "E");
-		uint16_to_hex_str(FaultWord.all, CharArray, 4);
-		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 6, 0, CharArray); // значение FaultWord в формате hex, 4 символа
+		uint16_to_hex_str(FaultWord.all, CharArray, 2/*4*/);
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 6, 0, CharArray); // значение FaultWord в формате hex, 2 символа
 	//}
 
 	// Вывод сигнала Alarm
 	//if (StatusWord.bit.alarm)
 	//{
-		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 11, 0, "A");
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 9, 0, "A");
 		uint16_to_hex_str(AlarmWord.all, CharArray, 2);
-		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 12, 0, CharArray); // значение AlarmWord в формате hex, 2 символа
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 10, 0, CharArray); // значение AlarmWord в формате hex, 2 символа
 	//}
 
 	// Вывод направления вращения
-	if (StatusWord.bit.dir) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 15, 0, "<-");}
-	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 15, 0, "->");}
+	if (StatusWord.bit.dir) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 13, 0, "<-");}
+	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 13, 0, "->");}
+
+	// Вывод задания частоты
+	UsbReadData(FREQ_REFERENCE_ADR, 1, ReadData);
+	ftoa((float)(ReadData[0])/10.0, CharArray, 1);
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 16, 0, CharArray);
 
 }
 //--------------------------------------------------------------------
@@ -148,7 +153,7 @@ void MonitorScreenDraw(void)
 */
 void ReferenceScreenDraw(void)
 {
-
+	StatusBarDraw();
 
 	ST7565_drawstring(20, 3, "Экран Задание");
 }

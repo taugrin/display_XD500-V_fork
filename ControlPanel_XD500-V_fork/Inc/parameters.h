@@ -19,6 +19,9 @@
 #define PU1_PU2_SELECT_ADR      0x0A04
 #define LOC_REM_ADR             0x0A05
 
+#define FREQ_EST_ADR			0x4401
+#define FREQ_REFERENCE_ADR      0x440E
+
 //
 // TypeDefs
 //

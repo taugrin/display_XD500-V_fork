@@ -7,6 +7,9 @@
 #include "stdbool.h"
 #include "stdint.h"
 #include "stddef.h"
+#include "string.h"
+#include "ftoa.h"
+
 #include "cmsis_os.h"
 
 #include "usertasks.h"
