@@ -11,33 +11,23 @@
 //
 // Global Variables
 //
+tMainScreen MainScreen = MonitorScreen;
 
-struct Screen *ActiveScr; // текущий активный экран
 
-struct Screen MonitorScr; // экран Монитор
+struct Menu ParametersMenu; // меню Параметры
 
-struct Screen ReferenceScr; // экран Задание
+struct Menu EventArchiveMenu; // меню Архив событий
 
-struct Screen  SettingsScr; // экран Настройка
+struct Menu QuickStartMenu; // меню Быстрый старт
 
-	struct Screen  ParametersScr; // экран Параметры
+struct Menu ParamFuncsMenu; // меню Функции копирования
 
-/*		struct Screen  ParamGroupsScr; // экран Группы параметров
+struct Menu SoftVersionsMenu; // меню Версия ПО
 
-			struct Screen  ParamEditScr; // экран Группы параметров
+struct Menu MonitorSettingsMenu; // меню Мониторинг
 
-	struct Screen  EventArchiveScr; // экран Архив событий
+struct Menu TimersMenu; // меню Показания таймеров
 
-	struct Screen  QuickStartScr; // экран Быстрый старт
-
-	struct Screen  ParamFuncsScr; // экран Функции копирования
-
-	struct Screen  SoftVersionsScr; // экран Версия ПО
-
-	struct Screen  MonitorSettingsScr; // экран Мониторинг (настройка)
-
-	struct Screen  TimersScr; // экран Показания таймеров
-*/
 //
 // Local Variables
 //
@@ -47,27 +37,42 @@ struct Screen  SettingsScr; // экран Настройка
 /*
 *
 */
-void InitScreens(void)
+void InitMenu(void)
 {
-	// экран Монитор
-	MonitorScr.Parent = NULL; MonitorScr.Child = NULL;
-	MonitorScr.Next = &ReferenceScr;
-	MonitorScr.level = 0;
+	ParametersMenu.Parent = NULL;
+	ParametersMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	ParametersMenu.Previous = &TimersMenu;
+	ParametersMenu.Next = &EventArchiveMenu;
 
-	// экран Задание
-	ReferenceScr.Parent = NULL; ReferenceScr.Child = NULL;
-	ReferenceScr.Next = &SettingsScr;
-	ReferenceScr.level = 0;
+	EventArchiveMenu.Parent = NULL;
+	EventArchiveMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	EventArchiveMenu.Previous = &ParametersMenu;
+	EventArchiveMenu.Next = &QuickStartMenu;
 
-	// экран Настройка
-	SettingsScr.Parent = NULL; SettingsScr.Child = &ParametersScr;
-	SettingsScr.Next = &MonitorScr;
-	SettingsScr.level = 0;
+	QuickStartMenu.Parent = NULL;
+	QuickStartMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	QuickStartMenu.Previous = &EventArchiveMenu;
+	QuickStartMenu.Next = &ParamFuncsMenu;
 
+	ParamFuncsMenu.Parent = NULL;
+	ParamFuncsMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	ParamFuncsMenu.Previous = &QuickStartMenu;
+	ParamFuncsMenu.Next = &SoftVersionsMenu;
 
+	SoftVersionsMenu.Parent = NULL;
+	SoftVersionsMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	SoftVersionsMenu.Previous = &ParamFuncsMenu;
+	SoftVersionsMenu.Next = &MonitorSettingsMenu;
 
+	MonitorSettingsMenu.Parent = NULL;
+	MonitorSettingsMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	MonitorSettingsMenu.Previous = &SoftVersionsMenu;
+	MonitorSettingsMenu.Next = &TimersMenu;
 
-	ActiveScr = &MonitorScr;
+	TimersMenu.Parent = NULL;
+	TimersMenu.Child = NULL; //ToDo: Пока NULL, но надо будет исправить
+	TimersMenu.Previous = &MonitorSettingsMenu;
+	TimersMenu.Next = &ParametersMenu;
 }
 //--------------------------------------------------------------------
 
@@ -76,9 +81,14 @@ void InitScreens(void)
 *
 */
 //--------------------------------------------------------------------
-void ScreenGoToNext(void)
+void NextScreen(void)
 {
-	ActiveScr = ActiveScr->Next;
+	switch (MainScreen)
+	{
+	case MonitorScreen: MainScreen = ReferenceScreen; break;
+	case ReferenceScreen: MainScreen = SettingsScreen; break;
+	case SettingsScreen: MainScreen = MonitorScreen; break;
+	}
 }
 //--------------------------------------------------------------------
 
@@ -88,13 +98,7 @@ void ScreenGoToNext(void)
 *
 */
 //--------------------------------------------------------------------
-/*void ScreenGoToChild(void)
-{
-	if (ActiveScr->Child != NULL)
-	{
-		ActiveScr = ActiveScr->Child;
-	}
-}*/
+
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -102,13 +106,7 @@ void ScreenGoToNext(void)
 *
 */
 //--------------------------------------------------------------------
-/*void ScreenGoToParrent(void)
-{
-	if (ActiveScr->Parent != NULL)
-	{
-		ActiveScr = ActiveScr->Parent;
-	}
-}*/
+
 //--------------------------------------------------------------------
 
 

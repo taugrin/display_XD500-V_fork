@@ -18,15 +18,21 @@
 //
 // TypeDefs
 //
-
-
-
-struct Screen
+typedef enum
 {
-	struct Screen	*Next;
-	struct Screen	*Parent;
-	struct Screen	*Child;
-	uint8_t			level;
+	MonitorScreen = 0,
+	ReferenceScreen,
+	SettingsScreen
+}tMainScreen;
+
+
+struct Menu
+{
+	struct Menu	*Previous;
+	struct Menu	*Next;
+	struct Menu	*Parent;
+	struct Menu	*Child;
+	uint8_t		id;
 
 	//char  			Name[MENU_NAME_MAXLENGTH];
 };
@@ -41,15 +47,15 @@ struct Screen
 //
 // Variables for other files
 //
-extern struct Screen *ActiveScr;
+extern tMainScreen MainScreen;
 
 
 //
 // Functions for other files
 //
-void InitScreens(void);
+void InitMenu(void);
 
-void ScreenGoToNext(void);
+void NextScreen(void);
 
 /*void ScreenGoToChild(void);
 

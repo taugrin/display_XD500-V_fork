@@ -26,7 +26,7 @@ void DisplayStatic(void)
 {
 	if (CheckKeySem(xButtonFuncSemaphore))
 	{
-		ScreenGoToNext();
+		NextScreen();
 	}
 }
 //--------------------------------------------------------------------
