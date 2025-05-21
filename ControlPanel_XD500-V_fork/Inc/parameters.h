@@ -14,6 +14,11 @@
 //
 #define MODBUSADR_ADR           0x3200
 
+#define PU1_SOURCE_ADR          0x0A00
+#define PU2_SOURCE_ADR          0x0A01
+#define PU1_PU2_SELECT_ADR      0x0A04
+#define LOC_REM_ADR             0x0A05
+
 //
 // TypeDefs
 //

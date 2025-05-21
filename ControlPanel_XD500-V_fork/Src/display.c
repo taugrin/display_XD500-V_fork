@@ -93,13 +93,39 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore)
 */
 void StatusBarDraw(void)
 {
+	char CharArray[12];
+
 	ST7565_drawline(0, 10, 128, 10, 1);
 
-	//Вывод номера преобразователя//
-	char modbusADR[12];
+	// Вывод номера преобразователя
 	UsbReadData(MODBUSADR_ADR, 1, ReadData);
-	my_itoa(ReadData[0], modbusADR);
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 0,  modbusADR);
+	my_itoa(ReadData[0], CharArray);
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 0, CharArray);
+
+	// Вывод LOCAL/REMOTE
+	UsbReadData(LOC_REM_ADR, 1, ReadData);
+	if (ReadData[0] == 0) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "R");}
+	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "L");}
+
+	// Вывод сигнала Fault
+	//if (StatusWord.bit.fault)
+	//{
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 5, 0, "E");
+		uint16_to_hex_str(FaultWord.all, CharArray, 4);
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 6, 0, CharArray); // значение FaultWord в формате hex, 4 символа
+	//}
+
+	// Вывод сигнала Alarm
+	//if (StatusWord.bit.alarm)
+	//{
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 11, 0, "A");
+		uint16_to_hex_str(AlarmWord.all, CharArray, 2);
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 12, 0, CharArray); // значение AlarmWord в формате hex, 2 символа
+	//}
+
+	// Вывод направления вращения
+	if (StatusWord.bit.dir) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 15, 0, "<-");}
+	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 15, 0, "->");}
 
 }
 //--------------------------------------------------------------------
