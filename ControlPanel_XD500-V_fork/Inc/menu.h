@@ -20,13 +20,6 @@
 //
 // TypeDefs
 //
-typedef enum
-{
-	MonitorScreen = 0,
-	ReferenceScreen,
-	SettingsScreen
-}tMainScreen;
-
 
 typedef struct
 {
@@ -46,7 +39,6 @@ typedef struct
 //
 // Variables for other files
 //
-extern tMainScreen MainScreen;
 
 extern MenuItem menuItems[MAX_MENU_ITEMS];
 extern uint16_t menuItemsCount;
@@ -60,7 +52,6 @@ extern int16_t currentLevelCount;
 //
 void InitBasicMenu(void);
 
-void NextScreen(void);
 
 /*void ScreenGoToChild(void);
 

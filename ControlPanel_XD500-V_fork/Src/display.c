@@ -8,6 +8,10 @@
 //
 int8_t CheckKeySem(SemaphoreHandle_t semaphore);
 
+void ButtonsCheck(void);
+
+void NextMainScreen(void);
+
 void StatusBarDraw(void);
 
 void MonitorScreenDraw(void);
@@ -18,6 +22,12 @@ void SettingsScreenDraw(void);
 
 void DrawMenu(void);
 
+void NavigateMenu(void);
+
+void NavigateMenuDown(void);
+
+void NavigateMenuUp(void);
+
 //
 // Global Variables
 //
@@ -27,6 +37,9 @@ void DrawMenu(void);
 // Local Variables
 //
 uint16_t ReadData[64];
+
+tMainScreens MainScreen = MonitorScr;
+tSettingsScreens SettingsScreens = MenuScr;
 
 int16_t currentSelection = 0; // Индекс выбранного пункта в текущем уровне
 int16_t currentLevelStart = 0; // Индекс первого пункта текущего уровня
@@ -39,12 +52,6 @@ int16_t currentLevelStart = 0; // Индекс первого пункта текущего уровня
 void DisplayStatic(void)
 {
 
-	// Переключение между экранами по нажатию кнопки F.
-	if (CheckKeySem(xButtonFuncSemaphore))
-	{
-		NextScreen();
-	}
-
 	// Вычитываю SW, SW1, FW, FW1, AW.
 	UsbReadData(0x4200, 5, ReadData);
 	StatusWord.all = ReadData[0];
@@ -53,6 +60,9 @@ void DisplayStatic(void)
 	FaultWord1.all = ReadData[3];
 	AlarmWord.all = ReadData[4];
 
+	// Обработка нажатий кнопок
+	ButtonsCheck();
+
 	// отрисовка строки статуса
 	StatusBarDraw();
 
@@ -60,15 +70,15 @@ void DisplayStatic(void)
 	// отрисовка экранов
 	switch (MainScreen)
 	{
-	case MonitorScreen:
+	case MonitorScr:
 		MonitorScreenDraw();
 		break;
 
-	case ReferenceScreen:
+	case ReferenceScr:
 		ReferenceScreenDraw();
 		break;
 
-	case SettingsScreen:
+	case SettingsScr:
 		SettingsScreenDraw();
 		break;
 	}
@@ -92,6 +102,36 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore)
     else {res = -1;}
 
     return res;
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* ButtonsCheck - обработка нажатий кнопок
+*/
+void ButtonsCheck(void)
+{
+	// Переключение между экранами по нажатию кнопки F.
+	if (CheckKeySem(xButtonFuncSemaphore))
+	{
+		NextMainScreen();
+	}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* NextMainScreen - переключение между главными экранами
+*/
+//--------------------------------------------------------------------
+void NextMainScreen(void)
+{
+	switch (MainScreen)
+	{
+	case MonitorScr: MainScreen = ReferenceScr; break;
+	case ReferenceScr: MainScreen = SettingsScr; break;
+	case SettingsScr: MainScreen = MonitorScr; break;
+	}
 }
 //--------------------------------------------------------------------
 
@@ -180,7 +220,14 @@ void SettingsScreenDraw(void)
 {
 	//ST7565_drawstring(20, 3, "Экран Настройки");
 
-	DrawMenu();
+	switch (SettingsScreens)
+	{
+	case MenuScr:
+		NavigateMenu();
+		DrawMenu();
+
+		break;
+	}
 
 }
 //--------------------------------------------------------------------
@@ -221,6 +268,69 @@ void DrawMenu(void)
     }
 
 }
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* NavigateMenu - навигация по меню
+*/
+void NavigateMenu(void)
+{
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		NavigateMenuDown();
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		NavigateMenuUp();
+	}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* NavigateMenuDown - перемещение по меню вниз
+*/
+void NavigateMenuDown(void)
+{
+	if (currentSelection < (currentLevelCount-1)) {currentSelection++;}
+	else {currentSelection = 0;}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* NavigateMenuUp - перемещение по меню вверх
+*/
+void NavigateMenuUp(void)
+{
+	if (currentSelection <= 0) {currentSelection = currentLevelCount-1;}
+	else {currentSelection--;}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------

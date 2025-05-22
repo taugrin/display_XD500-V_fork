@@ -13,7 +13,6 @@ void Menu_ClearChildren(int16_t parentIdx);
 //
 // Global Variables
 //
-tMainScreen MainScreen = MonitorScreen;
 
 MenuItem menuItems[MAX_MENU_ITEMS];
 uint16_t menuItemsCount = 0;
@@ -26,21 +25,6 @@ int16_t currentLevelCount = 7; // Количество пунктов в текущем уровне (для корня
 // Local Variables
 //
 
-//--------------------------------------------------------------------
-/*
-* NextScreen - переключение между экранами
-*/
-//--------------------------------------------------------------------
-void NextScreen(void)
-{
-	switch (MainScreen)
-	{
-	case MonitorScreen: MainScreen = ReferenceScreen; break;
-	case ReferenceScreen: MainScreen = SettingsScreen; break;
-	case SettingsScreen: MainScreen = MonitorScreen; break;
-	}
-}
-//--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
 /*

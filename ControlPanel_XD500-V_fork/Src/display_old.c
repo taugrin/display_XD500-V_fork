@@ -559,7 +559,7 @@ void NumberValView(int32_t value, int bindec , int factor, uint8_t x, uint8_t st
 }
 //navigations and parametr change functions
 
-uint16_t NavigateMenu(level_t * from_obj, level_t * to_obj, const char* list, uint16_t size, uint16_t option, bool WorkEsc)
+uint16_t NavigateMenuOld(level_t * from_obj, level_t * to_obj, const char* list, uint16_t size, uint16_t option, bool WorkEsc)
 {
     uint16_t status;
     //TextView(to_obj, list, size);
@@ -1681,13 +1681,13 @@ void DisplayStaticOld(void) {
     case MODE_PREFERENS:
         switch (Main_menu->Value) {
         case 0:
-            NavigateMenu(Mode, Main_menu, Menu[0], MAX_STRING, NAVIG_DISP_STRUCT, true);
+            NavigateMenuOld(Mode, Main_menu, Menu[0], MAX_STRING, NAVIG_DISP_STRUCT, true);
             break;
 
         case 1:// ПАРАМЕТРЫ
             switch (Groups_list->Value) {
             case 0:
-                NavigateMenu(Main_menu, Groups_list, groups[0].name, sizeof(groups[0]), NAVIG_DISP_STRUCT, true);//отображать все группы кроме последней
+                NavigateMenuOld(Main_menu, Groups_list, groups[0].name, sizeof(groups[0]), NAVIG_DISP_STRUCT, true);//отображать все группы кроме последней
                 break;
 
             default:
@@ -1744,7 +1744,7 @@ void DisplayStaticOld(void) {
         case 4:// ФУНКЦИИ КОПИРОВАНИЯ
             switch (Memory_list->Value) {
             case 0:
-                NavigateMenu(Main_menu, Memory_list, Memory[0], MAX_STRING, NAVIG_DISP_STRUCT, true);
+                NavigateMenuOld(Main_menu, Memory_list, Memory[0], MAX_STRING, NAVIG_DISP_STRUCT, true);
                 break;
 
             case 1:// ЗАГРУЗИТЬ В XD500

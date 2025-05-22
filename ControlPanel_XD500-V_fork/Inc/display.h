@@ -46,6 +46,18 @@
 // TypeDefs
 //
 
+typedef enum
+{
+	MonitorScr = 0,
+	ReferenceScr,
+	SettingsScr
+}tMainScreens;
+
+typedef enum
+{
+	MenuScr = 0,
+}tSettingsScreens;
+
 
 //
 // Variables from other files
