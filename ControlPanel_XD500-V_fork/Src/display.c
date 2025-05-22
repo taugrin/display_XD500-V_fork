@@ -236,9 +236,14 @@ void SettingsScreenDraw(void)
 /*
 * DrawMenu - отображает на экране 3 пункта текущего уровня в зависимости от выбранного пункта
 */
+int16_t MenustartIdx = -10;
+uint16_t MenuCount = 655;
 void DrawMenu(void)
 {
-    int16_t itemIdx = currentLevelStart; // индекс начала меню
+	// Определяем для текущего уровня меню индекс начала и количество элементов
+	GetCurrentLevelInfo(&currentLevelStart, &currentLevelCount);
+
+	int16_t itemIdx = currentLevelStart; // индекс начала меню
 
     uint8_t BeginMenuItem = (currentSelection / 3)*3; // верхний пункт меню на экране в зависимости от выбранного
     uint8_t EndMenuItem = BeginMenuItem + 3; // нижний пункт меню на экране в зависимости от выбранного
@@ -296,6 +301,9 @@ void NavigateMenu(void)
 */
 void NavigateMenuDown(void)
 {
+	// Определяем для текущего уровня меню индекс начала и количество элементов
+	GetCurrentLevelInfo(&currentLevelStart, &currentLevelCount);
+
 	if (currentSelection < (currentLevelCount-1)) {currentSelection++;}
 	else {currentSelection = 0;}
 }
@@ -307,6 +315,9 @@ void NavigateMenuDown(void)
 */
 void NavigateMenuUp(void)
 {
+	// Определяем для текущего уровня меню индекс начала и количество элементов
+	GetCurrentLevelInfo(&currentLevelStart, &currentLevelCount);
+
 	if (currentSelection <= 0) {currentSelection = currentLevelCount-1;}
 	else {currentSelection--;}
 }

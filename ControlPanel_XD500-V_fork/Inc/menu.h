@@ -45,18 +45,14 @@ extern uint16_t menuItemsCount;
 
 extern int16_t currentMenuIdx;
 extern int16_t currentParent;
-extern int16_t currentLevelCount;
+extern uint16_t currentLevelCount;
 
 //
 // Functions for other files
 //
 void InitBasicMenu(void);
 
-
-/*void ScreenGoToChild(void);
-
-void ScreenGoToParrent(void);
-*/
+void GetCurrentLevelInfo(int16_t* startIdx, uint16_t* count);
 
 
 #endif /* MENU_H_ */
