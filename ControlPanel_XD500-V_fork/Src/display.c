@@ -53,6 +53,9 @@ void DisplayStatic(void)
 	FaultWord1.all = ReadData[3];
 	AlarmWord.all = ReadData[4];
 
+	// отрисовка строки статуса
+	StatusBarDraw();
+
 
 	// отрисовка экранов
 	switch (MainScreen)
@@ -146,7 +149,6 @@ void StatusBarDraw(void)
 */
 void MonitorScreenDraw(void)
 {
-	StatusBarDraw();
 
 	ST7565_drawstring(20, 3, "Ёкран ћонитор");
 }
@@ -158,7 +160,6 @@ void MonitorScreenDraw(void)
 */
 void ReferenceScreenDraw(void)
 {
-	StatusBarDraw();
 
 	ST7565_drawstring(20, 3, "Ёкран «адание");
 }
@@ -186,26 +187,39 @@ void SettingsScreenDraw(void)
 
 //--------------------------------------------------------------------
 /*
-*
+* DrawMenu - отображает на экране 3 пункта текущего уровн€ в зависимости от выбранного пункта
 */
 void DrawMenu(void)
 {
-    // ќтображаем пункты текущего уровн€
-    int16_t itemIdx = currentLevelStart;
+    int16_t itemIdx = currentLevelStart; // индекс начала меню
+
+    uint8_t BeginMenuItem = (currentSelection / 3)*3; // верхний пункт меню на экране в зависимости от выбранного
+    uint8_t EndMenuItem = BeginMenuItem + 3; // нижний пункт меню на экране в зависимости от выбранного
+
+    // определ€ю индекс меню дл€ верхнего пункта на экране
+    for(uint8_t i = 0; i < BeginMenuItem; i++)
+    {
+    	itemIdx = menuItems[itemIdx].nextIdx;
+    }
+
+    // отрисовываю три пункта меню на экране в зависимости от выбранного пункта
     uint8_t j = 2;
-    for(uint8_t i = 0; i < currentLevelCount && i < VISIBLE_ITEMS; i++)
+    for(uint8_t i = BeginMenuItem; i < currentLevelCount && i < EndMenuItem; i++)
     {
         // ќтображение названи€ пункта
-        ST7565_drawstring(2, j, menuItems[itemIdx].name);
+        ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, j, menuItems[itemIdx].name);
         j+=2;
 
         // ¬ыделение текущего выбранного пункта
-        /*if(i == currentSelection) {
-            ST7565_inv_fillrect(0, 10 + i*10, 128, 8, 1);
-        }*/
+        if(i == currentSelection)
+        {
+        	ST7565_inv_fillrect(0, 15 + (16 * (i % 3)), 128, 9, 1);
+        }
 
+        // переписываю индекс дл€ следующего пункта меню
         itemIdx = menuItems[itemIdx].nextIdx;
     }
+
 }
 //--------------------------------------------------------------------
 
