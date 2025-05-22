@@ -32,6 +32,8 @@ void NavigateMenuEnter(void);
 
 void NavigateMenuBack(void);
 
+void NavigateMenuClearInfo(void);
+
 //
 // Global Variables
 //
@@ -134,9 +136,18 @@ void NextMainScreen(void)
 {
 	switch (MainScreen)
 	{
-	case MonitorScr: MainScreen = ReferenceScr; break;
-	case ReferenceScr: MainScreen = SettingsScr; break;
-	case SettingsScr: MainScreen = MonitorScr; break;
+	case MonitorScr:
+		MainScreen = ReferenceScr;
+		break;
+
+	case ReferenceScr:
+		MainScreen = SettingsScr;
+		break;
+
+	case SettingsScr:
+		MainScreen = MonitorScr;
+		NavigateMenuClearInfo();
+		break;
 	}
 }
 //--------------------------------------------------------------------
@@ -373,6 +384,23 @@ void NavigateMenuBack(void)
 		currentSelection = currentSelectionOld[currentMenuLvl]; // восстанавливаем номер строки, с которой перешли в дочернее меню
 		currentMenuLvl--;
 	}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* NavigateMenu - навигация по меню
+*/
+void NavigateMenuClearInfo(void)
+{
+	currentMenuIdx = 0;
+	currentParentIdx = -1;
+	currentLevelCount = 7;
+	currentSelection = 0;
+	memset(currentSelectionOld, 0, sizeof(currentSelectionOld));
+	currentMenuLvl = 0;
+	currentLevelStart = 0;
+	selectedItemIdx = 0;
 }
 //--------------------------------------------------------------------
 
