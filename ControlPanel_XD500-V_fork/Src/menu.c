@@ -18,7 +18,7 @@ MenuItem menuItems[MAX_MENU_ITEMS];
 uint16_t menuItemsCount = 0;
 
 int16_t currentMenuIdx = 0;
-int16_t currentParent = -1;
+int16_t currentParentIdx = -1;
 uint16_t currentLevelCount = 7; // Количество пунктов в текущем уровне (для корня - 7)
 
 //
@@ -32,13 +32,26 @@ uint16_t currentLevelCount = 7; // Количество пунктов в текущем уровне (для корн
 */
 void InitBasicMenu(void)
 {
-    Menu_AddItem("ПАРАМЕТРЫ", -1, 1, NULL); //[0]
-    Menu_AddItem("АРХИВ СОБЫТИЙ", -1, 2, NULL); //[1]
-    Menu_AddItem("БЫСТРЫЙ СТАРТ", -1, 3, NULL); //[2]
-    Menu_AddItem("ФУНКЦИИ КОПИРОВАНИЯ", -1, 4, NULL); //[3]
-    Menu_AddItem("ВЕРСИИ ПО", -1, 5, NULL); //[4]
-    Menu_AddItem("МОНИТОРИНГ", -1, 6, NULL); //[5]
-    Menu_AddItem("ПОКАЗАНИЯ ТАЙМЕРОВ", -1, 0, NULL); //[6]
+	int16_t MenuItemsCnt;
+	int8_t MenuFirstIdx;
+
+    // Добавляю элементы в корневое меню
+	Menu_AddItem("ПАРАМЕТРЫ", -1, 1, NULL); //[0]
+	Menu_AddItem("АРХИВ СОБЫТИЙ", -1, 2, NULL); //[1]
+	Menu_AddItem("БЫСТРЫЙ СТАРТ", -1, 3, NULL); //[2]
+	Menu_AddItem("ФУНКЦИИ КОПИРОВАНИЯ", -1, 4, NULL); //[3]
+	Menu_AddItem("ВЕРСИИ ПО", -1, 5, NULL); //[4]
+	Menu_AddItem("МОНИТОРИНГ", -1, 6, NULL); //[5]
+	MenuItemsCnt = Menu_AddItem("ПОКАЗАНИЯ ТАЙМЕРОВ", -1, 0, NULL); //[6]
+
+    // Добавляю элементы в меню "ПАРАМЕТРЫ" (parentIdx = 0)
+    // ToDo: Ручками добавляю пока только для отладки. В дальнейшем должно быть автоматизировано по массиву групп.
+	MenuItemsCnt = Menu_AddItem("ГРУППА 10", 0, MenuItemsCnt+2, NULL); MenuFirstIdx = MenuItemsCnt; //[7]
+	MenuItemsCnt = Menu_AddItem("ГРУППА 11", 0, MenuItemsCnt+2, NULL); //[8]
+	MenuItemsCnt = Menu_AddItem("ГРУППА 12", 0, MenuItemsCnt+2, NULL); //[9]
+	MenuItemsCnt = Menu_AddItem("ГРУППА 13", 0, MenuItemsCnt+2, NULL); //[10]
+	MenuItemsCnt = Menu_AddItem("ГРУППА 14", 0, MenuFirstIdx, NULL); //[11]
+
 
 }
 //--------------------------------------------------------------------
@@ -102,7 +115,7 @@ void Menu_ClearChildren(int16_t parentIdx)
 */
 void GetCurrentLevelInfo(int16_t* startIdx, uint16_t* count)
 {
-    if (currentParent == -1)
+    if (currentParentIdx == -1)
     {
         // Корневой уровень меню
         *startIdx = 0;
@@ -127,7 +140,7 @@ void GetCurrentLevelInfo(int16_t* startIdx, uint16_t* count)
     else
     {
         // Уровень дочерних элементов
-        *startIdx = menuItems[currentParent].childIdx;
+        *startIdx = menuItems[currentParentIdx].childIdx;
         *count = 0;
 
         // Подсчитываем количество дочерних элементов
@@ -137,7 +150,7 @@ void GetCurrentLevelInfo(int16_t* startIdx, uint16_t* count)
          */
         int16_t first_idx = *startIdx;
         int16_t idx = menuItems[first_idx].nextIdx;
-        while (idx != -1 && *count < MAX_MENU_ITEMS)
+        while (idx != first_idx && *count < MAX_MENU_ITEMS)
         {
             (*count)++;
             idx = menuItems[idx].nextIdx;

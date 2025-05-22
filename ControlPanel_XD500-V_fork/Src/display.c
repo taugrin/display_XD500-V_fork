@@ -28,6 +28,10 @@ void NavigateMenuDown(void);
 
 void NavigateMenuUp(void);
 
+void NavigateMenuEnter(void);
+
+void NavigateMenuBack(void);
+
 //
 // Global Variables
 //
@@ -41,9 +45,11 @@ uint16_t ReadData[64];
 tMainScreens MainScreen = MonitorScr;
 tSettingsScreens SettingsScreens = MenuScr;
 
-int16_t currentSelection = 0; // »ндекс выбранного пункта в текущем уровне
+int16_t currentSelection = 0; // Ќомер строки выбранного пункта в текущем уровне
+int16_t currentSelectionOld[5] = {0, 0, 0, 0, 0}; // массив дл€ хранени€ номера строки, с которой вошли в дочернее меню
+uint8_t currentMenuLvl = 0;
 int16_t currentLevelStart = 0; // »ндекс первого пункта текущего уровн€
-
+int16_t selectedItemIdx = 0; // »ндекс выбранного пунтка текущего уровн€
 
 //--------------------------------------------------------------------
 /*
@@ -265,6 +271,7 @@ void DrawMenu(void)
         // ¬ыделение текущего выбранного пункта
         if(i == currentSelection)
         {
+        	selectedItemIdx = itemIdx;
         	ST7565_inv_fillrect(0, 15 + (16 * (i % 3)), 128, 9, 1);
         }
 
@@ -291,6 +298,18 @@ void NavigateMenu(void)
 	if (CheckKeySem(xButtonUpSemaphore))
 	{
 		NavigateMenuUp();
+	}
+
+	//  нопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+		NavigateMenuEnter();
+	}
+
+	//  нопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		NavigateMenuBack();
 	}
 }
 //--------------------------------------------------------------------
@@ -325,9 +344,36 @@ void NavigateMenuUp(void)
 
 //--------------------------------------------------------------------
 /*
-*
+* NavigateMenuEnter - переход в дочернее меню
 */
+void NavigateMenuEnter(void)
+{
+	// ≈сли у пункта есть дочерние элементы - переходим к ним
+	if(menuItems[selectedItemIdx].childIdx != -1)
+	{
+		currentParentIdx = selectedItemIdx;
+		currentMenuLvl++;
+		currentSelectionOld[currentMenuLvl] = currentSelection; // сохран€ем номер строки в родительском меню
+		currentSelection = 0; // в дочернем меню начнем с нулевой строки
+	}
+}
+//--------------------------------------------------------------------
 
+//--------------------------------------------------------------------
+/*
+* NavigateMenuBack - переход в родительское меню
+*/
+void NavigateMenuBack(void)
+{
+	// ≈сли у пункта есть дочерние элементы - переходим к ним
+	//if(menuItems[selectedItemIdx].parentIdx != -1)
+	if(currentParentIdx != -1)
+	{
+		currentParentIdx = menuItems[currentParentIdx].parentIdx;
+		currentSelection = currentSelectionOld[currentMenuLvl]; // восстанавливаем номер строки, с которой перешли в дочернее меню
+		currentMenuLvl--;
+	}
+}
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------

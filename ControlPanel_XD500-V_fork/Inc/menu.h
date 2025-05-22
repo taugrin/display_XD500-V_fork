@@ -44,7 +44,7 @@ extern MenuItem menuItems[MAX_MENU_ITEMS];
 extern uint16_t menuItemsCount;
 
 extern int16_t currentMenuIdx;
-extern int16_t currentParent;
+extern int16_t currentParentIdx;
 extern uint16_t currentLevelCount;
 
 //
