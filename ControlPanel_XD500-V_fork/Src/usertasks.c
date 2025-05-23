@@ -1,6 +1,5 @@
 #include <display_old.h>
 
-#include "menu.h"
 #include "display.h"
 
 #include "usertasks.h"

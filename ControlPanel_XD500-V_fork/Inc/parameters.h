@@ -12,6 +12,14 @@
 //
 // Defines
 //
+
+// максимальная длина символов в названии группы или параметра
+#define MAX_NAME_LENGTH		21
+
+// максимальное количество элементов в списке
+#define MAX_LIST_CNT		12
+
+
 #define MODBUSADR_ADR           0x3200
 
 #define PU1_SOURCE_ADR          0x0A00
@@ -22,9 +30,28 @@
 #define FREQ_EST_ADR			0x4401
 #define FREQ_REFERENCE_ADR      0x440E
 
+
 //
 // TypeDefs
 //
+
+typedef struct
+{
+	char		name[MAX_NAME_LENGTH];
+	uint16_t	adr;
+	uint16_t 	fatoryVal;
+	uint16_t 	minVal;
+	uint16_t 	maxVal;
+	bool		isSigned;
+	uint16_t 	scale;
+	bool 		isList;
+	uint16_t 	listArrayIdx;
+	bool		writeEn;
+	bool 		writeWhileRun;
+} tParam;
+
+
+
 
 typedef union
 {
@@ -123,6 +150,12 @@ typedef union
     uint16_t all;
 } tAlarmWord;
 
+
+
+
+
+
+
 //
 // Variables from other files
 //
@@ -139,6 +172,10 @@ extern tStatusWord1 StatusWord1;
 extern tFaultWord FaultWord;
 extern tFaultWord1 FaultWord1;
 extern tAlarmWord AlarmWord;
+
+extern tParam Gxx_Pxx;
+
+extern const char listArray[2][MAX_LIST_CNT][MAX_NAME_LENGTH];
 
 //
 // Functions for other files
