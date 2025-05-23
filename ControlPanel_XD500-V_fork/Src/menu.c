@@ -6,7 +6,7 @@
 //
 // Function Prototypes
 //
-int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, void* data);
+int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildScreens childScreen, void *groups);
 
 void Menu_ClearChildren(int16_t parentIdx);
 
@@ -36,21 +36,21 @@ void InitBasicMenu(void)
 	int8_t MenuFirstIdx;
 
     // Äîáàâëÿþ ýëåìåíòû â êîðíåâîå ìåíþ
-	Menu_AddItem("ÏÀÐÀÌÅÒÐÛ", -1, 1, NULL); //[0]
-	Menu_AddItem("ÀÐÕÈÂ ÑÎÁÛÒÈÉ", -1, 2, NULL); //[1]
-	Menu_AddItem("ÁÛÑÒÐÛÉ ÑÒÀÐÒ", -1, 3, NULL); //[2]
-	Menu_AddItem("ÔÓÍÊÖÈÈ ÊÎÏÈÐÎÂÀÍÈß", -1, 4, NULL); //[3]
-	Menu_AddItem("ÂÅÐÑÈÈ ÏÎ", -1, 5, NULL); //[4]
-	Menu_AddItem("ÌÎÍÈÒÎÐÈÍÃ", -1, 6, NULL); //[5]
-	MenuItemsCnt = Menu_AddItem("ÏÎÊÀÇÀÍÈß ÒÀÉÌÅÐÎÂ", -1, 0, NULL); //[6]
+	Menu_AddItem("ÏÀÐÀÌÅÒÐÛ", -1, 1, NoScr, NULL); //[0]
+	Menu_AddItem("ÀÐÕÈÂ ÑÎÁÛÒÈÉ", -1, 2, NoScr, NULL); //[1]
+	Menu_AddItem("ÁÛÑÒÐÛÉ ÑÒÀÐÒ", -1, 3, NoScr, NULL); //[2]
+	Menu_AddItem("ÔÓÍÊÖÈÈ ÊÎÏÈÐÎÂÀÍÈß", -1, 4, NoScr, NULL); //[3]
+	Menu_AddItem("ÂÅÐÑÈÈ ÏÎ", -1, 5, SoftVersionsScr, NULL); //[4]
+	Menu_AddItem("ÌÎÍÈÒÎÐÈÍÃ", -1, 6, NoScr, NULL); //[5]
+	MenuItemsCnt = Menu_AddItem("ÏÎÊÀÇÀÍÈß ÒÀÉÌÅÐÎÂ", -1, 0, NoScr, NULL); //[6]
 
     // Äîáàâëÿþ ýëåìåíòû â ìåíþ "ÏÀÐÀÌÅÒÐÛ" (parentIdx = 0)
     // ToDo: Ðó÷êàìè äîáàâëÿþ ïîêà òîëüêî äëÿ îòëàäêè. Â äàëüíåéøåì äîëæíî áûòü àâòîìàòèçèðîâàíî ïî ìàññèâó ãðóïï.
-	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 10", 0, MenuItemsCnt+2, NULL); MenuFirstIdx = MenuItemsCnt; //[7]
-	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 11", 0, MenuItemsCnt+2, NULL); //[8]
-	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 12", 0, MenuItemsCnt+2, NULL); //[9]
-	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 13", 0, MenuItemsCnt+2, NULL); //[10]
-	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 14", 0, MenuFirstIdx, NULL); //[11]
+	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 10", 0, MenuItemsCnt+2, NoScr, NULL); MenuFirstIdx = MenuItemsCnt; //[7]
+	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 11", 0, MenuItemsCnt+2, NoScr, NULL); //[8]
+	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 12", 0, MenuItemsCnt+2, NoScr, NULL); //[9]
+	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 13", 0, MenuItemsCnt+2, NoScr, NULL); //[10]
+	MenuItemsCnt = Menu_AddItem("ÃÐÓÏÏÀ 14", 0, MenuFirstIdx, NoScr, NULL); //[11]
 
 
 }
@@ -62,7 +62,7 @@ void InitBasicMenu(void)
 /*
 * Menu_AddItem - Äîáàâëåíèå ïóíêòà
 */
-int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, void* data)
+int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildScreens childScreen, void *groups)
 {
     if(menuItemsCount >= MAX_MENU_ITEMS) return -1;
 
@@ -73,7 +73,8 @@ int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, void* d
     menuItems[menuItemsCount].parentIdx = parentIdx;
     menuItems[menuItemsCount].childIdx = -1;
     menuItems[menuItemsCount].nextIdx = nextIdx;
-    menuItems[menuItemsCount].data = data;
+    menuItems[menuItemsCount].childScreen = childScreen;
+    menuItems[menuItemsCount].groups = groups;
 
     // Îáíîâëÿåì childIdx ó ðîäèòåëÿ
     if(parentIdx >= 0 && menuItems[parentIdx].childIdx == -1) {

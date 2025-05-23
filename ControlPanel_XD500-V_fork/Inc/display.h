@@ -22,6 +22,8 @@
 
 #include "parameters.h"
 
+#include "screens.h"
+
 #include "menu.h"
 
 
@@ -46,17 +48,6 @@
 // TypeDefs
 //
 
-typedef enum
-{
-	MonitorScr = 0,
-	ReferenceScr,
-	SettingsScr
-}tMainScreens;
-
-typedef enum
-{
-	MenuScr = 0,
-}tSettingsScreens;
 
 
 //

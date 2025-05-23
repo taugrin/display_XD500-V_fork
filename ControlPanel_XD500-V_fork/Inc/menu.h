@@ -9,6 +9,8 @@
 #include "stddef.h"
 #include "string.h"
 
+#include "screens.h"
+
 
 //
 // Defines
@@ -23,11 +25,12 @@
 
 typedef struct
 {
-    char 		name[MENU_NAME_MAXLENGTH];	// Название пункта
-    int8_t      parentIdx;  // Индекс родителя (-1 для корня)
-    int8_t      childIdx;   // Индекс первого ребёнка (-1 если нет)
-    int8_t      nextIdx;    // Индекс следующего пункта (-1 если нет)
-    void*       data;       // Указатель на связанные данные (группы/параметры)
+    char 			name[MENU_NAME_MAXLENGTH];	// Название пункта
+    int8_t      	parentIdx;  	// Индекс родителя (-1 для корня)
+    int8_t      	childIdx;   	// Индекс первого ребёнка (-1 если нет)
+    int8_t      	nextIdx;    	// Индекс следующего пункта (-1 если нет)
+    tChildScreens	childScreen; 	// Связанный экран
+    void        	*groups;       	// Указатель на связанные данные (группы/параметры)
 } MenuItem;
 
 

@@ -34,6 +34,7 @@ void NavigateMenuBack(void);
 
 void NavigateMenuClearInfo(void);
 
+void SoftVersionsScreenDraw(void);
 //
 // Global Variables
 //
@@ -43,9 +44,6 @@ void NavigateMenuClearInfo(void);
 // Local Variables
 //
 uint16_t ReadData[64];
-
-tMainScreens MainScreen = MonitorScr;
-tSettingsScreens SettingsScreens = MenuScr;
 
 int16_t currentSelection = 0; // Номер строки выбранного пункта в текущем уровне
 int16_t currentSelectionOld[5] = {0, 0, 0, 0, 0}; // массив для хранения номера строки, с которой вошли в дочернее меню
@@ -70,9 +68,6 @@ void DisplayStatic(void)
 
 	// Обработка нажатий кнопок
 	ButtonsCheck();
-
-	// отрисовка строки статуса
-	StatusBarDraw();
 
 
 	// отрисовка экранов
@@ -206,6 +201,8 @@ void StatusBarDraw(void)
 */
 void MonitorScreenDraw(void)
 {
+	// отрисовка строки статуса
+	StatusBarDraw();
 
 	ST7565_drawstring(20, 3, "Экран Монитор");
 }
@@ -217,16 +214,11 @@ void MonitorScreenDraw(void)
 */
 void ReferenceScreenDraw(void)
 {
+	// отрисовка строки статуса
+	StatusBarDraw();
 
 	ST7565_drawstring(20, 3, "Экран Задание");
 }
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-/*
-*
-*/
-
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
@@ -237,13 +229,28 @@ void SettingsScreenDraw(void)
 {
 	//ST7565_drawstring(20, 3, "Экран Настройки");
 
-	switch (SettingsScreens)
+	switch (ChildScreen)
 	{
+	case NoScr:
+
+		break;
+
 	case MenuScr:
+		// отрисовка строки статуса
+		StatusBarDraw();
+
+		// навигация по меню
 		NavigateMenu();
+
+		// отрисовка меню
 		DrawMenu();
 
 		break;
+
+	case SoftVersionsScr:
+		SoftVersionsScreenDraw();
+		break;
+
 	}
 
 }
@@ -253,8 +260,6 @@ void SettingsScreenDraw(void)
 /*
 * DrawMenu - отображает на экране 3 пункта текущего уровня в зависимости от выбранного пункта
 */
-int16_t MenustartIdx = -10;
-uint16_t MenuCount = 655;
 void DrawMenu(void)
 {
 	// Определяем для текущего уровня меню индекс начала и количество элементов
@@ -367,6 +372,13 @@ void NavigateMenuEnter(void)
 		currentSelectionOld[currentMenuLvl] = currentSelection; // сохраняем номер строки в родительском меню
 		currentSelection = 0; // в дочернем меню начнем с нулевой строки
 	}
+	else
+	{
+		if (menuItems[selectedItemIdx].childScreen != NoScr)
+		{
+			ChildScreen = menuItems[selectedItemIdx].childScreen;
+		}
+	}
 }
 //--------------------------------------------------------------------
 
@@ -401,14 +413,24 @@ void NavigateMenuClearInfo(void)
 	currentMenuLvl = 0;
 	currentLevelStart = 0;
 	selectedItemIdx = 0;
+	ChildScreen = MenuScr;
 }
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
 /*
-*
+* SoftVersionsScreenDraw - отрисовка экрана Версии ПО
 */
+void SoftVersionsScreenDraw(void)
+{
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MenuScr;
+	}
 
+	ST7565_drawstring(20, 3, "Экран Версии ПО");
+}
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
