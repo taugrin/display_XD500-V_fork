@@ -72,7 +72,7 @@ void DisplayStatic(void)
 
 	//ToDo: нужно только на время отладки структуры параметров, иначе компилятор выкидывает переменные
 	uint16_t a = Gxx_Pxx.adr;
-	char b = listArray[0][0][0];
+	char b = listG10_P01[0][0];
 
 	// отрисовка экранов
 	switch (MainScreen)

@@ -19,6 +19,21 @@
 // максимальное количество элементов в списке
 #define MAX_LIST_CNT		12
 
+#define PAR_IS_UINT			0
+#define PAR_IS_INT			1
+#define PAR_IS_LIST			2
+
+#define UNITS_VOID			"   "
+#define UNITS_HZ  			"Hz "
+#define UNITS_RPM  			"rpm"
+#define UNITS_PROC			"%  "
+#define UNITS_SEC 			"s  "
+#define UNITS_MSEC 			"ms "
+#define UNITS_VOLT  		"V  "
+#define UNITS_KWT  			"kW "
+#define UNITS_AMP  			"A  "
+#define UNITS_OHM 			"Ohm"
+
 
 #define MODBUSADR_ADR           0x3200
 
@@ -42,12 +57,12 @@ typedef struct
 	uint16_t 	fatoryVal;
 	uint16_t 	minVal;
 	uint16_t 	maxVal;
-	bool		isSigned;
+	uint16_t	type;	// 0 - unsigned; 1 - signed; 2 - list;
 	uint16_t 	scale;
-	bool 		isList;
-	uint16_t 	listArrayIdx;
+	char	 	*listArrayPointer;
 	bool		writeEn;
 	bool 		writeWhileRun;
+	char		units[3];
 } tParam;
 
 
@@ -174,8 +189,7 @@ extern tFaultWord1 FaultWord1;
 extern tAlarmWord AlarmWord;
 
 extern tParam Gxx_Pxx;
-
-extern const char listArray[2][MAX_LIST_CNT][MAX_NAME_LENGTH];
+extern /*const*/ char listG10_P01[10][MAX_NAME_LENGTH];
 
 //
 // Functions for other files
