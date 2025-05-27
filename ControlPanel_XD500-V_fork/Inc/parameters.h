@@ -54,16 +54,25 @@ typedef struct
 {
 	char		name[MAX_NAME_LENGTH];
 	uint16_t	adr;
-	uint16_t 	fatoryVal;
+	//uint16_t 	fatoryVal;
 	uint16_t 	minVal;
 	uint16_t 	maxVal;
 	uint16_t	type;	// 0 - unsigned; 1 - signed; 2 - list;
 	uint16_t 	scale;
-	char	 	*listArrayPointer;
+	const char	*listItems;
 	bool		writeEn;
 	bool 		writeWhileRun;
 	char		units[3];
 } tParam;
+
+typedef struct
+{
+	char			name[MAX_NAME_LENGTH];
+	const tParam    *params;
+	uint16_t		groupCnt;
+	bool 			saveInEeprom;
+	bool 			viewInMenu;
+} tGroup;
 
 
 
@@ -188,13 +197,18 @@ extern tFaultWord FaultWord;
 extern tFaultWord1 FaultWord1;
 extern tAlarmWord AlarmWord;
 
-extern tParam Gxx_Pxx;
-extern /*const*/ char listG10_P01[10][MAX_NAME_LENGTH];
+
+
+extern const tGroup Group10;
+
+
+
+
 
 //
 // Functions for other files
 //
-
+void InitParameters(void);
 
 
 #endif /* PARAMETERS_H_ */
