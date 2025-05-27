@@ -80,8 +80,11 @@ const tGroup Group11 = {
 //--------------------------------------------------------------------
 
 
+const tGroup* const AllGroups[] = {&Group10, &Group11};
+const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-
+const tGroup* const MenuGroups[] = {&Group10, &Group11};
+const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 
 //--------------------------------------------------------------------

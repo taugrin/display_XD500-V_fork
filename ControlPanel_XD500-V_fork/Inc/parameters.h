@@ -199,10 +199,11 @@ extern tAlarmWord AlarmWord;
 
 
 
-extern const tGroup Group10;
-extern const tGroup Group11;
+extern const tGroup* const AllGroups[];
+extern const uint16_t AllGroupsCnt;
 
-
+extern const tGroup* const MenuGroups[];
+extern const uint16_t MenuGroupsCnt;
 
 
 //
