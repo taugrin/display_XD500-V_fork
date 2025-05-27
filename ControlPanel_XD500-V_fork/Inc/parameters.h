@@ -7,7 +7,7 @@
 #include "stdbool.h"
 #include "stdint.h"
 #include "stddef.h"
-
+#include "string.h"
 
 //
 // Defines
@@ -71,7 +71,7 @@ typedef struct
 	const tParam    *params;
 	uint16_t		groupCnt;
 	bool 			saveInEeprom;
-	bool 			viewInMenu;
+	//bool 			viewInMenu;
 } tGroup;
 
 
@@ -200,7 +200,7 @@ extern tAlarmWord AlarmWord;
 
 
 extern const tGroup Group10;
-
+extern const tGroup Group11;
 
 
 
@@ -208,7 +208,8 @@ extern const tGroup Group10;
 //
 // Functions for other files
 //
-void InitParameters(void);
+
+const char* GetListItem(const tParam* param, uint8_t index);
 
 
 #endif /* PARAMETERS_H_ */

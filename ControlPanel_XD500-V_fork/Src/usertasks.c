@@ -42,8 +42,6 @@ void vTaskDisplay(void const * argument)
 	uint8_t i; // отправляю те самые 150 запросов, после которых USB падает и переинициализируется
 	for (i = 0; i < 151; i++) IntDataRequest(0x0000); // всё, дальше USB падать не должно
 
-	// инициализация параметров
-	InitParameters();
 
 	// инициализация корневого меню
 	InitBasicMenu();

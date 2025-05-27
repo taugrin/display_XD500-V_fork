@@ -44,37 +44,39 @@ static const tParam group10_params[] = {
 	{"07 ĞÅÆÈÌ ĞÀÁÎÒÛ", 	 0x0A06, 0, 1, PAR_IS_LIST, 1, listG10P07, true, false, UNITS_VOID}
 };
 
-
 // Ãğóïïà ïàğàìåòğîâ
 const tGroup Group10 = {
     "10 ÏÓÑÊ/ÑÒÎÏ/ÍÀÏĞÀÂË",
     group10_params,
     sizeof(group10_params)/sizeof(tParam),
-	true,
 	true
 };
-
 //--------------------------------------------------------------------
 
 
 //--------------------------Ãğóïïà 11---------------------------------
-/*char listG11P01[2][MAX_NAME_LENGTH] =  {"REF1 Hz", "REF2 %"};
-tParam G11_P01 = {"01 ÇÀÄÀÍÈÅ Ñ ÏÓËÜÒÀ", 	0x0B00, 0, 0, 1, PAR_IS_LIST, 1, listG11P01[0], true, false, UNITS_VOID};
+// Ñïèñêè ïàğàìåòğîâ (îäíîé ñòğîêîé ñ \0 ğàçäåëèòåëÿìè)
+static const char listG11P01[] =  "REF1 Hz\0REF2 %";
+static const char listG11P02[] =  "AI1\0AI2\0AI3\0KEYPAD\0FIELDBUS";
 
-char listG11P02[5][MAX_NAME_LENGTH] =  {"AI1", "AI2", "AI3",  "KEYPAD", "FIELDBUS"};
-tParam G11_P02 = {"02 ÏÓ1 ÇÀÄÀÍÈÅ", 	0x0B01, 0, 0, 4, PAR_IS_LIST, 1, listG11P02[0], true, false, UNITS_VOID};
+// Ïàğàìåòğû ãğóïïû 11
+static const tParam group11_params[] = {
+	{"01 ÇÀÄÀÍÈÅ Ñ ÏÓËÜÒÀ",  0x0B00, 0, 1,    PAR_IS_LIST, 1,  listG11P01, true, false, UNITS_VOID},
+	{"02 ÏÓ1 ÇÀÄÀÍÈÅ", 	     0x0B01, 0, 4,    PAR_IS_LIST, 1,  listG11P02, true, false, UNITS_VOID},
+	{"03 ÏÓ1 ÌÈÍÈÌÓÌ", 	     0x0B02, 0, 500,  PAR_IS_INT,  10, NULL,       true, false, UNITS_HZ},
+	{"04 ÏÓ1 ÌÀÊÑÈÌÓÌ", 	 0x0B03, 0, 1000, PAR_IS_INT,  10, NULL,       true, false, UNITS_HZ},
+	{"05 ÏÓ2 ÇÀÄÀÍÈÅ", 	     0x0B04, 0, 4,    PAR_IS_LIST, 1,  listG11P02, true, false, UNITS_VOID},
+	{"06 ÏÓ2 ÌÈÍÈÌÓÌ", 	     0x0B05, 0, 1000, PAR_IS_INT,  10, NULL,       true, false, UNITS_PROC},
+	{"07 ÏÓ2 ÌÀÊÑÈÌÓÌ", 	 0x0B06, 0, 2000, PAR_IS_INT,  10, NULL,       true, false, UNITS_PROC}
+};
 
-tParam G11_P03 = {"03 ÏÓ1 ÌÈÍÈÌÓÌ", 	0x0B02, 0, 0, 500, PAR_IS_INT, 10, NULL, true, false, UNITS_HZ};
-
-tParam G11_P04 = {"04 ÏÓ1 ÌÀÊÑÈÌÓÌ", 	0x0B03, 500, 0, 1000, PAR_IS_INT, 10, NULL, true, false, UNITS_HZ};
-
-tParam G11_P05 = {"05 ÏÓ2 ÇÀÄÀÍÈÅ", 	0x0B04, 0, 0, 4, PAR_IS_LIST, 1, listG11P02[0], true, false, UNITS_VOID};
-
-tParam G11_P06 = {"06 ÏÓ2 ÌÈÍÈÌÓÌ", 	0x0B05, 0, 0, 1000, PAR_IS_INT, 10, NULL, true, false, UNITS_PROC};
-
-tParam G11_P07 = {"07 ÏÓ2 ÌÀÊÑÈÌÓÌ", 	0x0B06, 1000, 0, 2000, PAR_IS_INT, 10, NULL, true, false, UNITS_PROC};
-*/
-
+// Ãğóïïà ïàğàìåòğîâ
+const tGroup Group11 = {
+    "11 ÂÛÁÎĞ ÇÀÄÀÍÈß",
+    group11_params,
+    sizeof(group11_params)/sizeof(tParam),
+	true
+};
 //--------------------------------------------------------------------
 
 
@@ -84,16 +86,30 @@ tParam G11_P07 = {"07 ÏÓ2 ÌÀÊÑÈÌÓÌ", 	0x0B06, 1000, 0, 2000, PAR_IS_INT, 10, NUL
 
 //--------------------------------------------------------------------
 /*
-* InitParameters - èíèöèàëèçàöèÿ ïàğàìåòğîâ
+* GetListItem - ôóíêöèÿ ïîëó÷åíèÿ ıëåìåíòà ñïèñêà ïî èíäåêñó.
 */
-void InitParameters(void)
+const char* GetListItem(const tParam* param, uint8_t index)
 {
+    if(param->type != PAR_IS_LIST) return NULL;
 
-	//--------------------------Ãğóïïà 10---------------------------------
+    const char* item = param->listItems;
+    uint8_t current = 0;
 
-	//--------------------------------------------------------------------
+    while(*item && current < index) {
+        item += strlen(item) + 1;
+        current++;
+    }
 
+    return *item ? item : NULL;
 }
+
+/*
+// Ïğèìåğ èñïîëüçîâàíèÿ:
+const tParam* param = &Group10.params[0]; // Ïàğàìåòğ ñî ñïèñêîì
+const char* listItem = GetListItem(param, 2); // Ïîëó÷àåì 3-é ıëåìåíò (èíäåêñ 2)
+
+*/
+
 //--------------------------------------------------------------------
 
 
