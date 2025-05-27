@@ -70,13 +70,6 @@ void DisplayStatic(void)
 	// Обработка нажатий кнопок
 	ButtonsCheck();
 
-	/*
-	 * ToDo: Добавлено на время отладки для того, чтобы в окне expressions
-	 * отображались данные. Иначе компилятор просто выкидывает переменные.
-	 */
-	uint16_t a = AllGroups[0]->groupCnt;
-
-
 	// отрисовка экранов
 	switch (MainScreen)
 	{

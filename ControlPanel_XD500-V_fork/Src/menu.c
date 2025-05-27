@@ -32,8 +32,7 @@ uint16_t currentLevelCount = 7; // Количество пунктов в текущем уровне (для корн
 */
 void InitBasicMenu(void)
 {
-	int16_t MenuItemsCnt;
-	int8_t MenuFirstIdx;
+	int16_t MenuItemsCnt, MenuFirstIdx, MenuNextIdx;
 
     // Добавляю элементы в корневое меню
 	Menu_AddItem("ПАРАМЕТРЫ", -1, 1, NoScr, NULL); //[0]
@@ -44,14 +43,17 @@ void InitBasicMenu(void)
 	Menu_AddItem("МОНИТОРИНГ", -1, 6, NoScr, NULL); //[5]
 	MenuItemsCnt = Menu_AddItem("ПОКАЗАНИЯ ТАЙМЕРОВ", -1, 0, NoScr, NULL); //[6]
 
-    // Добавляю элементы в меню "ПАРАМЕТРЫ" (parentIdx = 0)
-    // ToDo: Ручками добавляю пока только для отладки. В дальнейшем должно быть автоматизировано по массиву групп.
-	MenuItemsCnt = Menu_AddItem("ГРУППА 10", 0, MenuItemsCnt+2, NoScr, NULL); MenuFirstIdx = MenuItemsCnt; //[7]
-	MenuItemsCnt = Menu_AddItem("ГРУППА 11", 0, MenuItemsCnt+2, NoScr, NULL); //[8]
-	MenuItemsCnt = Menu_AddItem("ГРУППА 12", 0, MenuItemsCnt+2, NoScr, NULL); //[9]
-	MenuItemsCnt = Menu_AddItem("ГРУППА 13", 0, MenuItemsCnt+2, NoScr, NULL); //[10]
-	MenuItemsCnt = Menu_AddItem("ГРУППА 14", 0, MenuFirstIdx, NoScr, NULL); //[11]
 
+	// Добавляю элементы в меню "ПАРАМЕТРЫ" группы для отображения в меню (parentIdx = 0)
+	int16_t i = 0;
+	while (i < MenuGroupsCnt)
+	{
+		if (i == (MenuGroupsCnt-1)) {MenuNextIdx = MenuFirstIdx;}
+		else {MenuNextIdx = MenuItemsCnt+2;}
+		MenuItemsCnt = Menu_AddItem(MenuGroups[i]->name, 0, MenuNextIdx, NoScr, NULL);
+		if (i == 0) {MenuFirstIdx = MenuItemsCnt;}
+		i++;
+	}
 
 }
 //--------------------------------------------------------------------

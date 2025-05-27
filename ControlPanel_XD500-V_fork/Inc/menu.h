@@ -11,6 +11,7 @@
 
 #include "screens.h"
 
+#include "parameters.h"
 
 //
 // Defines
