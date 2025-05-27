@@ -479,6 +479,27 @@ void GroupViewScreenDraw(void)
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, MenuGroups[groupIdx]->params[paramIdx].name);
 
 	// считывание значения параметра
+	UsbReadData(MenuGroups[groupIdx]->params[paramIdx].adr, 1, ReadData);
+
+	// вывод значения параметра
+
+	const tParam* param = &MenuGroups[groupIdx]->params[paramIdx];
+
+	switch (MenuGroups[groupIdx]->params[paramIdx].type)
+	{
+	case PAR_IS_UINT:
+
+		break;
+
+	case PAR_IS_INT:
+
+		break;
+
+	case PAR_IS_LIST:
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, GetListItem(param, ReadData[0]));
+		break;
+
+	}
 
 }
 //--------------------------------------------------------------------
