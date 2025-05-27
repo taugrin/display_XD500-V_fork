@@ -69,7 +69,7 @@ typedef struct
 {
 	char			name[MAX_NAME_LENGTH];
 	const tParam    *params;
-	uint16_t		groupCnt;
+	uint16_t		paramCnt;
 	bool 			saveInEeprom;
 	//bool 			viewInMenu;
 } tGroup;

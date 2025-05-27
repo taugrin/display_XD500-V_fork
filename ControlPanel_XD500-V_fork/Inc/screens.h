@@ -29,6 +29,8 @@ typedef enum
 {
 	NoScr = 0,
 	MenuScr,
+	GroupViewScr,
+	ParameterEditScr,
 	SoftVersionsScr
 }tChildScreens;
 

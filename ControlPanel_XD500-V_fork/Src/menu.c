@@ -50,7 +50,7 @@ void InitBasicMenu(void)
 	{
 		if (i == (MenuGroupsCnt-1)) {MenuNextIdx = MenuFirstIdx;}
 		else {MenuNextIdx = MenuItemsCnt+2;}
-		MenuItemsCnt = Menu_AddItem(MenuGroups[i]->name, 0, MenuNextIdx, NoScr, NULL);
+		MenuItemsCnt = Menu_AddItem(MenuGroups[i]->name, 0, MenuNextIdx, GroupViewScr, NULL);
 		if (i == 0) {MenuFirstIdx = MenuItemsCnt;}
 		i++;
 	}

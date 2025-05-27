@@ -34,6 +34,8 @@ void NavigateMenuBack(void);
 
 void NavigateMenuClearInfo(void);
 
+void GroupViewScreenDraw(void);
+
 void SoftVersionsScreenDraw(void);
 //
 // Global Variables
@@ -51,6 +53,8 @@ uint8_t currentMenuLvl = 0;
 int16_t currentLevelStart = 0; // Индекс первого пункта текущего уровня
 int16_t selectedItemIdx = 0; // Индекс выбранного пунтка текущего уровня
 
+int16_t groupIdx = 0;
+int16_t paramIdx = 0;
 
 //--------------------------------------------------------------------
 /*
@@ -235,6 +239,7 @@ void SettingsScreenDraw(void)
 
 		break;
 
+	// экран для отображения всего меню
 	case MenuScr:
 		// отрисовка строки статуса
 		StatusBarDraw();
@@ -245,8 +250,22 @@ void SettingsScreenDraw(void)
 		// отрисовка меню
 		DrawMenu();
 
+
+		paramIdx = 0; // сброс номера параметра, чтобы при входе в группу начиналось с 0
+
 		break;
 
+	// экран для отображения параметров в группе
+	case GroupViewScr:
+		GroupViewScreenDraw();
+		break;
+
+	// экран для ввода значения параметра
+	case ParameterEditScr:
+
+		break;
+
+	// экран для отображения версий ПО пульта и привода
 	case SoftVersionsScr:
 		SoftVersionsScreenDraw();
 		break;
@@ -419,6 +438,53 @@ void NavigateMenuClearInfo(void)
 
 //--------------------------------------------------------------------
 /*
+* GroupViewScreenDraw - отрисовка экрана параметров в группе
+*/
+void GroupViewScreenDraw(void)
+{
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		if (paramIdx < (MenuGroups[groupIdx]->paramCnt - 1)) {paramIdx++;}
+		else {paramIdx = 0;}
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		if (paramIdx > 0) {paramIdx--;}
+		else {paramIdx = (MenuGroups[groupIdx]->paramCnt -1);}
+	}
+
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MenuScr;
+	}
+
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+	// вывод названия группы
+	groupIdx = selectedItemIdx - currentLevelStart;
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, MenuGroups[groupIdx]->name);
+
+	// вывод названия параметра
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, MenuGroups[groupIdx]->params[paramIdx].name);
+
+	// считывание значения параметра
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 * SoftVersionsScreenDraw - отрисовка экрана Версии ПО
 */
 void SoftVersionsScreenDraw(void)
@@ -429,7 +495,9 @@ void SoftVersionsScreenDraw(void)
 		ChildScreen = MenuScr;
 	}
 
+
 	ST7565_drawstring(20, 3, "Экран Версии ПО");
+
 }
 //--------------------------------------------------------------------
 
