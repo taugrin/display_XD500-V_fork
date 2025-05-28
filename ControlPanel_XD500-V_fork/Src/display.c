@@ -220,7 +220,7 @@ void MonitorScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	if (editDigitBlinkCnt < 2) {editDigitBlinkCnt++;}
+	if (editDigitBlinkCnt < 1) {editDigitBlinkCnt++;}
 	else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
 
 	if (editDigitBlink) {ST7565_drawstring(20, 3, "Экран Монитор");}

@@ -71,6 +71,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #define CMD_NOP  0xE3
 #define CMD_TEST  0xF0
 
+extern bool enablePartialUpdate;
+
   void ST7565_st7565_init(void);
   void ST7565_begin(uint8_t contrast);
   void ST7565_st7565_command(uint8_t c);

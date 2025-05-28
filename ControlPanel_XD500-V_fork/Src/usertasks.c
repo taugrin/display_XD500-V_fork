@@ -1,10 +1,9 @@
-#include <display_old.h>
-
 #include "display.h"
 
 #include "usertasks.h"
 #include "usb_host.h"
 #include "usb_user.h"
+#include "usb_funcs.h"
 #include "cmsis_os.h"
 #include "stm32f1xx_hal.h"
 #include "lcd.h"
@@ -24,48 +23,47 @@ SemaphoreHandle_t xButtonStoptSemaphore = NULL;
 
 void vTaskDisplay(void const * argument)
 {
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET); //ToDo: Отладка! Начало инициализации дисплея.
     DWT_Delay_Init(); // инициализация счетчика тактов DWT_CYCCNT
 	ST7565_st7565_init(); // инициализация дисплея
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET); //ToDo: Отладка! Конец инициализации дисплея.
+
 	ST7565_clear();
 	ST7565_StartImage(); // запись стартовой картинки в массив
 	ST7565_display(); // вывод картинки на экран
+	enablePartialUpdate = true;
 
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //ToDo: Отладка! Продолжение инициализации (usb и RefInit).
 	MX_USB_HOST_Init(); // инициализация usb
 
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); //ToDo: Отладка! Начало паузы.
 	vTaskDelay(5000); // Ожидание готовности usb. В это же время выводится стартовая картинка.
-		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET); //ToDo: Отладка! Конец паузы.
 
 	uint8_t i; // отправляю те самые 150 запросов, после которых USB падает и переинициализируется
-	for (i = 0; i < 151; i++) IntDataRequest(0x0000); // всё, дальше USB падать не должно
-
+	uint16_t tmpInitBuf[2];
+	for (i = 0; i < 151; i++) {UsbReadData(0x4200, 1, tmpInitBuf);} // всё, дальше USB падать не должно
 
 	// инициализация корневого меню
 	InitBasicMenu();
 
-    RefInit(); // считывание задания пульта из eeprom
-    	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //ToDo: Отладка! Конец инициализации.
+    //RefInit(); // считывание задания пульта из eeprom
+
 
     for (;;)
     {
-    		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //ToDo: Отладка! Начало задачи дисплея.
     		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET); //ToDo: Отладка! Начало задачи дисплея.
 
+    		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //ToDo: Отладка!
         ST7565_clear();
+        	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //ToDo: Отладка!
 
-        //DisplayStaticOld(); // оригинальная функция обработки связи, кнопок и дисплея
-        DisplayStatic(); // моя функция
+        	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); //ToDo: Отладка!
+		DisplayStatic(); // моя функция
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET); //ToDo: Отладка!
 
+			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); //ToDo: Отладка!
         ST7565_display();
+        	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //ToDo: Отладка!
 
         	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET); //ToDo: Отладка! Конец задачи дисплея.
-        //vTaskDelay(5);
 		vTaskDelay(2);
-    		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //ToDo: Отладка! Конец задачи дисплея с учетом паузы.
-		//vTaskDelay(1); //ToDo: Отладка! Эта задержка только для того, чтобы на лог. анализаторе четко увидеть PA6 reset перед следующим PA6 set
+
     }
 
 }

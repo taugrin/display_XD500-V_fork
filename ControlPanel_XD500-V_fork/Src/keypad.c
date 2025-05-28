@@ -1,4 +1,3 @@
-#include <display_old.h>
 #include "stdbool.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"

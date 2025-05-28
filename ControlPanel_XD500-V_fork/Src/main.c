@@ -47,7 +47,6 @@
   ******************************************************************************
   */
 /* Includes ------------------------------------------------------------------*/
-#include <display_old.h>
 #include "main.h"
 #include "stm32f1xx_hal.h"
 #include "cmsis_os.h"
@@ -89,7 +88,6 @@ unsigned int Counter2 = 0;
 
 
 keypad_t KeyPad;
-extern Menu_t Display;
 
 /* USER CODE END PV */
 
@@ -155,7 +153,6 @@ int main(void)
 
   /* USER CODE BEGIN 2 */
 
-  MenuInit(&Display);
 
   /* USER CODE END 2 */
 

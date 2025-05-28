@@ -24,6 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 
 #include <stdlib.h>
 #include <stdint.h>
+#include <stdbool.h>
 #include "stm32f1xx.h"
 #include "ST7565.h"
 #include <string.h>
@@ -70,10 +71,11 @@ uint8_t st7565_buffer[1024] = {
 // originally derived from Steve Evans/JCW's mod but cleaned up and
 // optimized
 //#define enablePartialUpdate
+bool enablePartialUpdate = false;
 
-#ifdef enablePartialUpdate
+//#ifdef enablePartialUpdate
 static uint8_t xUpdateMin, xUpdateMax, yUpdateMin, yUpdateMax;
-#endif
+//#endif
 
 
 void DelaymS(uint32_t nTime)
@@ -88,12 +90,13 @@ void DelayuS(uint32_t nCount)
 
 
 static void ST7565_updateBoundingBox(uint8_t xmin, uint8_t ymin, uint8_t xmax, uint8_t ymax) {
-#ifdef enablePartialUpdate
+//#ifdef enablePartialUpdate
+if (enablePartialUpdate){
   if (xmin < xUpdateMin) xUpdateMin = xmin;
   if (xmax > xUpdateMax) xUpdateMax = xmax;
   if (ymin < yUpdateMin) yUpdateMin = ymin;
   if (ymax > yUpdateMax) yUpdateMax = ymax;
-#endif
+}//#endif
 }
 
 void ST7565_drawbitmap(uint8_t x, uint8_t y, const uint8_t *bitmap, uint8_t w, uint8_t h, uint8_t color) {
@@ -394,7 +397,8 @@ void ST7565_display(void) {
       uart_putw_dec(p);
       putstring_nl("");
     */
-#ifdef enablePartialUpdate
+//#ifdef enablePartialUpdate
+if (enablePartialUpdate){
     // check if this page is part of update
     if ( yUpdateMin >= ((p+1)*8) ) {
       continue;   // nope, skip it!
@@ -402,21 +406,25 @@ void ST7565_display(void) {
     if (yUpdateMax < p*8) {
       break;
     }
-#endif
+}//#endif
 
   DelaymS(1);
     ST7565_st7565_command(CMD_SET_PAGE | pagemap[p]);
     DelaymS(1);//DelayuS(100);
 
 
-#ifdef enablePartialUpdate
+//#ifdef enablePartialUpdate
+if (enablePartialUpdate){
     col = xUpdateMin;
     maxcol = xUpdateMax;
-#else
+}
+//#else
+else
+{
     // start at the beginning of the row
     col = 0;
     maxcol = LCDWIDTH;
-#endif
+}//#endif
 
     ST7565_st7565_command(CMD_SET_COLUMN_LOWER | ((col+ST7565_STARTBYTES) & 0xf));
     DelaymS(1);
@@ -433,12 +441,13 @@ void ST7565_display(void) {
     }
   }
 
-#ifdef enablePartialUpdate
+//#ifdef enablePartialUpdate
+if (enablePartialUpdate){
   xUpdateMin = LCDWIDTH;// - 1;
   xUpdateMax = 0;
   yUpdateMin = LCDHEIGHT;//-1;
   yUpdateMax = 0;
-#endif
+}//#endif
 }
 
 // clear everything
