@@ -44,6 +44,9 @@
 #define DISP_LEFT_BOUND 2
 #define DISP_CENTR 64
 
+#define DISP_RIGHT_CHAR_POS 20
+#define DISP_CENTR_CHAR_POS 10
+
 #define VISIBLE_ITEMS 3 //  оличество отображаемых пунктов за раз
 
 //
