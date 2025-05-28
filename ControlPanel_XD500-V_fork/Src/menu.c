@@ -6,7 +6,7 @@
 //
 // Function Prototypes
 //
-int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildScreens childScreen, void *groups);
+int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildScreens childScreen/*, void *groups*/);
 
 void Menu_ClearChildren(int16_t parentIdx);
 
@@ -35,13 +35,13 @@ void InitBasicMenu(void)
 	int16_t MenuItemsCnt, MenuFirstIdx, MenuNextIdx;
 
     // Äîáàâëÿþ ýëåìåíòû â êîðíåâîå ìåíþ
-	Menu_AddItem("ÏÀÐÀÌÅÒÐÛ", -1, 1, NoScr, NULL); //[0]
-	Menu_AddItem("ÀÐÕÈÂ ÑÎÁÛÒÈÉ", -1, 2, NoScr, NULL); //[1]
-	Menu_AddItem("ÁÛÑÒÐÛÉ ÑÒÀÐÒ", -1, 3, NoScr, NULL); //[2]
-	Menu_AddItem("ÔÓÍÊÖÈÈ ÊÎÏÈÐÎÂÀÍÈß", -1, 4, NoScr, NULL); //[3]
-	Menu_AddItem("ÂÅÐÑÈÈ ÏÎ", -1, 5, SoftVersionsScr, NULL); //[4]
-	Menu_AddItem("ÌÎÍÈÒÎÐÈÍÃ", -1, 6, NoScr, NULL); //[5]
-	MenuItemsCnt = Menu_AddItem("ÏÎÊÀÇÀÍÈß ÒÀÉÌÅÐÎÂ", -1, 0, NoScr, NULL); //[6]
+	Menu_AddItem("ÏÀÐÀÌÅÒÐÛ", -1, 1, NoScr/*, NULL*/); //[0]
+	Menu_AddItem("ÀÐÕÈÂ ÑÎÁÛÒÈÉ", -1, 2, NoScr); //[1]
+	Menu_AddItem("ÁÛÑÒÐÛÉ ÑÒÀÐÒ", -1, 3, NoScr); //[2]
+	Menu_AddItem("ÔÓÍÊÖÈÈ ÊÎÏÈÐÎÂÀÍÈß", -1, 4, NoScr); //[3]
+	Menu_AddItem("ÂÅÐÑÈÈ ÏÎ", -1, 5, SoftVersionsScr); //[4]
+	Menu_AddItem("ÌÎÍÈÒÎÐÈÍÃ", -1, 6, NoScr); //[5]
+	MenuItemsCnt = Menu_AddItem("ÏÎÊÀÇÀÍÈß ÒÀÉÌÅÐÎÂ", -1, 0, NoScr); //[6]
 
 
 	// Äîáàâëÿþ ýëåìåíòû â ìåíþ "ÏÀÐÀÌÅÒÐÛ" ãðóïïû äëÿ îòîáðàæåíèÿ â ìåíþ (parentIdx = 0)
@@ -50,7 +50,7 @@ void InitBasicMenu(void)
 	{
 		if (i == (MenuGroupsCnt-1)) {MenuNextIdx = MenuFirstIdx;}
 		else {MenuNextIdx = MenuItemsCnt+2;}
-		MenuItemsCnt = Menu_AddItem(MenuGroups[i]->name, 0, MenuNextIdx, GroupViewScr, NULL);
+		MenuItemsCnt = Menu_AddItem(MenuGroups[i]->name, 0, MenuNextIdx, GroupViewScr);
 		if (i == 0) {MenuFirstIdx = MenuItemsCnt;}
 		i++;
 	}
@@ -64,7 +64,7 @@ void InitBasicMenu(void)
 /*
 * Menu_AddItem - Äîáàâëåíèå ïóíêòà
 */
-int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildScreens childScreen, void *groups)
+int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildScreens childScreen/*, void *groups*/)
 {
     if(menuItemsCount >= MAX_MENU_ITEMS) return -1;
 
@@ -76,7 +76,7 @@ int16_t Menu_AddItem(const char* name, int8_t parentIdx, int8_t nextIdx, tChildS
     menuItems[menuItemsCount].childIdx = -1;
     menuItems[menuItemsCount].nextIdx = nextIdx;
     menuItems[menuItemsCount].childScreen = childScreen;
-    menuItems[menuItemsCount].groups = groups;
+    //menuItems[menuItemsCount].groups = groups;
 
     // Îáíîâëÿåì childIdx ó ðîäèòåëÿ
     if(parentIdx >= 0 && menuItems[parentIdx].childIdx == -1) {
