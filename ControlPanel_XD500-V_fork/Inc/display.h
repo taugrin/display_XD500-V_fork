@@ -9,6 +9,8 @@
 #include "stddef.h"
 #include "string.h"
 #include "ftoa.h"
+#include "stdio.h"
+#include "math.h"
 
 #include "cmsis_os.h"
 

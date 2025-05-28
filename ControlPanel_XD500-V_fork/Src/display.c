@@ -36,6 +36,8 @@ void NavigateMenuClearInfo(void);
 
 void GroupViewScreenDraw(void);
 
+void DisplayParameterValue(uint8_t x, uint8_t y, const tParam* param, uint16_t value);
+
 void SoftVersionsScreenDraw(void);
 //
 // Global Variables
@@ -482,26 +484,125 @@ void GroupViewScreenDraw(void)
 	UsbReadData(MenuGroups[groupIdx]->params[paramIdx].adr, 1, ReadData);
 
 	// вывод значения параметра
-
 	const tParam* param = &MenuGroups[groupIdx]->params[paramIdx];
-
-	switch (MenuGroups[groupIdx]->params[paramIdx].type)
-	{
-	case PAR_IS_UINT:
-
-		break;
-
-	case PAR_IS_INT:
-
-		break;
-
-	case PAR_IS_LIST:
-		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, GetListItem(param, ReadData[0]));
-		break;
-
-	}
+	DisplayParameterValue(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param, ReadData[0]);
 
 }
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* DisplayParameterValue - Функция для вывода параметров на дисплей
+* Функция для вывода параметров на дисплей
+* @param x - позиция по X (0-127)
+* @param y - линия (позиция по Y (0-7), где каждый шаг = 8 пикселям)
+* @param param - указатель на параметр (из tParam)
+* @param value - значение параметра (сырое значение из регистра)
+*/
+void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_t value)
+{
+    char buffer[16]; // Буфер для форматированного значения
+    char units[4] = "   "; // Буфер для единиц измерения (3 символа + '\0')
+
+    // Копируем единицы измерения из параметра
+    strncpy(units, param->units, 3);
+    units[3] = '\0';
+
+    switch(param->type) {
+        case PAR_IS_UINT: // Беззнаковое целое
+            if(param->scale > 1) {
+                // Дробное значение (целое с масштабированием)
+                uint16_t int_part = value / param->scale; // целая часть
+                uint16_t frac_part = value % param->scale; // дробная часть
+                // формируем строку и записываем её в buffer
+                snprintf(buffer, sizeof(buffer), "%u.%0*u %s",
+                         int_part,
+                         (int)log10(param->scale),
+                         frac_part,
+                         units);
+                /*
+                 %u		Беззнаковое целое число (int_part)
+                 . 		Разделитель целой и дробной части
+                 %0*u	Динамическое форматирование:
+                 	 	 	 0 — ведущие нули, нужны например если frac_part = 1, но param->scale = 100, тогда будет вывод 01
+                 	 	 	 * — подстановка числа из аргумента. log10(100) = 2, поэтому будет %0*2
+                 %s		Строка (units — единицы измерения, например, "Hz").
+                */
+            } else {
+                // Просто целое беззнаковое
+            	// формируем строку и записываем её в buffer
+                snprintf(buffer, sizeof(buffer), "%u %s", value, units);
+                /*
+				 %u		Беззнаковое целое число (int_part)
+				 %s		Строка (units — единицы измерения, например, "Hz").
+				*/
+            }
+            break;
+
+        case PAR_IS_INT: // Знаковое целое
+            if(param->scale > 1) {
+                // Дробное значение со знаком
+                int16_t signed_value = (int16_t)value;
+                int16_t int_part = signed_value / param->scale;
+                int16_t frac_part = abs(signed_value % param->scale);
+                // формируем строку и записываем её в buffer
+                snprintf(buffer, sizeof(buffer), "%d.%0*d %s",
+                         int_part,
+                         (int)log10(param->scale),
+                         frac_part,
+                         units);
+                /*
+                 %d		Целое число со знаком (int_part)
+                 . 		Разделитель целой и дробной части
+                 %0*d	Динамическое форматирование:
+                 	 	 	 0 — ведущие нули, нужны например если frac_part = 1, но param->scale = 100, тогда будет вывод 01
+                 	 	 	 * — подстановка числа из аргумента. log10(100) = 2, поэтому будет %0*2
+                 %s		Строка (units — единицы измерения, например, "Hz").
+                */
+            } else {
+                // Просто целое знаковое
+            	// формируем строку и записываем её в buffer
+                snprintf(buffer, sizeof(buffer), "%d %s", (int16_t)value, units);
+                /*
+				 %d		Целое число со знаком (int_part)
+				 %s		Строка (units — единицы измерения, например, "Hz").
+				*/
+            }
+            break;
+
+        case PAR_IS_LIST: // Значение из списка
+        { // если не обернуть фигурными скобками, не даст создать const char* list_item
+        	const char* list_item = GetListItem(param, value);
+            if(list_item)
+            {
+            	// формируем строку и записываем её в buffer
+                snprintf(buffer, sizeof(buffer), "%s", list_item);
+                /*
+				 %s	Вывод строки.
+				*/
+            }
+            else
+            {
+                // Вывод сообщения, если нет такого значения в списке
+            	snprintf(buffer, sizeof(buffer), "НЕТ В СПИСКЕ");
+            }
+        } // если не обернуть фигурными скобками, не даст создать const char* list_item
+            break;
+
+        default:
+            // Вывод сообщения, если неправильно указан тип данных.
+        	snprintf(buffer, sizeof(buffer), "ОШИБКА ТИПА");
+            break;
+    }
+
+    // Очищаем область перед выводом
+    //ST7565_fillrect(x, line * 8, 128 - x, 8, 0);
+
+    // Выводим значение на дисплей
+    ST7565_drawstring(x, line, buffer);
+
+}
+
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
