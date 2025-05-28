@@ -38,6 +38,8 @@ void GroupViewScreenDraw(void);
 
 void DisplayParameterValue(uint8_t x, uint8_t y, const tParam* param, uint16_t value);
 
+void ParameterEditScreenDraw(void);
+
 void SoftVersionsScreenDraw(void);
 //
 // Global Variables
@@ -57,6 +59,8 @@ int16_t selectedItemIdx = 0; // Индекс выбранного пунтка текущего уровня
 
 int16_t groupIdx = 0;
 int16_t paramIdx = 0;
+
+const tParam* param;
 
 //--------------------------------------------------------------------
 /*
@@ -264,7 +268,7 @@ void SettingsScreenDraw(void)
 
 	// экран для ввода значения параметра
 	case ParameterEditScr:
-
+		ParameterEditScreenDraw();
 		break;
 
 	// экран для отображения версий ПО пульта и привода
@@ -444,6 +448,24 @@ void NavigateMenuClearInfo(void)
 */
 void GroupViewScreenDraw(void)
 {
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+	// вывод названия группы
+	groupIdx = selectedItemIdx - currentLevelStart;
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, MenuGroups[groupIdx]->name);
+
+	// вывод названия параметра
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, MenuGroups[groupIdx]->params[paramIdx].name);
+
+	// считывание значения параметра
+	UsbReadData(MenuGroups[groupIdx]->params[paramIdx].adr, 1, ReadData);
+
+	// вывод значения параметра
+	param = &MenuGroups[groupIdx]->params[paramIdx];
+	DisplayParameterValue(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param, ReadData[0]);
+
+
 	// Кнопка вниз
 	if (CheckKeySem(xButtonDownSemaphore))
 	{
@@ -461,7 +483,10 @@ void GroupViewScreenDraw(void)
 	// Кнопка enter
 	if (CheckKeySem(xButtonEnterSemaphore))
 	{
-
+		if (param->writeEn)
+		{
+			ChildScreen = ParameterEditScr;
+		}
 	}
 
 	// Кнопка reset
@@ -469,23 +494,6 @@ void GroupViewScreenDraw(void)
 	{
 		ChildScreen = MenuScr;
 	}
-
-	// отрисовка строки статуса
-	StatusBarDraw();
-
-	// вывод названия группы
-	groupIdx = selectedItemIdx - currentLevelStart;
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, MenuGroups[groupIdx]->name);
-
-	// вывод названия параметра
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, MenuGroups[groupIdx]->params[paramIdx].name);
-
-	// считывание значения параметра
-	UsbReadData(MenuGroups[groupIdx]->params[paramIdx].adr, 1, ReadData);
-
-	// вывод значения параметра
-	const tParam* param = &MenuGroups[groupIdx]->params[paramIdx];
-	DisplayParameterValue(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param, ReadData[0]);
 
 }
 //--------------------------------------------------------------------
@@ -606,6 +614,44 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
 
 //--------------------------------------------------------------------
 /*
+* ParameterEditScreenDraw - отрисовка экрана изменения параметра
+*/
+void ParameterEditScreenDraw(void)
+{
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+
+
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+
+	}
+
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = GroupViewScr;
+	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 * SoftVersionsScreenDraw - отрисовка экрана Версии ПО
 */
 void SoftVersionsScreenDraw(void)
@@ -620,13 +666,6 @@ void SoftVersionsScreenDraw(void)
 	ST7565_drawstring(20, 3, "Экран Версии ПО");
 
 }
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-/*
-*
-*/
-
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
