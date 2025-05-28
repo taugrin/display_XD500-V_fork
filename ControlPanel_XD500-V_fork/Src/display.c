@@ -683,26 +683,29 @@ void ParameterEditScreenDraw(void)
 			}
 			else // «начение со знаком
 			{
-				uint16_t int_part;
-				uint16_t frac_part;
+				int16_t signed_value;
+				int16_t int_part;
+				int16_t frac_part;
 
 				if(param->scale > 1) // дробное значение (целое с масштабированием)
 				{
 					// ћинимальное значение слева
-					int_part = param->minVal / param->scale; // цела€ часть
-					frac_part = param->minVal % param->scale; // дробна€ часть
+					signed_value = (int16_t)param->minVal;
+					int_part = signed_value / param->scale; // цела€ часть
+					frac_part = abs(signed_value % param->scale); // дробна€ часть
 					// формируем строку и записываем еЄ в buffer
-					snprintf(buffer, sizeof(buffer), "%u.%0*u",
+					snprintf(buffer, sizeof(buffer), "%d.%0*d",
 							 int_part,
 							 (int)log10(param->scale),
 							 frac_part);
 					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
 
 					// ћаксимальное значение справа
-					int_part = param->maxVal / param->scale; // цела€ часть
-					frac_part = param->maxVal % param->scale; // дробна€ часть
+					signed_value = (int16_t)param->maxVal;
+					int_part = signed_value / param->scale; // цела€ часть
+					frac_part = abs(signed_value % param->scale); // дробна€ часть
 					// формируем строку и записываем еЄ в buffer
-					snprintf(buffer, sizeof(buffer), "%u.%0*u",
+					snprintf(buffer, sizeof(buffer), "%d.%0*d",
 							 int_part,
 							 (int)log10(param->scale),
 							 frac_part);
@@ -714,11 +717,13 @@ void ParameterEditScreenDraw(void)
 				else // целое значение
 				{
 					// ћинимальное значение слева
-					snprintf(buffer, sizeof(buffer), "%d", param->minVal);
+					signed_value = (int16_t)param->minVal;
+					snprintf(buffer, sizeof(buffer), "%d", signed_value);
 					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
 
 					// ћаксимальное значение справа
-					snprintf(buffer, sizeof(buffer), "%d", param->maxVal);
+					signed_value = (int16_t)param->maxVal;
+					snprintf(buffer, sizeof(buffer), "%d", signed_value);
 					int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
 					if (rightPos < 0) {rightPos = 0;}
 					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
