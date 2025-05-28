@@ -408,9 +408,9 @@ if (enablePartialUpdate){
     }
 }//#endif
 
-  DelaymS(1);
+  	//DelaymS(1);
     ST7565_st7565_command(CMD_SET_PAGE | pagemap[p]);
-    DelaymS(1);//DelayuS(100);
+    //DelaymS(1);//DelayuS(100);
 
 
 //#ifdef enablePartialUpdate
@@ -427,11 +427,11 @@ else
 }//#endif
 
     ST7565_st7565_command(CMD_SET_COLUMN_LOWER | ((col+ST7565_STARTBYTES) & 0xf));
-    DelaymS(1);
+    //DelaymS(1);
     ST7565_st7565_command(CMD_SET_COLUMN_UPPER | (((col+ST7565_STARTBYTES) >> 4) & 0x0F));
-    DelaymS(1);
+    //DelaymS(1);
     ST7565_st7565_command(CMD_RMW);
-    DelaymS(1);//DelayuS(100);
+    //DelaymS(1);//DelayuS(100);
     
     for(; col < maxcol; col++) {
       //uart_putw_dec(col);

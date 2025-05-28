@@ -18,7 +18,7 @@ void lcdDataWrite(uint8_t data)
 
     //A0 DOWN
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //CS UP
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
@@ -27,28 +27,28 @@ void lcdDataWrite(uint8_t data)
 
     //A0 UP
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //CS DOWN
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
     //WR DOWN
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
 
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //CMD BUS SET
     HAL_GPIO_WritePin(GPIOC, GpioDataPins & data, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //WR UP
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
     //CS UP
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //A0 DOWN
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 }
 
 uint8_t  lcdReadStatus()
@@ -111,7 +111,7 @@ void lcdCmd(uint8_t cmd)
 
     //A0 UP
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
     //CS UP
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
     //WR UP
@@ -119,28 +119,28 @@ void lcdCmd(uint8_t cmd)
 
     //A0 DOWN
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //CS DOWN
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
     //WR DOWN
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_RESET);
 
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //CMD BUS SET
     HAL_GPIO_WritePin(GPIOC, GpioDataPins & cmd, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //WR UP
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, GPIO_PIN_SET);
     //CS UP
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 
     //A0 UP
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_SET);
-    DWT_Delay_us(1);
+    //DWT_Delay_us(1);
 }
 
 void lcdInit()
