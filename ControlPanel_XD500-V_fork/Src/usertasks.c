@@ -63,7 +63,7 @@ void vTaskDisplay(void const * argument)
 
         	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET); //ToDo: Отладка! Конец задачи дисплея.
         //vTaskDelay(5);
-		vTaskDelay(3);
+		vTaskDelay(2);
     		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); //ToDo: Отладка! Конец задачи дисплея с учетом паузы.
 		//vTaskDelay(1); //ToDo: Отладка! Эта задержка только для того, чтобы на лог. анализаторе четко увидеть PA6 reset перед следующим PA6 set
     }

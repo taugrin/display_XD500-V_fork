@@ -61,6 +61,12 @@ int16_t groupIdx = 0;
 int16_t paramIdx = 0;
 
 const tParam* param;
+uint16_t paramData;
+char paramDataCharBuf[21]; // Буфер для форматированного значения параметра
+bool ParameterEditScreen;
+uint8_t paramDataEditDigit = 2, paramDataMinDigit, paramDataMaxDigit;
+bool editDigitBlink;
+uint8_t editDigitBlinkCnt;
 
 //--------------------------------------------------------------------
 /*
@@ -214,7 +220,11 @@ void MonitorScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	ST7565_drawstring(20, 3, "Экран Монитор");
+	if (editDigitBlinkCnt < 2) {editDigitBlinkCnt++;}
+	else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
+
+	if (editDigitBlink) {ST7565_drawstring(20, 3, "Экран Монитор");}
+	else {ST7565_drawstring(20, 3, "Экран Монитор_");}
 }
 //--------------------------------------------------------------------
 
@@ -264,6 +274,9 @@ void SettingsScreenDraw(void)
 	// экран для отображения параметров в группе
 	case GroupViewScr:
 		GroupViewScreenDraw();
+		ParameterEditScreen = true;
+		editDigitBlink = false;
+		editDigitBlinkCnt = 0;
 		break;
 
 	// экран для ввода значения параметра
@@ -460,10 +473,11 @@ void GroupViewScreenDraw(void)
 
 	// считывание значения параметра
 	UsbReadData(MenuGroups[groupIdx]->params[paramIdx].adr, 1, ReadData);
+	paramData = ReadData[0];
 
 	// вывод значения параметра
 	param = &MenuGroups[groupIdx]->params[paramIdx];
-	DisplayParameterValue(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param, ReadData[0]);
+	DisplayParameterValue(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param, paramData);
 
 
 	// Кнопка вниз
@@ -508,7 +522,7 @@ void GroupViewScreenDraw(void)
 */
 void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_t value)
 {
-    char buffer[16]; // Буфер для форматированного значения
+    //char paramDataCharBuf[21]; // Буфер для форматированного значения
     char units[4] = "   "; // Буфер для единиц измерения (3 символа + '\0')
 
     // Копируем единицы измерения из параметра
@@ -521,8 +535,8 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
                 // Дробное значение (целое с масштабированием)
                 uint16_t int_part = value / param->scale; // целая часть
                 uint16_t frac_part = value % param->scale; // дробная часть
-                // формируем строку и записываем её в buffer
-                snprintf(buffer, sizeof(buffer), "%u.%0*u %s",
+                // формируем строку и записываем её в paramDataCharBuf
+                snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%u.%0*u %s",
                          int_part,
                          (int)log10(param->scale),
                          frac_part,
@@ -537,8 +551,8 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
                 */
             } else {
                 // Просто целое беззнаковое
-            	// формируем строку и записываем её в buffer
-                snprintf(buffer, sizeof(buffer), "%u %s", value, units);
+            	// формируем строку и записываем её в paramDataCharBuf
+                snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%u %s", value, units);
                 /*
 				 %u		Беззнаковое целое число (int_part)
 				 %s		Строка (units — единицы измерения, например, "Hz").
@@ -552,8 +566,8 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
                 int16_t signed_value = (int16_t)value;
                 int16_t int_part = signed_value / param->scale;
                 int16_t frac_part = abs(signed_value % param->scale);
-                // формируем строку и записываем её в buffer
-                snprintf(buffer, sizeof(buffer), "%d.%0*d %s",
+                // формируем строку и записываем её в paramDataCharBuf
+                snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%d.%0*d %s",
                          int_part,
                          (int)log10(param->scale),
                          frac_part,
@@ -568,8 +582,8 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
                 */
             } else {
                 // Просто целое знаковое
-            	// формируем строку и записываем её в buffer
-                snprintf(buffer, sizeof(buffer), "%d %s", (int16_t)value, units);
+            	// формируем строку и записываем её в paramDataCharBuf
+                snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%d %s", (int16_t)value, units);
                 /*
 				 %d		Целое число со знаком (int_part)
 				 %s		Строка (units — единицы измерения, например, "Hz").
@@ -582,8 +596,8 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
         	const char* list_item = GetListItem(param, value);
             if(list_item)
             {
-            	// формируем строку и записываем её в buffer
-                snprintf(buffer, sizeof(buffer), "%s", list_item);
+            	// формируем строку и записываем её в paramDataCharBuf
+                snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%s", list_item);
                 /*
 				 %s	Вывод строки.
 				*/
@@ -591,14 +605,14 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
             else
             {
                 // Вывод сообщения, если нет такого значения в списке
-            	snprintf(buffer, sizeof(buffer), "НЕТ В СПИСКЕ");
+            	snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "НЕТ В СПИСКЕ");
             }
         } // если не обернуть фигурными скобками, не даст создать const char* list_item
             break;
 
         default:
             // Вывод сообщения, если неправильно указан тип данных.
-        	snprintf(buffer, sizeof(buffer), "ОШИБКА ТИПА");
+        	snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "ОШИБКА ТИПА");
             break;
     }
 
@@ -606,7 +620,7 @@ void DisplayParameterValue(uint8_t x, uint8_t line, const tParam* param, uint16_
     //ST7565_fillrect(x, line * 8, 128 - x, 8, 0);
 
     // Выводим значение на дисплей
-    ST7565_drawstring(x, line, buffer);
+    ST7565_drawstring(x, line, paramDataCharBuf);
 
 }
 
@@ -623,115 +637,151 @@ void ParameterEditScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
+
+
 	switch(param->type)
 	{
 		case PAR_IS_UINT:
 		case PAR_IS_INT:
 		{
-			// вывод названия параметра по центру
-			uint8_t nameLen = strlen(param->name);
-			int8_t posX = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTR_CHAR_POS - nameLen/2);
-			if (posX < 0) {posX = 0;}
-			ST7565_drawstring(posX, 2, param->name);
+			uint8_t stringLen;
+			int8_t centerPos;
 
-
-
-
-			// вывод мин и макс
-			if (param->type == PAR_IS_UINT) // Значение без знака.
+			// Вывод названия параметра по центру.
+			if (ParameterEditScreen)
 			{
-				uint16_t int_part;
-				uint16_t frac_part;
-
-				if(param->scale > 1) // дробное значение (целое с масштабированием)
-				{
-					// Минимальное значение слева
-					int_part = param->minVal / param->scale; // целая часть
-					frac_part = param->minVal % param->scale; // дробная часть
-					// формируем строку и записываем её в buffer
-					snprintf(buffer, sizeof(buffer), "%u.%0*u",
-							 int_part,
-							 (int)log10(param->scale),
-							 frac_part);
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
-
-					// Максимальное значение справа
-					int_part = param->maxVal / param->scale; // целая часть
-					frac_part = param->maxVal % param->scale; // дробная часть
-					// формируем строку и записываем её в buffer
-					snprintf(buffer, sizeof(buffer), "%u.%0*u",
-							 int_part,
-							 (int)log10(param->scale),
-							 frac_part);
-					int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
-					if (rightPos < 0) {rightPos = 0;}
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
-
-				}
-				else // целое значение
-				{
-					// Минимальное значение слева
-					snprintf(buffer, sizeof(buffer), "%u", param->minVal);
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
-
-					// Максимальное значение справа
-					snprintf(buffer, sizeof(buffer), "%u", param->maxVal);
-					int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
-					if (rightPos < 0) {rightPos = 0;}
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
-				}
-			}
-			else // Значение со знаком
-			{
-				int16_t signed_value;
-				int16_t int_part;
-				int16_t frac_part;
-
-				if(param->scale > 1) // дробное значение (целое с масштабированием)
-				{
-					// Минимальное значение слева
-					signed_value = (int16_t)param->minVal;
-					int_part = signed_value / param->scale; // целая часть
-					frac_part = abs(signed_value % param->scale); // дробная часть
-					// формируем строку и записываем её в buffer
-					snprintf(buffer, sizeof(buffer), "%d.%0*d",
-							 int_part,
-							 (int)log10(param->scale),
-							 frac_part);
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
-
-					// Максимальное значение справа
-					signed_value = (int16_t)param->maxVal;
-					int_part = signed_value / param->scale; // целая часть
-					frac_part = abs(signed_value % param->scale); // дробная часть
-					// формируем строку и записываем её в buffer
-					snprintf(buffer, sizeof(buffer), "%d.%0*d",
-							 int_part,
-							 (int)log10(param->scale),
-							 frac_part);
-					int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
-					if (rightPos < 0) {rightPos = 0;}
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
-
-				}
-				else // целое значение
-				{
-					// Минимальное значение слева
-					signed_value = (int16_t)param->minVal;
-					snprintf(buffer, sizeof(buffer), "%d", signed_value);
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
-
-					// Максимальное значение справа
-					signed_value = (int16_t)param->maxVal;
-					snprintf(buffer, sizeof(buffer), "%d", signed_value);
-					int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
-					if (rightPos < 0) {rightPos = 0;}
-					ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
-				}
+				stringLen = strlen(param->name);
+				centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
+				if (centerPos < 0) {centerPos = 0;}
+				ST7565_drawstring(centerPos, 2, param->name);
 			}
 
-			// подписи мин слева и макс справа
-			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 7, "мин             макс");
+			// Вывод значения параметра.
+			//uint16_t paramData;
+			//char paramDataCharBuf[21]; // Буфер для форматированного значения параметра
+
+			// мигание символа
+			if (editDigitBlinkCnt < 2) {editDigitBlinkCnt++;}
+			else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
+
+			stringLen = strlen(paramDataCharBuf);
+			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
+			if (centerPos < 0) {centerPos = 0;}
+
+			paramDataMinDigit = stringLen - 4;
+			if (editDigitBlink)
+			{
+				paramDataCharBuf[paramDataEditDigit] = '_';
+			}
+			else
+			{
+				paramDataCharBuf[paramDataEditDigit] = '0';
+			}
+
+			ST7565_drawstring(centerPos, 4, paramDataCharBuf);
+
+
+			// Вывод минального и максимального значений.
+			if (ParameterEditScreen)
+			{
+				if (param->type == PAR_IS_UINT) // Значение без знака.
+				{
+					uint16_t int_part;
+					uint16_t frac_part;
+
+					if(param->scale > 1) // дробное значение (целое с масштабированием)
+					{
+						// Минимальное значение слева
+						int_part = param->minVal / param->scale; // целая часть
+						frac_part = param->minVal % param->scale; // дробная часть
+						// формируем строку и записываем её в buffer
+						snprintf(buffer, sizeof(buffer), "%u.%0*u",
+								 int_part,
+								 (int)log10(param->scale),
+								 frac_part);
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
+
+						// Максимальное значение справа
+						int_part = param->maxVal / param->scale; // целая часть
+						frac_part = param->maxVal % param->scale; // дробная часть
+						// формируем строку и записываем её в buffer
+						snprintf(buffer, sizeof(buffer), "%u.%0*u",
+								 int_part,
+								 (int)log10(param->scale),
+								 frac_part);
+						int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
+						if (rightPos < 0) {rightPos = 0;}
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
+
+					}
+					else // целое значение
+					{
+						// Минимальное значение слева
+						snprintf(buffer, sizeof(buffer), "%u", param->minVal);
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
+
+						// Максимальное значение справа
+						snprintf(buffer, sizeof(buffer), "%u", param->maxVal);
+						int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
+						if (rightPos < 0) {rightPos = 0;}
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
+					}
+				}
+				else // Значение со знаком
+				{
+					int16_t signed_value;
+					int16_t int_part;
+					int16_t frac_part;
+
+					if(param->scale > 1) // дробное значение (целое с масштабированием)
+					{
+						// Минимальное значение слева
+						signed_value = (int16_t)param->minVal;
+						int_part = signed_value / param->scale; // целая часть
+						frac_part = abs(signed_value % param->scale); // дробная часть
+						// формируем строку и записываем её в buffer
+						snprintf(buffer, sizeof(buffer), "%d.%0*d",
+								 int_part,
+								 (int)log10(param->scale),
+								 frac_part);
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
+
+						// Максимальное значение справа
+						signed_value = (int16_t)param->maxVal;
+						int_part = signed_value / param->scale; // целая часть
+						frac_part = abs(signed_value % param->scale); // дробная часть
+						// формируем строку и записываем её в buffer
+						snprintf(buffer, sizeof(buffer), "%d.%0*d",
+								 int_part,
+								 (int)log10(param->scale),
+								 frac_part);
+						int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
+						if (rightPos < 0) {rightPos = 0;}
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
+
+					}
+					else // целое значение
+					{
+						// Минимальное значение слева
+						signed_value = (int16_t)param->minVal;
+						snprintf(buffer, sizeof(buffer), "%d", signed_value);
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, buffer);
+
+						// Максимальное значение справа
+						signed_value = (int16_t)param->maxVal;
+						snprintf(buffer, sizeof(buffer), "%d", signed_value);
+						int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(buffer);
+						if (rightPos < 0) {rightPos = 0;}
+						ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, buffer);
+					}
+				}
+
+				// подписи мин слева и макс справа
+				ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 7, "мин             макс");
+
+			}
+
+			ParameterEditScreen = false;
 
 		}
 		break;
