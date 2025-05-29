@@ -11,7 +11,7 @@ uint16_t GpioDataPins = GPIO_PIN_0|GPIO_PIN_1|GPIO_PIN_2|GPIO_PIN_3
 
 
 
-void lcdDataWrite(uint8_t data)
+void lcdDataWriteOld(uint8_t data)
 {
     //RESET DATA BUS
     HAL_GPIO_WritePin(GPIOC, GpioDataPins, GPIO_PIN_RESET);
@@ -49,6 +49,28 @@ void lcdDataWrite(uint8_t data)
     //A0 DOWN
     HAL_GPIO_WritePin(GPIOC, GPIO_PIN_8, GPIO_PIN_RESET);
     //DWT_Delay_us(1);
+}
+
+void lcdDataWrite(uint8_t data)
+{
+    // Сброс шины данных
+    GPIOC->BSRR = GpioDataPins << 16;
+
+    GPIOC->BSRR = GPIO_PIN_8 << 16;  // A0 низкий
+    GPIOB->BSRR = GPIO_PIN_12;       // CS высокий
+    GPIOB->BSRR = GPIO_PIN_10;       // WR высокий
+
+    GPIOC->BSRR = GPIO_PIN_8;        // A0 высокий
+    GPIOB->BSRR = GPIO_PIN_12 << 16; // CS низкий
+    GPIOB->BSRR = GPIO_PIN_10 << 16; // WR низкий
+
+    // Установка данных
+    GPIOC->BSRR = data & 0xFF;
+
+    GPIOB->BSRR = GPIO_PIN_10;       // WR высокий
+    GPIOB->BSRR = GPIO_PIN_12;       // CS высокий
+    GPIOC->BSRR = GPIO_PIN_8 << 16;  // A0 низкий
+
 }
 
 uint8_t  lcdReadStatus()
