@@ -802,7 +802,8 @@ void ParameterEditScreenDraw(void)
 			// Êíîïêà enter
 			if (CheckKeySem(xButtonEnterSemaphore))
 			{
-
+				UsbWriteReg(param->adr, paramData);
+				ChildScreen = GroupViewScr;
 			}
 
 

@@ -48,6 +48,6 @@ extern uint16_t USBReceived;
 
 void UsbReadData(uint16_t ParamAdr, uint16_t ParamCnt, uint16_t *ParamData);
 
-
+void UsbWriteReg(uint16_t ParamAdr, uint16_t ParamData);
 
 #endif /* USB_FUNCS_H_ */
