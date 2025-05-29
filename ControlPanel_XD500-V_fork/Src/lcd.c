@@ -53,6 +53,7 @@ void lcdDataWriteOld(uint8_t data)
 
 void lcdDataWrite(uint8_t data)
 {
+	/*
     // —брос шины данных
     GPIOC->BSRR = GpioDataPins << 16;
 
@@ -70,7 +71,26 @@ void lcdDataWrite(uint8_t data)
     GPIOB->BSRR = GPIO_PIN_10;       // WR высокий
     GPIOB->BSRR = GPIO_PIN_12;       // CS высокий
     GPIOC->BSRR = GPIO_PIN_8 << 16;  // A0 низкий
+	*/
 
+    // —брос шины данных и установка A0 в низкий уровень
+    GPIOC->BSRR = (GpioDataPins | GPIO_PIN_8) << 16;
+
+    // ”становка CS и WR в высокий уровень (если они еще не установлены)
+    GPIOB->BSRR = GPIO_PIN_12 | GPIO_PIN_10;
+
+    // ”становка A0 в высокий и CS в низкий
+    GPIOC->BSRR = GPIO_PIN_8;
+    GPIOB->BSRR = GPIO_PIN_12 << 16;
+
+    // ”становка данных и формирование строба записи
+    GPIOC->BSRR = data & 0xFF;
+    GPIOB->BSRR = GPIO_PIN_10 << 16; // WR низкий
+    GPIOB->BSRR = GPIO_PIN_10;       // WR высокий
+
+    // «авершение цикла записи
+    GPIOB->BSRR = GPIO_PIN_12;       // CS высокий
+    GPIOC->BSRR = GPIO_PIN_8 << 16;  // A0 низкий
 }
 
 uint8_t  lcdReadStatus()
