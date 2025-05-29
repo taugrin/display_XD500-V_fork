@@ -66,9 +66,9 @@ const tParam* param;
 uint16_t paramData;
 char paramDataCharBuf[21]; // Буфер для форматированного значения параметра
 bool ParameterEditScreen;
-uint8_t paramDataEditDigit = 2, paramDataMinDigit, paramDataMaxDigit;
-bool editDigitBlink;
-uint8_t editDigitBlinkCnt;
+int8_t paramDataEditDigit = 0; // Текущий редактируемый разряд (индекс в строке)
+bool editDigitBlink = false;     // Состояние мигания
+uint8_t editDigitBlinkCnt = 0;   // Счетчик для мигания
 
 //--------------------------------------------------------------------
 /*
@@ -132,11 +132,7 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore)
 */
 void ButtonsCheck(void)
 {
-	// Переключение между экранами по нажатию кнопки F.
-	if (CheckKeySem(xButtonFuncSemaphore))
-	{
-		NextMainScreen();
-	}
+
 }
 //--------------------------------------------------------------------
 
@@ -222,11 +218,14 @@ void MonitorScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	if (editDigitBlinkCnt < 1) {editDigitBlinkCnt++;}
-	else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
+	ST7565_drawstring(20, 3, "Экран Монитор");
 
-	if (editDigitBlink) {ST7565_drawstring(20, 3, "Экран Монитор");}
-	else {ST7565_drawstring(20, 3, "Экран Монитор_");}
+
+	// Переключение между экранами по нажатию кнопки F.
+	if (CheckKeySem(xButtonFuncSemaphore))
+	{
+		NextMainScreen();
+	}
 }
 //--------------------------------------------------------------------
 
@@ -240,6 +239,12 @@ void ReferenceScreenDraw(void)
 	StatusBarDraw();
 
 	ST7565_drawstring(20, 3, "Экран Задание");
+
+	// Переключение между экранами по нажатию кнопки F.
+	if (CheckKeySem(xButtonFuncSemaphore))
+	{
+		NextMainScreen();
+	}
 }
 //--------------------------------------------------------------------
 
@@ -293,6 +298,13 @@ void SettingsScreenDraw(void)
 
 	}
 
+
+
+	// Переключение между экранами по нажатию кнопки F.
+	if (CheckKeySem(xButtonFuncSemaphore))
+	{
+		NextMainScreen();
+	}
 }
 //--------------------------------------------------------------------
 
@@ -502,6 +514,9 @@ void GroupViewScreenDraw(void)
 		if (param->writeEn)
 		{
 			ChildScreen = ParameterEditScr;
+			paramDataEditDigit = strlen(paramDataCharBuf) - 5; // крайняя правая цифра = длина массива - длина ед.изм (4) - 1;
+			editDigitBlink = false;
+			editDigitBlinkCnt = 0;
 		}
 	}
 
@@ -690,11 +705,50 @@ void ParameterEditScreenDraw(void)
 			ST7565_drawstring(centerPos, 2, param->name);
 
 			// Вывод значения параметра.
+			if (editDigitBlinkCnt < 10) {editDigitBlinkCnt++;}
+			else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
+
 			SetBufferForDisplayParamData(param, paramData, false);
 			stringLen = strlen(paramDataCharBuf);
 			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
 			if (centerPos < 0) {centerPos = 0;}
+
+			if (editDigitBlink)
+			{
+				paramDataCharBuf[paramDataEditDigit] = '_'; // мигаю редактируемым разрядом
+			}
+
 			ST7565_drawstring(centerPos, 4, paramDataCharBuf);
+
+
+
+			// Кнопка вниз
+			if (CheckKeySem(xButtonDownSemaphore))
+			{
+
+			}
+
+			// Кнопка вверх
+			if (CheckKeySem(xButtonUpSemaphore))
+			{
+
+			}
+
+			// Кнопка F
+			if (CheckKeySem(xButtonFuncSemaphore))
+			{
+				editDigitBlinkCnt = 0; editDigitBlink = true;
+				paramDataEditDigit--; // перемещаю курсор влево
+				if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit--;} // если попалась точка, перемещаю еще влево
+				if (paramDataEditDigit < 0) {paramDataEditDigit = stringLen - 1;} // перемещаю в крайнюю правую позицию
+			}
+
+			// Кнопка enter
+			if (CheckKeySem(xButtonEnterSemaphore))
+			{
+
+			}
+
 
 
 			// Вывод минального и максимального значений.
@@ -719,24 +773,6 @@ void ParameterEditScreenDraw(void)
 	}
 
 
-
-	// Кнопка вниз
-	if (CheckKeySem(xButtonDownSemaphore))
-	{
-
-	}
-
-	// Кнопка вверх
-	if (CheckKeySem(xButtonUpSemaphore))
-	{
-
-	}
-
-	// Кнопка enter
-	if (CheckKeySem(xButtonEnterSemaphore))
-	{
-
-	}
 
 	// Кнопка reset
 	if (CheckKeySem(xButtonResetSemaphore))
