@@ -728,11 +728,15 @@ void ParameterEditScreenDraw(void)
 			if (stringLen < stringLenOld)
 			{
 				// значение уменьшилось на порядок, надо переместить курсор влево
+				if (paramDataEditDigit == 0)
+				{
+					paramDataEditStepU /= 10; // уменьшаю шаг изменения параметр в 10 раз
+					paramDataEditStepI /= 10; // уменьшаю шаг изменения параметр в 10 раз
+				}
 				paramDataEditDigit--;
 				if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit--;}
 				if (paramDataEditDigit < 0) {paramDataEditDigit = 0;}
-				paramDataEditStepU /= 10; // уменьшаю шаг изменения параметр в 10 раз
-				paramDataEditStepI /= 10; // уменьшаю шаг изменения параметр в 10 раз
+
 			}
 
 			stringLenOld = stringLen;
