@@ -65,10 +65,13 @@ int16_t paramIdx = 0;
 const tParam* param;
 uint16_t paramData;
 char paramDataCharBuf[21]; // Буфер для форматированного значения параметра
-bool ParameterEditScreen;
-int8_t paramDataEditDigit = 0; // Текущий редактируемый разряд (индекс в строке)
+bool ParameterEditScreen1stStep;
+uint8_t stringLen, stringLenOld;
 bool editDigitBlink = false;     // Состояние мигания
 uint8_t editDigitBlinkCnt = 0;   // Счетчик для мигания
+int8_t paramDataEditDigit = 0; // Текущий редактируемый разряд (индекс в строке)
+uint16_t paramDataEditStepU = 1; // Шаг изменения значения параметра
+int16_t paramDataEditStepI = 1; // Шаг изменения значения параметра
 
 //--------------------------------------------------------------------
 /*
@@ -281,9 +284,6 @@ void SettingsScreenDraw(void)
 	// экран для отображения параметров в группе
 	case GroupViewScr:
 		GroupViewScreenDraw();
-		ParameterEditScreen = true;
-		editDigitBlink = false;
-		editDigitBlinkCnt = 0;
 		break;
 
 	// экран для ввода значения параметра
@@ -514,9 +514,12 @@ void GroupViewScreenDraw(void)
 		if (param->writeEn)
 		{
 			ChildScreen = ParameterEditScr;
-			paramDataEditDigit = strlen(paramDataCharBuf) - 5; // крайняя правая цифра = длина массива - длина ед.изм (4) - 1;
+			ParameterEditScreen1stStep = true;
 			editDigitBlink = false;
 			editDigitBlinkCnt = 0;
+			paramDataEditDigit = strlen(paramDataCharBuf) - 5; // крайняя правая цифра = длина массива - длина ед.изм (4) - 1;
+			paramDataEditStepU = 1;
+			paramDataEditStepI = 1;
 		}
 	}
 
@@ -694,9 +697,10 @@ void ParameterEditScreenDraw(void)
 		case PAR_IS_UINT:
 		case PAR_IS_INT:
 		{
-			uint8_t stringLen;
+			//uint8_t stringLen, stringLenOld;
 			int8_t centerPos;
 			int8_t rightPos;
+			int16_t paramDataI;
 
 			// Вывод названия параметра по центру.
 			stringLen = strlen(param->name);
@@ -705,11 +709,34 @@ void ParameterEditScreenDraw(void)
 			ST7565_drawstring(centerPos, 2, param->name);
 
 			// Вывод значения параметра.
-			if (editDigitBlinkCnt < 10) {editDigitBlinkCnt++;}
+			if (editDigitBlinkCnt < 7) {editDigitBlinkCnt++;}
 			else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
 
 			SetBufferForDisplayParamData(param, paramData, false);
+
 			stringLen = strlen(paramDataCharBuf);
+			if (ParameterEditScreen1stStep) {ParameterEditScreen1stStep = false; stringLenOld = stringLen;}
+			if (stringLen > stringLenOld)
+			{
+				// значение увеличилось на порядок, надо переместить курсор вправо
+				paramDataEditDigit++;
+				if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit++;}
+				if (paramDataEditDigit > stringLen) {paramDataEditDigit = stringLen;}
+
+			}
+
+			if (stringLen < stringLenOld)
+			{
+				// значение уменьшилось на порядок, надо переместить курсор влево
+				paramDataEditDigit--;
+				if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit--;}
+				if (paramDataEditDigit < 0) {paramDataEditDigit = 0;}
+				paramDataEditStepU /= 10; // уменьшаю шаг изменения параметр в 10 раз
+				paramDataEditStepI /= 10; // уменьшаю шаг изменения параметр в 10 раз
+			}
+
+			stringLenOld = stringLen;
+
 			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
 			if (centerPos < 0) {centerPos = 0;}
 
@@ -725,22 +752,51 @@ void ParameterEditScreenDraw(void)
 			// Кнопка вниз
 			if (CheckKeySem(xButtonDownSemaphore))
 			{
-
+				if (param->type == PAR_IS_UINT)
+				{
+					paramData -= paramDataEditStepU;
+					if (paramData < param->minVal) {paramData = param->minVal;}
+				}
+				else
+				{
+					paramDataI = (int16_t)(paramData);
+					paramDataI -= paramDataEditStepI;
+					if (paramDataI < (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+					paramData = (uint16_t)(paramDataI);
+				}
 			}
 
 			// Кнопка вверх
 			if (CheckKeySem(xButtonUpSemaphore))
 			{
-
+				if (param->type == PAR_IS_UINT)
+				{
+					paramData += paramDataEditStepU;
+					if (paramData > param->maxVal) {paramData = param->maxVal;}
+				}
+				else
+				{
+					paramDataI = (int16_t)(paramData);
+					paramDataI += paramDataEditStepI;
+					if (paramDataI > (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+					paramData = (uint16_t)(paramDataI);
+				}
 			}
 
 			// Кнопка F
 			if (CheckKeySem(xButtonFuncSemaphore))
 			{
-				editDigitBlinkCnt = 0; editDigitBlink = true;
+				//editDigitBlinkCnt = 0; editDigitBlink = true;
 				paramDataEditDigit--; // перемещаю курсор влево
+				paramDataEditStepU *= 10; // увеличиваю шаг изменения параметр в 10 раз
+				paramDataEditStepI *= 10; // увеличиваю шаг изменения параметр в 10 раз
 				if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit--;} // если попалась точка, перемещаю еще влево
-				if (paramDataEditDigit < 0) {paramDataEditDigit = stringLen - 1;} // перемещаю в крайнюю правую позицию
+				if ((paramDataEditDigit < 0) || (paramDataCharBuf[paramDataEditDigit] == '-')) // если крайняя левая позиция или знак минус
+				{
+					paramDataEditDigit = stringLen - 1; // перемещаю в крайнюю правую позицию
+					paramDataEditStepU = 1; // сбрасываю шаг изменения параметра в наименьшее значение
+					paramDataEditStepI = 1; // сбрасываю шаг изменения параметра в наименьшее значение
+				}
 			}
 
 			// Кнопка enter
