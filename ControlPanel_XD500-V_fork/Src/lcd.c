@@ -86,6 +86,7 @@ void lcdDataWrite(uint8_t data)
     // ”становка данных и формирование строба записи
     GPIOC->BSRR = data & 0xFF;
     GPIOB->BSRR = GPIO_PIN_10 << 16; // WR низкий
+    asm volatile("nop; nop");
     GPIOB->BSRR = GPIO_PIN_10;       // WR высокий
 
     // «авершение цикла записи
