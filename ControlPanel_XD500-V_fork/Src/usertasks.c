@@ -29,7 +29,7 @@ void vTaskDisplay(void const * argument)
 	ST7565_clear();
 	ST7565_StartImage(); // запись стартовой картинки в массив
 	ST7565_display(); // вывод картинки на экран
-	enablePartialUpdate = true;
+	//enablePartialUpdate = true;
 
 	MX_USB_HOST_Init(); // инициализация usb
 
