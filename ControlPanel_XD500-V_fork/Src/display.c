@@ -681,6 +681,7 @@ void ParameterEditScreenDraw(void)
 		{
 			uint8_t stringLen;
 			int8_t centerPos;
+			int8_t rightPos;
 
 			// Вывод названия параметра по центру.
 			stringLen = strlen(param->name);
@@ -689,7 +690,11 @@ void ParameterEditScreenDraw(void)
 			ST7565_drawstring(centerPos, 2, param->name);
 
 			// Вывод значения параметра.
-
+			SetBufferForDisplayParamData(param, paramData, false);
+			stringLen = strlen(paramDataCharBuf);
+			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
+			if (centerPos < 0) {centerPos = 0;}
+			ST7565_drawstring(centerPos, 4, paramDataCharBuf);
 
 
 			// Вывод минального и максимального значений.
@@ -697,7 +702,7 @@ void ParameterEditScreenDraw(void)
 			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, paramDataCharBuf);
 
 			SetBufferForDisplayParamData(param, param->maxVal, false);
-			int8_t rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
+			rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
 			if (rightPos < 0) {rightPos = 0;}
 			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, paramDataCharBuf);
 
