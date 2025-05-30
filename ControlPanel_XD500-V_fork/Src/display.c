@@ -221,7 +221,6 @@ void StatusBarDraw(void)
 /*
 * MonitorScreenDraw - отрисовка экрана Монитор
 */
-uint8_t monitorScreenDrawCnt = 0;
 void MonitorScreenDraw(void)
 {
 	// отрисовка строки статуса
@@ -258,6 +257,8 @@ void MonitorScreenDraw(void)
 	{
 		NextMainScreen();
 	}
+
+	vTaskDelay(200);
 }
 //--------------------------------------------------------------------
 
@@ -900,6 +901,8 @@ void SoftVersionsScreenDraw(void)
 			 ReadData[0] % 100);          // CC (третья часть)
 
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 12, 5, paramDataCharBuf);
+
+	vTaskDelay(200);
 
 }
 //--------------------------------------------------------------------
