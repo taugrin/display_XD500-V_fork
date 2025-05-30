@@ -221,13 +221,13 @@ void StatusBarDraw(void)
 /*
 * MonitorScreenDraw - отрисовка экрана Монитор
 */
+uint8_t monitorScreenDrawCnt = 0;
 void MonitorScreenDraw(void)
 {
 	// отрисовка строки статуса
 	StatusBarDraw();
 
 	// пока просто считываю ток, Udc и Tigbt, чтобы отобразить на экране
-
 	param = &AllGroups[2]->params[3];
 	UsbReadData(param->adr, 1, ReadData);
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, param->name);
@@ -251,7 +251,6 @@ void MonitorScreenDraw(void)
 	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
 	if (rightPos < 0) {rightPos = 0;}
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, paramDataCharBuf);
-
 
 
 	// Переключение между экранами по нажатию кнопки F.
@@ -886,8 +885,21 @@ void SoftVersionsScreenDraw(void)
 		ChildScreen = MenuScr;
 	}
 
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 1, "     ВЕРСИИ ПО:");
 
-	ST7565_drawstring(20, 3, "Экран Версии ПО");
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 3, "ПО ПУЛЬТА:");
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 12, 3, SOFT_VERSION);
+
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 5, "ПО XD500-V:");
+
+	UsbReadData(0x4400, 1, ReadData);
+    // Разбиваем число на части и форматируем
+    snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%d.%02d.%02d",
+    		 ReadData[0] / 10000,         // A (первая часть)
+             (ReadData[0] / 100) % 100,   // BB (вторая часть)
+			 ReadData[0] % 100);          // CC (третья часть)
+
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 12, 5, paramDataCharBuf);
 
 }
 //--------------------------------------------------------------------

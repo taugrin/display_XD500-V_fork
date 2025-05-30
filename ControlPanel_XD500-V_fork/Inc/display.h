@@ -34,6 +34,9 @@
 //
 // Defines
 //
+
+#define SOFT_VERSION "1.00.00"
+
 #define FONT_SIZE 5
 #define CHAR_GAP  1
 #define FONT_GAP (FONT_SIZE+1*CHAR_GAP)
