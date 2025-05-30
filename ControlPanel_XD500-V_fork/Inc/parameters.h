@@ -27,12 +27,13 @@
 #define UNITS_HZ  			"Hz "
 #define UNITS_RPM  			"rpm"
 #define UNITS_PROC			"%  "
-#define UNITS_SEC 			"s  "
-#define UNITS_MSEC 			"ms "
 #define UNITS_VOLT  		"V  "
 #define UNITS_KWT  			"kW "
 #define UNITS_AMP  			"A  "
+#define UNITS_CELSIUM		"§Ñ "
 #define UNITS_OHM 			"Ohm"
+#define UNITS_SEC 			"s  "
+#define UNITS_MSEC 			"ms "
 
 
 #define MODBUSADR_ADR           0x3200

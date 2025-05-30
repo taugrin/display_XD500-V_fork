@@ -63,11 +63,11 @@ static const char listG11P02[] =  "AI1\0AI2\0AI3\0KEYPAD\0FIELDBUS";
 static const tParam group11_params[] = {
 	{"01 ЗАДАНИЕ С ПУЛЬТА",  0x0B00, 0, 1,    PAR_IS_LIST, 1,  listG11P01, true, false, UNITS_VOID},
 	{"02 ПУ1 ЗАДАНИЕ", 	     0x0B01, 0, 4,    PAR_IS_LIST, 1,  listG11P02, true, false, UNITS_VOID},
-	{"03 ПУ1 МИНИМУМ", 	     0x0B02, 0, 500,  PAR_IS_INT,  10, NULL,       true, false, UNITS_HZ},
-	{"04 ПУ1 МАКСИМУМ", 	 0x0B03, 0, 1000, PAR_IS_INT,  10, NULL,       true, false, UNITS_HZ},
+	{"03 ПУ1 МИНИМУМ", 	     0x0B02, 0, 500,  PAR_IS_UINT,  10, NULL,       true, false, UNITS_HZ},
+	{"04 ПУ1 МАКСИМУМ", 	 0x0B03, 0, 1000, PAR_IS_UINT,  10, NULL,       true, false, UNITS_HZ},
 	{"05 ПУ2 ЗАДАНИЕ", 	     0x0B04, 0, 4,    PAR_IS_LIST, 1,  listG11P02, true, false, UNITS_VOID},
-	{"06 ПУ2 МИНИМУМ", 	     0x0B05, 0, 1000, PAR_IS_INT,  10, NULL,       true, false, UNITS_PROC},
-	{"07 ПУ2 МАКСИМУМ", 	 0x0B06, 0, 2000, PAR_IS_INT,  10, NULL,       true, false, UNITS_PROC}
+	{"06 ПУ2 МИНИМУМ", 	     0x0B05, 0, 1000, PAR_IS_UINT,  10, NULL,       true, false, UNITS_PROC},
+	{"07 ПУ2 МАКСИМУМ", 	 0x0B06, 0, 2000, PAR_IS_UINT,  10, NULL,       true, false, UNITS_PROC}
 };
 
 // Группа параметров
@@ -80,7 +80,37 @@ const tGroup Group11 = {
 //--------------------------------------------------------------------
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11};
+//--------------------------Группа 68---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+
+// Параметры группы 68
+static const tParam group68_params[] = {
+	{"ПО XD500-V",        0x4400, 			       0, 65535,  PAR_IS_UINT,  1, NULL, false, false, UNITS_VOID},
+	{"ЧАСТОТА", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, false, false, UNITS_HZ},
+	{"СКОРОСТЬ", 	      0x4402, (uint16_t)(-20000), 20000,  PAR_IS_INT,   1, NULL, false, false, UNITS_RPM},
+	{"ТОК ДВИГ", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_AMP},
+	{"МОМЕНТ", 	      	  0x4404,  (uint16_t)(-2000),  2000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOID},
+	{"МОЩНОСТЬ", 		  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, false, false, UNITS_KWT},
+	{"НАПРЯЖ ДВИГ",  	  0x4406,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOLT},
+	{"НАПРЯЖ DC",    	  0x4407,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOLT},
+	{"ТЕМП IGBT",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOLT}
+
+};
+
+// Группа параметров
+const tGroup Group68 = {
+    "68 МОНИТОРИНГ",
+	group68_params,
+    sizeof(group68_params)/sizeof(tParam),
+	true
+};
+
+//--------------------------------------------------------------------
+
+
+
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group68};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11};

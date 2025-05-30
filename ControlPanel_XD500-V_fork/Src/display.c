@@ -62,11 +62,16 @@ int16_t selectedItemIdx = 0; // Индекс выбранного пунтка текущего уровня
 int16_t groupIdx = 0;
 int16_t paramIdx = 0;
 
+uint8_t stringLen, stringLenOld;
+
+int8_t centerPos;
+int8_t rightPos;
+
 const tParam* param;
 uint16_t paramData;
 char paramDataCharBuf[21]; // Буфер для форматированного значения параметра
+
 bool ParameterEditScreen1stStep;
-uint8_t stringLen, stringLenOld;
 bool editDigitBlink = false;     // Состояние мигания
 uint8_t editDigitBlinkCnt = 0;   // Счетчик для мигания
 int8_t paramDataEditDigit = 0; // Текущий редактируемый разряд (индекс в строке)
@@ -221,7 +226,32 @@ void MonitorScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	ST7565_drawstring(20, 3, "Экран Монитор");
+	// пока просто считываю ток, Udc и Tigbt, чтобы отобразить на экране
+
+	param = &AllGroups[2]->params[3];
+	UsbReadData(param->adr, 1, ReadData);
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, param->name);
+	SetBufferForDisplayParamData(param, ReadData[0], false);
+	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
+	if (rightPos < 0) {rightPos = 0;}
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 2, paramDataCharBuf);
+
+	param = &AllGroups[2]->params[7];
+	UsbReadData(param->adr, 1, ReadData);
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, param->name);
+	SetBufferForDisplayParamData(param, ReadData[0], false);
+	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
+	if (rightPos < 0) {rightPos = 0;}
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 4, paramDataCharBuf);
+
+	param = &AllGroups[2]->params[8];
+	UsbReadData(param->adr, 1, ReadData);
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param->name);
+	SetBufferForDisplayParamData(param, ReadData[0], false);
+	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
+	if (rightPos < 0) {rightPos = 0;}
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, paramDataCharBuf);
+
 
 
 	// Переключение между экранами по нажатию кнопки F.
@@ -698,8 +728,8 @@ void ParameterEditScreenDraw(void)
 		case PAR_IS_INT:
 		{
 			//uint8_t stringLen, stringLenOld;
-			int8_t centerPos;
-			int8_t rightPos;
+			//int8_t centerPos;
+			//int8_t rightPos;
 			int16_t paramDataI;
 
 			// Вывод названия параметра по центру.
