@@ -833,14 +833,6 @@ void ParameterEditScreenDraw(void)
 				}
 			}
 
-			// Кнопка enter
-			if (CheckKeySem(xButtonEnterSemaphore))
-			{
-				UsbWriteReg(param->adr, paramData);
-				ChildScreen = GroupViewScr;
-			}
-
-
 
 			// Вывод минального и максимального значений.
 			SetBufferForDisplayParamData(param, param->minVal, false);
@@ -858,12 +850,50 @@ void ParameterEditScreenDraw(void)
 		break;
 
 		case PAR_IS_LIST:
+		{
+			uint8_t BeginListItem = (paramData / 3)*3; // верхний пункт списка на экране в зависимости от выбранного
+			uint8_t EndListItem = BeginListItem + 3; // нижний пункт списка на экране в зависимости от выбранного
 
+			// отрисовываю три пункта списка на экране в зависимости от выбранного
+			uint8_t j = 2;
+			for(uint8_t i = BeginListItem; i <= param->maxVal && i < EndListItem; i++)
+			{
+				// Отображение названия пункта
+				ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, j, GetListItem(param, i));
+				j+=2;
+
+				// Выделение текущего выбранного пункта
+				if(i == paramData)
+				{
+					ST7565_inv_fillrect(0, 15 + (16 * (i % 3)), 128, 9, 1);
+				}
+
+			}
+
+			// Кнопка вниз
+			if (CheckKeySem(xButtonDownSemaphore))
+			{
+				if (paramData == param->maxVal) {paramData = param->minVal;}
+				else {paramData++;}
+			}
+
+			// Кнопка вверх
+			if (CheckKeySem(xButtonUpSemaphore))
+			{
+				if (paramData == param->minVal) {paramData = param->maxVal;}
+				else {paramData--;}
+			}
+		}
 		break;
 
 	}
 
-
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+		UsbWriteReg(param->adr, paramData);
+		ChildScreen = GroupViewScr;
+	}
 
 	// Кнопка reset
 	if (CheckKeySem(xButtonResetSemaphore))
