@@ -79,6 +79,33 @@ const tGroup Group11 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 12---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG12P01[] =  "NOT SEL\0DI1\0DI2\0DI3\0DI_12\0DI_34\0DI_56\0DI_123\0DI_456";
+
+// Параметры группы 12
+static const tParam group12_params[] = {
+	{"01 ВЫБОР ПОСТ СКОР",  0x0C00, 			    0,    8,  PAR_IS_LIST, 1,  listG12P01, true, false, UNITS_VOID},
+	{"02 ПОСТ СКОР 1", 	    0x0C01, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"03 ПОСТ СКОР 2", 	    0x0C02, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"04 ПОСТ СКОР 3", 	    0x0C03, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"05 ПОСТ СКОР 4", 	    0x0C04, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"06 ПОСТ СКОР 5", 	    0x0C05, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"07 ПОСТ СКОР 6", 	    0x0C06, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"08 ПОСТ СКОР 7", 	    0x0C07, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"09 ПОСТ СКОР 8", 	    0x0C08, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+
+};
+
+// Группа параметров
+const tGroup Group12 = {
+    "12 ПОСТ СКОРОСТИ",
+    group12_params,
+    sizeof(group12_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 
 //--------------------------Группа 68---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
@@ -110,10 +137,10 @@ const tGroup Group68 = {
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group68};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group68};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 

@@ -227,7 +227,7 @@ void MonitorScreenDraw(void)
 	StatusBarDraw();
 
 	// пока просто считываю ток, Udc и Tigbt, чтобы отобразить на экране
-	param = &AllGroups[2]->params[3];
+	param = &AllGroups[3]->params[3];
 	UsbReadData(param->adr, 1, ReadData);
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, param->name);
 	SetBufferForDisplayParamData(param, ReadData[0], false, false);
@@ -235,7 +235,7 @@ void MonitorScreenDraw(void)
 	if (rightPos < 0) {rightPos = 0;}
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 2, paramDataCharBuf);
 
-	param = &AllGroups[2]->params[7];
+	param = &AllGroups[3]->params[7];
 	UsbReadData(param->adr, 1, ReadData);
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, param->name);
 	SetBufferForDisplayParamData(param, ReadData[0], false, false);
@@ -243,7 +243,7 @@ void MonitorScreenDraw(void)
 	if (rightPos < 0) {rightPos = 0;}
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 4, paramDataCharBuf);
 
-	param = &AllGroups[2]->params[8];
+	param = &AllGroups[3]->params[8];
 	UsbReadData(param->adr, 1, ReadData);
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param->name);
 	SetBufferForDisplayParamData(param, ReadData[0], false, false);
@@ -676,7 +676,7 @@ void SetBufferForDisplayParamData(const tParam* param, uint16_t value, bool with
 					if (withZeros)
 					{
 		                snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%+0*d.%0*d %s",
-		                		 (int)(5-frac_digits),
+		                		 (int)(6-frac_digits),
 		                		 int_part,
 								 frac_digits,
 		                         frac_part,
@@ -697,7 +697,7 @@ void SetBufferForDisplayParamData(const tParam* param, uint16_t value, bool with
 					if (withZeros)
 					{
 						snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%+0*d.%0*d",
-								 (int)(5-frac_digits),
+								 (int)(6-frac_digits),
 								 int_part,
 								 frac_digits,
 								 frac_part);
@@ -830,24 +830,13 @@ void ParameterEditScreenDraw(void)
 			if (centerPos < 0) {centerPos = 0;}
 			ST7565_drawstring(centerPos, 2, param->name);
 
-			// Вывод значения параметра.
+			// Вывод значения параметра (начало).
 			if (editDigitBlinkCnt < 7) {editDigitBlinkCnt++;}
 			else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
 
 			SetBufferForDisplayParamData(param, paramData, false, true);
 
 			stringLen = strlen(paramDataCharBuf);
-
-			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
-			if (centerPos < 0) {centerPos = 0;}
-
-			if (editDigitBlink)
-			{
-				paramDataCharBuf[paramDataEditDigit] = '_'; // мигаю редактируемым разрядом
-			}
-
-			ST7565_drawstring(centerPos, 4, paramDataCharBuf);
-
 
 
 			// Кнопка вниз
@@ -858,20 +847,38 @@ void ParameterEditScreenDraw(void)
 					if (paramData <= param->minVal) {paramData = param->minVal;}
 					else
 					{
-						if (paramData <= paramDataEditStepU) {paramData = param->minVal;}
+						if (paramData <= param->minVal + paramDataEditStepU) {paramData = param->minVal;}
 						else {paramData -= paramDataEditStepU;}
 					}
 				}
 				else
 				{
 					paramDataI = (int16_t)(paramData);
-					if (paramDataI <= (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+					if (paramDataCharBuf[paramDataEditDigit] == '-')
+					{
+						paramDataI = -paramDataI;
+						if (paramDataI >= (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+						if (paramDataI <= (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+					}
+					else if (paramDataCharBuf[paramDataEditDigit] == '+')
+					{
+						paramDataI = -paramDataI;
+						if (paramDataI >= (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+						if (paramDataI <= (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+					}
 					else
 					{
-						if (paramDataI <= paramDataEditStepI) {paramDataI = (int16_t)(param->minVal);}
-						else {paramDataI -= paramDataEditStepI;}
+
+						if (paramDataI <= (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+						else
+						{
+							if (paramDataI <= (int16_t)(param->minVal) + paramDataEditStepI) {paramDataI = (int16_t)(param->minVal);}
+							else {paramDataI -= paramDataEditStepI;}
+						}
+
 					}
 					paramData = (uint16_t)(paramDataI);
+
 				}
 			}
 
@@ -890,13 +897,31 @@ void ParameterEditScreenDraw(void)
 				else
 				{
 					paramDataI = (int16_t)(paramData);
-					if (paramDataI >= (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+					if (paramDataCharBuf[paramDataEditDigit] == '-')
+					{
+						paramDataI = -paramDataI;
+						if (paramDataI >= (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+						if (paramDataI <= (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+					}
+					else if (paramDataCharBuf[paramDataEditDigit] == '+')
+					{
+						paramDataI = -paramDataI;
+						if (paramDataI >= (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+						if (paramDataI <= (int16_t)(param->minVal)) {paramDataI = (int16_t)(param->minVal);}
+					}
 					else
 					{
-						if (paramDataI >= (int16_t)(param->maxVal) - paramDataEditStepI) {paramDataI = (int16_t)(param->maxVal);}
-						else {paramDataI += paramDataEditStepI;}
+
+						if (paramDataI >= (int16_t)(param->maxVal)) {paramDataI = (int16_t)(param->maxVal);}
+						else
+						{
+							if (paramDataI >= (int16_t)(param->maxVal) - paramDataEditStepI) {paramDataI = (int16_t)(param->maxVal);}
+							else {paramDataI += paramDataEditStepI;}
+						}
+
 					}
 					paramData = (uint16_t)(paramDataI);
+
 				}
 			}
 
@@ -908,13 +933,24 @@ void ParameterEditScreenDraw(void)
 				paramDataEditStepU *= 10; // увеличиваю шаг изменения параметр в 10 раз
 				paramDataEditStepI *= 10; // увеличиваю шаг изменения параметр в 10 раз
 				if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit--;} // если попалась точка, перемещаю еще влево
-				if ((paramDataEditDigit < 0) || (paramDataCharBuf[paramDataEditDigit] == '-')) // если крайняя левая позиция или знак минус
+				if (paramDataEditDigit < 0) // если крайняя левая позиция
 				{
 					paramDataEditDigit = stringLen - 1; // перемещаю в крайнюю правую позицию
 					paramDataEditStepU = 1; // сбрасываю шаг изменения параметра в наименьшее значение
 					paramDataEditStepI = 1; // сбрасываю шаг изменения параметра в наименьшее значение
 				}
 			}
+
+			// Вывод значения параметра (продолжение).
+			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
+			if (centerPos < 0) {centerPos = 0;}
+
+			if (editDigitBlink)
+			{
+				paramDataCharBuf[paramDataEditDigit] = '_'; // мигаю редактируемым разрядом
+			}
+
+			ST7565_drawstring(centerPos, 4, paramDataCharBuf);
 
 
 			// Вывод минального и максимального значений.
