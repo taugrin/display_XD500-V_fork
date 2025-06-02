@@ -86,14 +86,14 @@ static const char listG12P01[] =  "NOT SEL\0DI1\0DI2\0DI3\0DI_12\0DI_34\0DI_56\0
 // оЮПЮЛЕРПШ ЦПСООШ 12
 static const tParam group12_params[] = {
 	{"01 бшанп оняр яйнп",  0x0C00, 			    0,    8,  PAR_IS_LIST, 1,  listG12P01, true, false, UNITS_VOID},
-	{"02 оняр яйнп 1", 	    0x0C01, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"03 оняр яйнп 2", 	    0x0C02, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"04 оняр яйнп 3", 	    0x0C03, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"05 оняр яйнп 4", 	    0x0C04, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"06 оняр яйнп 5", 	    0x0C05, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"07 оняр яйнп 6", 	    0x0C06, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"08 оняр яйнп 7", 	    0x0C07, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
-	{"09 оняр яйнп 8", 	    0x0C08, (uint16_t)(-6000), 6000,  PAR_IS_INT,  10, NULL,       true, false, UNITS_RPM},
+	{"02 оняр яйнп 1", 	    0x0C01, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"03 оняр яйнп 2", 	    0x0C02, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"04 оняр яйнп 3", 	    0x0C03, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"05 оняр яйнп 4", 	    0x0C04, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"06 оняр яйнп 5", 	    0x0C05, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"07 оняр яйнп 6", 	    0x0C06, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"08 оняр яйнп 7", 	    0x0C07, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
+	{"09 оняр яйнп 8", 	    0x0C08, (uint16_t)(-6000), 6000,  PAR_IS_INT,  1,  NULL,       true, false, UNITS_RPM},
 
 };
 
