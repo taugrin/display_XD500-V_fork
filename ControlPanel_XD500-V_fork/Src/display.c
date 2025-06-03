@@ -269,23 +269,22 @@ void MonitorScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	// пока просто считываю ток, Udc и Tigbt, чтобы отобразить на экране
-	param = &AllGroups[3]->params[3];
-	UsbReadData(param->adr, 1, ReadData);
-	DrawStringWithAlign(2, ALIGN_LEFT, param->name);
-	SetBufferForDisplayParamData(param, ReadData[0], false, false);
+	// Монитор 1
+	DrawStringWithAlign(2, ALIGN_LEFT, Monitor[MonitorSelect[0]].name);
+	UsbReadData(Monitor[MonitorSelect[0]].adr, 1, ReadData);
+	SetBufferForDisplayParamData(&Monitor[MonitorSelect[0]], ReadData[0], true, false);
 	DrawStringWithAlign(2, ALIGN_RIGHT, paramDataCharBuf);
 
-	param = &AllGroups[3]->params[7];
-	UsbReadData(param->adr, 1, ReadData);
-	DrawStringWithAlign(4, ALIGN_LEFT, param->name);
-	SetBufferForDisplayParamData(param, ReadData[0], false, false);
+	// Монитор 2
+	DrawStringWithAlign(4, ALIGN_LEFT, Monitor[MonitorSelect[1]].name);
+	UsbReadData(Monitor[MonitorSelect[1]].adr, 1, ReadData);
+	SetBufferForDisplayParamData(&Monitor[MonitorSelect[1]], ReadData[0], true, false);
 	DrawStringWithAlign(4, ALIGN_RIGHT, paramDataCharBuf);
 
-	param = &AllGroups[3]->params[8];
-	UsbReadData(param->adr, 1, ReadData);
-	DrawStringWithAlign(6, ALIGN_LEFT, param->name);
-	SetBufferForDisplayParamData(param, ReadData[0], false, false);
+	// Монитор 3
+	DrawStringWithAlign(6, ALIGN_LEFT, Monitor[MonitorSelect[2]].name);
+	UsbReadData(Monitor[MonitorSelect[2]].adr, 1, ReadData);
+	SetBufferForDisplayParamData(&Monitor[MonitorSelect[2]], ReadData[0], true, false);
 	DrawStringWithAlign(6, ALIGN_RIGHT, paramDataCharBuf);
 
 
@@ -1141,6 +1140,20 @@ void MonitorSettingsScreenEditDraw(void)
 			ST7565_inv_fillrect(0, 15 + (16 * (i % 3)), 128, 9, 1);
 		}
 
+	}
+
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		if (MonitorVal == (MonitorCnt - 1)) {MonitorVal = 0;}
+		else {MonitorVal++;}
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		if (MonitorVal == 0) {MonitorVal = MonitorCnt - 1;}
+		else {MonitorVal--;}
 	}
 
 	// Кнопка enter

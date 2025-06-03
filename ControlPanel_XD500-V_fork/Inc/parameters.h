@@ -25,17 +25,17 @@
 #define PAR_IS_BIN			3
 #define PAR_IS_HEX			4
 
-#define UNITS_VOID			"   "
-#define UNITS_HZ  			"Hz "
+#define UNITS_VOID			" "
+#define UNITS_HZ  			"Hz"
 #define UNITS_RPM  			"rpm"
-#define UNITS_PROC			"%  "
-#define UNITS_VOLT  		"V  "
-#define UNITS_KWT  			"kW "
-#define UNITS_AMP  			"A  "
-#define UNITS_CELSIUM		"§Ñ "
+#define UNITS_PROC			"%"
+#define UNITS_VOLT  		"V"
+#define UNITS_KWT  			"kW"
+#define UNITS_AMP  			"A"
+#define UNITS_CELSIUM		"§Ñ"
 #define UNITS_OHM 			"Ohm"
-#define UNITS_SEC 			"s  "
-#define UNITS_MSEC 			"ms "
+#define UNITS_SEC 			"s"
+#define UNITS_MSEC 			"ms"
 
 
 #define MODBUSADR_ADR           0x3200
@@ -77,7 +77,7 @@ typedef struct
 	//bool 			viewInMenu;
 } tGroup;
 
-typedef struct
+/*typedef struct
 {
 	char		name[MAX_NAME_LENGTH];
 	uint16_t	adr;
@@ -87,7 +87,7 @@ typedef struct
 	uint16_t 	scale;
 	const char	*listItems;
 	char		units[3];
-} tMonitor;
+} tMonitor;*/
 
 
 
@@ -211,7 +211,7 @@ extern tFaultWord FaultWord;
 extern tFaultWord1 FaultWord1;
 extern tAlarmWord AlarmWord;
 
-extern const tMonitor Monitor[];
+extern const tParam Monitor[];
 extern const uint16_t MonitorCnt;
 extern uint8_t MonitorSelect[3];
 extern uint8_t MonitorNum;

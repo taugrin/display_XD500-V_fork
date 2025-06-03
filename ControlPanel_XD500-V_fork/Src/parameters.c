@@ -107,50 +107,24 @@ const tGroup Group12 = {
 //--------------------------------------------------------------------
 
 
-//--------------------------Группа 68---------------------------------
-// Списки параметров (одной строкой с \0 разделителями)
 
-
-// Параметры группы 68
-static const tParam group68_params[] = {
-	{"ПО XD500-V",        0x4400, 			       0, 65535,  PAR_IS_UINT,  1, NULL, false, false, UNITS_VOID},
-	{"ЧАСТОТА", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, false, false, UNITS_HZ},
-	{"СКОРОСТЬ", 	      0x4402, (uint16_t)(-20000), 20000,  PAR_IS_INT,   1, NULL, false, false, UNITS_RPM},
-	{"ТОК ДВИГ", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_AMP},
-	{"МОМЕНТ", 	      	  0x4404,  (uint16_t)(-2000),  2000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOID},
-	{"МОЩНОСТЬ", 		  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, false, false, UNITS_KWT},
-	{"НАПРЯЖ ДВИГ",  	  0x4406,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOLT},
-	{"НАПРЯЖ DC",    	  0x4407,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOLT},
-	{"ТЕМП IGBT",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false, UNITS_VOLT}
-
-};
-
-// Группа параметров
-const tGroup Group68 = {
-    "68 МОНИТОРИНГ",
-	group68_params,
-    sizeof(group68_params)/sizeof(tParam),
-	true
-};
-
-//--------------------------------------------------------------------
 
 //--------------------------Мониторинг--------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
 
 // Параметры Мониторинга
-const tMonitor Monitor[] = {
-	{"DC BUS VOLT",    	  0x4407,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_VOLT},
-	{"VOLTAGE",  	  	  0x4406,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_VOLT},
-	{"CURRENT", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_AMP},
-	{"FREQUENCY", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, UNITS_HZ},
-	{"POWER", 		  	  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, UNITS_KWT},
-	{"IGBT TEMP",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_VOLT}
+const tParam Monitor[] = {
+	{"DC BUS VOLT",    	  0x4407,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_VOLT},
+	{"VOLTAGE",  	  	  0x4406,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_VOLT},
+	{"CURRENT", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_AMP},
+	{"FREQUENCY", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_HZ},
+	{"POWER", 		  	  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, false, false,  UNITS_KWT},
+	{"IGBT TEMP",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_CELSIUM}
 
 };
 
-const uint16_t MonitorCnt = sizeof(Monitor)/sizeof(tMonitor);
+const uint16_t MonitorCnt = sizeof(Monitor)/sizeof(tParam);
 
 uint8_t MonitorSelect[3] = {2, 0, 5}; // значения Монитор 1, Монитор 2, Монитор 3
 uint8_t MonitorNum = 0; // индекс выбранного мониторинга (Монитор 1, Монитор 2, Монитор 3)
@@ -160,7 +134,7 @@ uint8_t MonitorVal = 0;
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group68};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12};
