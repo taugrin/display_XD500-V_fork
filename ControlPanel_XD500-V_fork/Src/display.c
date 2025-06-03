@@ -851,16 +851,10 @@ void ParameterEditScreenDraw(void)
 		case PAR_IS_UINT:
 		case PAR_IS_INT:
 		{
-			//uint8_t stringLen, stringLenOld;
-			//int8_t centerPos;
-			//int8_t rightPos;
 			int16_t paramDataI;
 
 			// ¬ывод названи€ параметра по центру.
-			stringLen = strlen(param->name);
-			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
-			if (centerPos < 0) {centerPos = 0;}
-			ST7565_drawstring(centerPos, 2, param->name);
+			DrawStringWithAlign(2, ALIGN_CENTER, param->name);
 
 			// ¬ывод значени€ параметра (начало).
 			if (editDigitBlinkCnt < 7) {editDigitBlinkCnt++;}
@@ -982,20 +976,18 @@ void ParameterEditScreenDraw(void)
 				paramDataCharBuf[paramDataEditDigit] = '_'; // мигаю редактируемым разр€дом
 			}
 
-			ST7565_drawstring(centerPos, 4, paramDataCharBuf);
+			DrawStringWithAlign(4, ALIGN_CENTER, paramDataCharBuf);
 
 
 			// ¬ывод минального и максимального значений.
 			SetBufferForDisplayParamData(param, param->minVal, false, false);
-			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, paramDataCharBuf);
+			DrawStringWithAlign(6, ALIGN_LEFT, paramDataCharBuf);
 
 			SetBufferForDisplayParamData(param, param->maxVal, false, false);
-			rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
-			if (rightPos < 0) {rightPos = 0;}
-			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, paramDataCharBuf);
+			DrawStringWithAlign(6, ALIGN_RIGHT, paramDataCharBuf);
 
 			// подписи мин слева и макс справа
-			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 7, "мин             макс");
+			DrawStringWithAlign(7, ALIGN_LEFT, "мин             макс");
 
 		}
 		break;
@@ -1010,7 +1002,7 @@ void ParameterEditScreenDraw(void)
 			for(uint8_t i = BeginListItem; i <= param->maxVal && i < EndListItem; i++)
 			{
 				// ќтображение названи€ пункта
-				ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, j, GetListItem(param, i));
+				DrawStringWithAlign(j, ALIGN_LEFT, GetListItem(param, i));
 				j+=2;
 
 				// ¬ыделение текущего выбранного пункта
