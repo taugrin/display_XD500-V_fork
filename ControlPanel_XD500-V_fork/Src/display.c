@@ -44,6 +44,10 @@ void DisplayParameterValue(uint8_t x, uint8_t y, const tParam* param, uint16_t v
 
 void ParameterEditScreenDraw(void);
 
+void MonitorSettingsScreenViewDraw(void);
+
+void MonitorSettingsScreenEditDraw(void);
+
 void SoftVersionsScreenDraw(void);
 //
 // Global Variables
@@ -340,6 +344,7 @@ void SettingsScreenDraw(void)
 
 
 		paramIdx = 0; // сброс номера параметра, чтобы при входе в группу начиналось с 0
+		MonitorNum = 0; // сброс номера мониторинга, чтобы при входи в меню мониторинг всегда начиналось с 0
 
 		break;
 
@@ -351,6 +356,16 @@ void SettingsScreenDraw(void)
 	// экран для ввода значения параметра
 	case ParameterEditScr:
 		ParameterEditScreenDraw();
+		break;
+
+	// экран для отображения значения настроек мониторинга
+	case MonitorSettingsViewScr:
+		MonitorSettingsScreenViewDraw();
+		break;
+
+	// экран для редактирования значения настроек мониторинга
+	case MonitorSettingsEditScr:
+		MonitorSettingsScreenEditDraw();
 		break;
 
 	// экран для отображения версий ПО пульта и привода
@@ -785,7 +800,7 @@ void SetBufferForDisplayParamData(const tParam* param, uint16_t value, bool with
 
         case PAR_IS_LIST: // Значение из списка
         { // если не обернуть фигурными скобками, не даст создать const char* list_item
-        	const char* list_item = GetListItem(param, value);
+        	const char* list_item = GetParamListItem(param, value);
             if(list_item)
             {
             	// формируем строку и записываем её в paramDataCharBuf
@@ -1002,7 +1017,7 @@ void ParameterEditScreenDraw(void)
 			for(uint8_t i = BeginListItem; i <= param->maxVal && i < EndListItem; i++)
 			{
 				// Отображение названия пункта
-				DrawStringWithAlign(j, ALIGN_LEFT, GetListItem(param, i));
+				DrawStringWithAlign(j, ALIGN_LEFT, GetParamListItem(param, i));
 				j+=2;
 
 				// Выделение текущего выбранного пункта
@@ -1043,6 +1058,61 @@ void ParameterEditScreenDraw(void)
 	{
 		ChildScreen = GroupViewScr;
 	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* MonitorSettingsScreenViewDraw - экран для отображения значения настроек мониторинга
+*/
+void MonitorSettingsScreenViewDraw(void)
+{
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+	// Надпись Мониторинг
+	DrawStringWithAlign(2, ALIGN_LEFT, "МОНИТОРИНГ");
+
+	// номер мониторинга
+	switch (MonitorNum)
+	{
+	case 0: DrawStringWithAlign(4, ALIGN_LEFT, "МОНИТОР 1"); break;
+	case 1: DrawStringWithAlign(4, ALIGN_LEFT, "МОНИТОР 2"); break;
+	case 2: DrawStringWithAlign(4, ALIGN_LEFT, "МОНИТОР 3"); break;
+	}
+
+
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		if (MonitorNum == 2) {MonitorNum = 0;}
+		else {MonitorNum++;}
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		if (MonitorNum == 0) {MonitorNum = 2;}
+		else {MonitorNum--;}
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MenuScr;
+	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* MonitorSettingsScreenEditDraw - экран для редактирования значения настроек мониторинга
+*/
+void MonitorSettingsScreenEditDraw(void)
+{
+
 
 }
 //--------------------------------------------------------------------

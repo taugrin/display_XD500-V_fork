@@ -40,7 +40,7 @@ void InitBasicMenu(void)
 	Menu_AddItem("ÁÛÑÒĞÛÉ ÑÒÀĞÒ", -1, 3, NoScr); //[2]
 	Menu_AddItem("ÔÓÍÊÖÈÈ ÊÎÏÈĞÎÂÀÍÈß", -1, 4, NoScr); //[3]
 	Menu_AddItem("ÂÅĞÑÈÈ ÏÎ", -1, 5, SoftVersionsScr); //[4]
-	Menu_AddItem("ÌÎÍÈÒÎĞÈÍÃ", -1, 6, NoScr); //[5]
+	Menu_AddItem("ÌÎÍÈÒÎĞÈÍÃ", -1, 6, MonitorSettingsViewScr); //[5]
 	MenuItemsCnt = Menu_AddItem("ÏÎÊÀÇÀÍÈß ÒÀÉÌÅĞÎÂ", -1, 0, NoScr); //[6]
 
 
@@ -55,14 +55,6 @@ void InitBasicMenu(void)
 		i++;
 	}
 
-	// Äîáàâëÿş ıëåìåíòû â ìåíş ÌÎÍÈÒÎĞÈÍÃ
-	MenuNextIdx = MenuItemsCnt+2;
-	MenuItemsCnt = Menu_AddItem("ÌÎÍÈÒÎĞÈÍÃ 1", 5, MenuNextIdx, NoScr);
-	MenuFirstIdx = MenuItemsCnt;
-	MenuNextIdx = MenuItemsCnt+2;
-	MenuItemsCnt = Menu_AddItem("ÌÎÍÈÒÎĞÈÍÃ 2", 5, MenuNextIdx, NoScr);
-	MenuNextIdx = MenuFirstIdx;
-	MenuItemsCnt = Menu_AddItem("ÌÎÍÈÒÎĞÈÍÃ 3", 5, MenuNextIdx, NoScr);
 
 }
 //--------------------------------------------------------------------

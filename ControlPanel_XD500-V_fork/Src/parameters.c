@@ -135,6 +135,28 @@ const tGroup Group68 = {
 
 //--------------------------------------------------------------------
 
+//--------------------------Мониторинг--------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+
+// Параметры Мониторинга
+const tMonitor Monitor[] = {
+	{"DC BUS VOLT",    	  0x4407,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_VOLT},
+	{"VOLTAGE",  	  	  0x4406,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_VOLT},
+	{"CURRENT", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_AMP},
+	{"FREQUENCY", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, UNITS_HZ},
+	{"POWER", 		  	  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, UNITS_KWT},
+	{"IGBT TEMP",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, UNITS_VOLT}
+
+};
+
+const uint16_t MonitorCnt = sizeof(Monitor)/sizeof(tMonitor);
+
+uint8_t MonitorVal[3] = {2, 0, 5};
+uint8_t MonitorNum = 0;
+
+//--------------------------------------------------------------------
+
 
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group68};
@@ -146,9 +168,9 @@ const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 //--------------------------------------------------------------------
 /*
-* GetListItem - функция получения элемента списка по индексу.
+* GetParamListItem - функция получения элемента списка по индексу.
 */
-const char* GetListItem(const tParam* param, uint8_t index)
+const char* GetParamListItem(const tParam* param, uint8_t index)
 {
     if(param->type != PAR_IS_LIST) return NULL;
 
@@ -166,7 +188,7 @@ const char* GetListItem(const tParam* param, uint8_t index)
 /*
 // Пример использования:
 const tParam* param = &Group10.params[0]; // Параметр со списком
-const char* listItem = GetListItem(param, 2); // Получаем 3-й элемент (индекс 2)
+const char* listItem = GetParamListItem(param, 2); // Получаем 3-й элемент (индекс 2)
 
 */
 

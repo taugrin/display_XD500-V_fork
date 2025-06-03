@@ -22,6 +22,8 @@
 #define PAR_IS_UINT			0
 #define PAR_IS_INT			1
 #define PAR_IS_LIST			2
+#define PAR_IS_BIN			3
+#define PAR_IS_HEX			4
 
 #define UNITS_VOID			"   "
 #define UNITS_HZ  			"Hz "
@@ -75,6 +77,17 @@ typedef struct
 	//bool 			viewInMenu;
 } tGroup;
 
+typedef struct
+{
+	char		name[MAX_NAME_LENGTH];
+	uint16_t	adr;
+	uint16_t 	minVal;
+	uint16_t 	maxVal;
+	uint16_t	type;	// 0 - unsigned; 1 - signed; 2 - list; 3 - bin; 4 - hex;
+	uint16_t 	scale;
+	const char	*listItems;
+	char		units[3];
+} tMonitor;
 
 
 
@@ -198,7 +211,10 @@ extern tFaultWord FaultWord;
 extern tFaultWord1 FaultWord1;
 extern tAlarmWord AlarmWord;
 
-
+extern const tMonitor Monitor[];
+extern const uint16_t MonitorCnt;
+extern uint8_t MonitorVal[3];
+extern uint8_t MonitorNum;
 
 extern const tGroup* const AllGroups[];
 extern const uint16_t AllGroupsCnt;
@@ -211,7 +227,7 @@ extern const uint16_t MenuGroupsCnt;
 // Functions for other files
 //
 
-const char* GetListItem(const tParam* param, uint8_t index);
+const char* GetParamListItem(const tParam* param, uint8_t index);
 
 
 #endif /* PARAMETERS_H_ */

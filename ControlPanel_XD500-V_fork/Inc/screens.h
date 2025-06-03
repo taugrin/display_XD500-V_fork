@@ -31,6 +31,8 @@ typedef enum
 	MenuScr,
 	GroupViewScr,
 	ParameterEditScr,
+	MonitorSettingsViewScr,
+	MonitorSettingsEditScr,
 	SoftVersionsScr
 }tChildScreens;
 
