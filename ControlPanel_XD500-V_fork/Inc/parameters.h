@@ -213,8 +213,10 @@ extern tAlarmWord AlarmWord;
 
 extern const tMonitor Monitor[];
 extern const uint16_t MonitorCnt;
-extern uint8_t MonitorVal[3];
+extern uint8_t MonitorSelect[3];
 extern uint8_t MonitorNum;
+extern uint8_t MonitorVal;
+
 
 extern const tGroup* const AllGroups[];
 extern const uint16_t AllGroupsCnt;

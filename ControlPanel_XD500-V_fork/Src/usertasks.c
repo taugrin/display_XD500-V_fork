@@ -42,6 +42,8 @@ void vTaskDisplay(void const * argument)
 	// инициализация корневого меню
 	InitBasicMenu();
 
+	//ToDo: Сделать вычитку значений мониторинга (MonitorSelect[3]) из eeprom!
+
     //RefInit(); // считывание задания пульта из eeprom
 
 

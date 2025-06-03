@@ -1082,6 +1082,8 @@ void MonitorSettingsScreenViewDraw(void)
 	case 2: DrawStringWithAlign(4, ALIGN_LEFT, "МОНИТОР 3"); break;
 	}
 
+	// значение мониторинга
+	DrawStringWithAlign(6, ALIGN_LEFT, Monitor[MonitorSelect[MonitorNum]].name);
 
 	// Кнопка вниз
 	if (CheckKeySem(xButtonDownSemaphore))
@@ -1095,6 +1097,13 @@ void MonitorSettingsScreenViewDraw(void)
 	{
 		if (MonitorNum == 0) {MonitorNum = 2;}
 		else {MonitorNum--;}
+	}
+
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+		MonitorVal = MonitorSelect[MonitorNum];
+		ChildScreen = MonitorSettingsEditScr;
 	}
 
 	// Кнопка reset
@@ -1112,7 +1121,42 @@ void MonitorSettingsScreenViewDraw(void)
 */
 void MonitorSettingsScreenEditDraw(void)
 {
+	// отрисовка строки статуса
+	StatusBarDraw();
 
+	uint8_t BeginListItem = (MonitorVal / 3)*3; // верхний пункт списка на экране в зависимости от выбранного
+	uint8_t EndListItem = BeginListItem + 3; // нижний пункт списка на экране в зависимости от выбранного
+
+	// отрисовываю три пункта списка на экране в зависимости от выбранного
+	uint8_t j = 2;
+	for(uint8_t i = BeginListItem; i <= MonitorCnt && i < EndListItem; i++)
+	{
+		// Отображение названия пункта
+		DrawStringWithAlign(j, ALIGN_LEFT, Monitor[i].name);
+		j+=2;
+
+		// Выделение текущего выбранного пункта
+		if(i == MonitorVal)
+		{
+			ST7565_inv_fillrect(0, 15 + (16 * (i % 3)), 128, 9, 1);
+		}
+
+	}
+
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+		MonitorSelect[MonitorNum] = MonitorVal;
+		//ToDo: Доделать сохранение MonitorSelect[MonitorNum] в eeprom!
+
+		ChildScreen = MonitorSettingsViewScr;
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MonitorSettingsViewScr;
+	}
 
 }
 //--------------------------------------------------------------------

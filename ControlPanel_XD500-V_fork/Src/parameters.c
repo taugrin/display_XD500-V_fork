@@ -152,8 +152,9 @@ const tMonitor Monitor[] = {
 
 const uint16_t MonitorCnt = sizeof(Monitor)/sizeof(tMonitor);
 
-uint8_t MonitorVal[3] = {2, 0, 5};
-uint8_t MonitorNum = 0;
+uint8_t MonitorSelect[3] = {2, 0, 5}; // значения Монитор 1, Монитор 2, Монитор 3
+uint8_t MonitorNum = 0; // индекс выбранного мониторинга (Монитор 1, Монитор 2, Монитор 3)
+uint8_t MonitorVal = 0;
 
 //--------------------------------------------------------------------
 
