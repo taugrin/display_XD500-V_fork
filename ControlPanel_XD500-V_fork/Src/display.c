@@ -304,7 +304,7 @@ void ReferenceScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	ST7565_drawstring(20, 3, "Экран Задание");
+	DrawStringWithAlign(3, ALIGN_CENTER, "Экран Задание");
 
 	// Переключение между экранами по нажатию кнопки F.
 	if (CheckKeySem(xButtonFuncSemaphore))
@@ -320,7 +320,6 @@ void ReferenceScreenDraw(void)
 */
 void SettingsScreenDraw(void)
 {
-	//ST7565_drawstring(20, 3, "Экран Настройки");
 
 	switch (ChildScreen)
 	{
@@ -543,10 +542,10 @@ void GroupViewScreenDraw(void)
 
 	// вывод названия группы
 	groupIdx = selectedItemIdx - currentLevelStart;
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, MenuGroups[groupIdx]->name);
+	DrawStringWithAlign(2, ALIGN_LEFT, MenuGroups[groupIdx]->name);
 
 	// вывод названия параметра
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, MenuGroups[groupIdx]->params[paramIdx].name);
+	DrawStringWithAlign(4, ALIGN_LEFT, MenuGroups[groupIdx]->params[paramIdx].name);
 
 	// считывание значения параметра
 	UsbReadData(MenuGroups[groupIdx]->params[paramIdx].adr, 1, ReadData);
