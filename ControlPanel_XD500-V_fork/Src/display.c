@@ -758,7 +758,7 @@ void SetBufferForDisplayParamData(const tParam* param, uint16_t value, bool with
                 {
 					if (withZeros)
 					{
-						snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%+05d %s", (int16_t)value, units);
+						snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%+06d %s", (int16_t)value, units);
 					}
 					else
 					{
@@ -769,7 +769,7 @@ void SetBufferForDisplayParamData(const tParam* param, uint16_t value, bool with
 				{
 					if (withZeros)
 					{
-						snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%+05d", (int16_t)value);
+						snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "%+06d", (int16_t)value);
 					}
 					else
 					{
