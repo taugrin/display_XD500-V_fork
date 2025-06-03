@@ -47,6 +47,10 @@
 #define DISP_LEFT_BOUND 2
 #define DISP_CENTR 64
 
+#define ALIGN_LEFT 0
+#define ALIGN_CENTER 1
+#define ALIGN_RIGHT 2
+
 #define DISP_RIGHT_CHAR_POS 20
 #define DISP_CENTER_CHAR_POS 10
 

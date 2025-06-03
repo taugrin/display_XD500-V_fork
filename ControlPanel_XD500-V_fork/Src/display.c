@@ -10,6 +10,8 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore);
 
 void ButtonsCheck(void);
 
+void DrawStringWithAlign(uint8_t line, uint8_t align, const char *c);
+
 void NextMainScreen(void);
 
 void StatusBarDraw(void);
@@ -146,6 +148,43 @@ void ButtonsCheck(void)
 
 //--------------------------------------------------------------------
 /*
+* DrawStringWithAlign - отрисовка текстовых данных с выравниванием
+*/
+void DrawStringWithAlign(uint8_t line, uint8_t align, const char *c)
+{
+	uint8_t len;
+	int8_t pos;
+
+	switch (align)
+	{
+	case 0: // left
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, line, c);
+	break;
+
+	case 1: // center
+		len = strlen(c);
+		pos = DISP_CENTER_CHAR_POS - len/2;
+		if (pos < 0) {pos = 0;}
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * pos, line, c);
+
+	break;
+
+	case 2: // right
+		len = strlen(c);
+		pos = DISP_RIGHT_CHAR_POS - len;
+		if (pos < 0) {pos = 0;}
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * pos, line, c);
+	break;
+
+	default: // default left
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, line, c);
+	break;
+	}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 * NextMainScreen - переключение между главными экранами
 */
 //--------------------------------------------------------------------
@@ -229,27 +268,21 @@ void MonitorScreenDraw(void)
 	// пока просто считываю ток, Udc и Tigbt, чтобы отобразить на экране
 	param = &AllGroups[3]->params[3];
 	UsbReadData(param->adr, 1, ReadData);
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 2, param->name);
+	DrawStringWithAlign(2, ALIGN_LEFT, param->name);
 	SetBufferForDisplayParamData(param, ReadData[0], false, false);
-	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
-	if (rightPos < 0) {rightPos = 0;}
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 2, paramDataCharBuf);
+	DrawStringWithAlign(2, ALIGN_RIGHT, paramDataCharBuf);
 
 	param = &AllGroups[3]->params[7];
 	UsbReadData(param->adr, 1, ReadData);
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 4, param->name);
+	DrawStringWithAlign(4, ALIGN_LEFT, param->name);
 	SetBufferForDisplayParamData(param, ReadData[0], false, false);
-	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
-	if (rightPos < 0) {rightPos = 0;}
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 4, paramDataCharBuf);
+	DrawStringWithAlign(4, ALIGN_RIGHT, paramDataCharBuf);
 
 	param = &AllGroups[3]->params[8];
 	UsbReadData(param->adr, 1, ReadData);
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param->name);
+	DrawStringWithAlign(6, ALIGN_LEFT, param->name);
 	SetBufferForDisplayParamData(param, ReadData[0], false, false);
-	rightPos = DISP_RIGHT_CHAR_POS - strlen(paramDataCharBuf);
-	if (rightPos < 0) {rightPos = 0;}
-	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * rightPos, 6, paramDataCharBuf);
+	DrawStringWithAlign(6, ALIGN_RIGHT, paramDataCharBuf);
 
 
 	// Переключение между экранами по нажатию кнопки F.
