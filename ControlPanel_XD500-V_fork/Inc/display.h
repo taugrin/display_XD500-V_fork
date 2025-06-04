@@ -28,7 +28,7 @@
 
 #include "menu.h"
 
-
+#include "eeprom.h"
 
 
 //

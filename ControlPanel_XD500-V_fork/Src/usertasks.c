@@ -10,6 +10,7 @@
 #include "dwt_stm32_delay.h"
 #include "ST7565.h"
 #include "usb_host.h"
+#include "eeprom.h"
 
 
 SemaphoreHandle_t xButtonUpSemaphore = NULL;
@@ -19,6 +20,8 @@ SemaphoreHandle_t xButtonFuncSemaphore = NULL;
 SemaphoreHandle_t xButtonResetSemaphore = NULL;
 SemaphoreHandle_t xButtonRunSemaphore = NULL;
 SemaphoreHandle_t xButtonStoptSemaphore = NULL;
+
+void InitMonitorSel(void);
 
 
 void vTaskDisplay(void const * argument)
@@ -42,7 +45,8 @@ void vTaskDisplay(void const * argument)
 	// инициализация корневого меню
 	InitBasicMenu();
 
-	//ToDo: Сделать вычитку значений мониторинга (MonitorSelect[3]) из eeprom!
+	// инициализация переменных мониторинга
+	InitMonitorSel();
 
     //RefInit(); // считывание задания пульта из eeprom
 
@@ -70,103 +74,19 @@ void vTaskDisplay(void const * argument)
 
 }
 
+void InitMonitorSel(void)
+{
+	uint8_t tmpMonitorSel;
 
-//void vTaskKeysCheck(void *pvParameters)
-//{
-//
-//
-//    key_cont_t countUp = {0,0};
-//    key_cont_t countDown = {0,0};
-//    key_cont_t countFunc = {0,0};
-//    key_cont_t countReset = {0,0};
-//    key_cont_t countRun = {0,0};
-//    key_cont_t countStop = {0,0};
-//    key_cont_t countEnter = {0,0};
-//
-//
-//
-//    xButtonUpSemaphore = xSemaphoreCreateBinary();
-//    xButtonDownSemaphore = xSemaphoreCreateBinary();
-//    xButtonEnterSemaphore = xSemaphoreCreateBinary();
-//    xButtonFuncSemaphore = xSemaphoreCreateBinary();
-//    xButtonResetSemaphore = xSemaphoreCreateBinary();
-//    xButtonRunSemaphore = xSemaphoreCreateBinary();
-//    xButtonStopSemaphore = xSemaphoreCreateBinary();
-//
-//    void ChekKey(uint8_t state, SemaphoreHandle_t xButton, key_cont_t* count)
-//    {
-//        if (state)
-//        {
-//            count->Push++;
-//
-//        } else
-//        {
-//            if (count->Push >= 2)
-//            {
-//                count->Pull++;
-//                if (count->Pull >= 20)
-//                {
-//                    count->Pull = 0;
-//                    count->Push = 0;
-//                    xSemaphoreGive(xButton);
-//
-//                }
-//
-//            }
-//
-//        }
-//        if (count->Push >= 68)
-//        {
-//            count->Pull = 0;
-//            count->Push = 0;
-//            xSemaphoreGive(xButton);
-//        }
-//
-//    }
-//
-//    //check if semaphores were created successfully
-//    if        ((xButtonUpSemaphore != NULL)
-//            && (xButtonDownSemaphore != NULL)
-//            && (xButtonEnterSemaphore != NULL)
-//            && (xButtonFuncSemaphore != NULL)
-//            && (xButtonResetSemaphore != NULL)
-//            && (xButtonRunSemaphore != NULL)
-//            && (xButtonStopSemaphore != NULL))
-//    {
-//        //successfully created
-//        //resets initial semaphores to 0
-//        xSemaphoreTake(xButtonUpSemaphore, (portTickType)0);
-//        xSemaphoreTake(xButtonDownSemaphore, (portTickType)0);
-//        xSemaphoreTake(xButtonEnterSemaphore, (portTickType)0);
-//        xSemaphoreTake(xButtonFuncSemaphore, (portTickType)0);
-//        xSemaphoreTake(xButtonResetSemaphore, (portTickType)0);
-//        xSemaphoreTake(xButtonRunSemaphore, (portTickType)0);
-//        xSemaphoreTake(xButtonStopSemaphore, (portTickType)0);
-//
-//    } else
-//    {
-//        //send error of failure
-//    }
-//
-//    for (;;)
-//    {
-//
-//
-//        ChekKey(KEY_FUNC, xButtonFuncSemaphore, &countFunc);
-//
-//        ChekKey(KEY_UP, xButtonUpSemaphore, &countUp);
-//
-//        ChekKey(KEY_DOWN, xButtonDownSemaphore, &countDown);
-//
-//        ChekKey(KEY_ENTER, xButtonEnterSemaphore, &countEnter);
-//
-//        ChekKey(KEY_RESET, xButtonResetSemaphore, &countReset);
-//
-//        ChekKey(KEY_RUN, xButtonRunSemaphore, &countRun);
-//
-//        ChekKey(KEY_STOP, xButtonStopSemaphore, &countStop);
-//
-//        vTaskDelay(4);
-//    }
-//}
+	// Монитор 1
+	tmpMonitorSel = readMonitorSel(0);
+	if ((tmpMonitorSel >= 0) && (tmpMonitorSel < MonitorCnt)) {MonitorSelect[0] = tmpMonitorSel;}
 
+	// Монитор 2
+	tmpMonitorSel = readMonitorSel(1);
+	if ((tmpMonitorSel >= 0) && (tmpMonitorSel < MonitorCnt)) {MonitorSelect[1] = tmpMonitorSel;}
+
+	// Монитор 3
+	tmpMonitorSel = readMonitorSel(2);
+	if ((tmpMonitorSel >= 0) && (tmpMonitorSel < MonitorCnt)) {MonitorSelect[2] = tmpMonitorSel;}
+}

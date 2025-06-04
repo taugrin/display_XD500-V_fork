@@ -1160,7 +1160,7 @@ void MonitorSettingsScreenEditDraw(void)
 	if (CheckKeySem(xButtonEnterSemaphore))
 	{
 		MonitorSelect[MonitorNum] = MonitorVal;
-		//ToDo: Доделать сохранение MonitorSelect[MonitorNum] в eeprom!
+		writeMonitorSel(MonitorNum, &MonitorVal);
 
 		ChildScreen = MonitorSettingsViewScr;
 	}
