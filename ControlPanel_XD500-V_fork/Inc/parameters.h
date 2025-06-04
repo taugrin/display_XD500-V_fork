@@ -218,6 +218,9 @@ extern uint8_t MonitorNum;
 extern uint8_t MonitorVal;
 
 
+extern uint8_t EventNum;
+
+
 extern const tGroup* const AllGroups[];
 extern const uint16_t AllGroupsCnt;
 

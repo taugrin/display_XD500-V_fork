@@ -133,6 +133,28 @@ uint8_t MonitorVal = 0;
 //--------------------------------------------------------------------
 
 
+//--------------------------Архив событий-----------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+
+// Параметры Архива событий
+/*const tParam Monitor[] = {
+	{"DC BUS VOLT",    	  0x4407,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_VOLT},
+	{"VOLTAGE",  	  	  0x4406,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_VOLT},
+	{"CURRENT", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_AMP},
+	{"FREQUENCY", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_HZ},
+	{"POWER", 		  	  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, false, false,  UNITS_KWT},
+	{"IGBT TEMP",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_CELSIUM}
+
+};
+
+const uint16_t MonitorCnt = sizeof(Monitor)/sizeof(tParam);*/
+
+uint8_t EventNum = 0; // индекс просматриваемого события
+
+//--------------------------------------------------------------------
+
+
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);

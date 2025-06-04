@@ -44,6 +44,8 @@ void DisplayParameterValue(uint8_t x, uint8_t y, const tParam* param, uint16_t v
 
 void ParameterEditScreenDraw(void);
 
+void EventArciveScreenDraw(void);
+
 void MonitorSettingsScreenViewDraw(void);
 
 void MonitorSettingsScreenEditDraw(void);
@@ -343,6 +345,7 @@ void SettingsScreenDraw(void)
 
 
 		paramIdx = 0; // сброс номера параметра, чтобы при входе в группу начиналось с 0
+		EventNum = 0; // сброс номера события, чтобы при входе в меню начиналось с 0
 		MonitorNum = 0; // сброс номера мониторинга, чтобы при входи в меню мониторинг всегда начиналось с 0
 
 		break;
@@ -355,6 +358,11 @@ void SettingsScreenDraw(void)
 	// экран для ввода значения параметра
 	case ParameterEditScr:
 		ParameterEditScreenDraw();
+		break;
+
+	// экран для отображения архива событий
+	case EventArciveScr:
+		EventArciveScreenDraw();
 		break;
 
 	// экран для отображения значения настроек мониторинга
@@ -1063,6 +1071,52 @@ void ParameterEditScreenDraw(void)
 
 //--------------------------------------------------------------------
 /*
+* EventArciveScreenDraw - экран для отображения архива событий
+*/
+void EventArciveScreenDraw(void)
+{
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+	// Надпись Событие
+	DrawStringWithAlign(2, ALIGN_LEFT, "СОБЫТИЕ ");
+
+	// Вывод номера события
+	char CharArray[2];
+	my_itoa((EventNum+1), CharArray);
+	if (EventNum < 9)
+	{
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 8, 2, "0");
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 9, 2, CharArray);
+	}
+	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 8, 2, CharArray);}
+
+
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		if (EventNum == 9) {EventNum = 0;}
+		else {EventNum++;}
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		if (EventNum == 0) {EventNum = 9;}
+		else {EventNum--;}
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MenuScr;
+	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 * MonitorSettingsScreenViewDraw - экран для отображения значения настроек мониторинга
 */
 void MonitorSettingsScreenViewDraw(void)
@@ -1205,6 +1259,13 @@ void SoftVersionsScreenDraw(void)
 	vTaskDelay(200);
 
 }
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------

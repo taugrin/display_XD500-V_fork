@@ -32,6 +32,7 @@ typedef enum
 	GroupViewScr,
 	ParameterEditScr,
 	MonitorSettingsViewScr,
+	EventArciveScr,
 	MonitorSettingsEditScr,
 	SoftVersionsScr
 }tChildScreens;

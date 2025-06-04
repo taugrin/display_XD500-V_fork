@@ -36,7 +36,7 @@ void InitBasicMenu(void)
 
     // дНАЮБКЪЧ ЩКЕЛЕМРШ Б ЙНПМЕБНЕ ЛЕМЧ
 	Menu_AddItem("оюпюлерпш", -1, 1, NoScr/*, NULL*/); //[0]
-	Menu_AddItem("юпухб янашрхи", -1, 2, NoScr); //[1]
+	Menu_AddItem("юпухб янашрхи", -1, 2, EventArciveScr); //[1]
 	Menu_AddItem("ашярпши ярюпр", -1, 3, NoScr); //[2]
 	Menu_AddItem("тсмйжхх йнохпнбюмхъ", -1, 4, NoScr); //[3]
 	Menu_AddItem("бепяхх он", -1, 5, SoftVersionsScr); //[4]
