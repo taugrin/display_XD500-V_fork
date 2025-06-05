@@ -120,7 +120,17 @@ const tParam Monitor[] = {
 	{"CURRENT", 	      0x4403,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_AMP},
 	{"FREQUENCY", 	      0x4401,  (uint16_t)(-1000),  1000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_HZ},
 	{"POWER", 		  	  0x4405, 		 	       0, 10000,  PAR_IS_INT, 100, NULL, false, false,  UNITS_KWT},
-	{"IGBT TEMP",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_CELSIUM}
+	{"IGBT TEMP",    	  0x4408,                  0, 10000,  PAR_IS_INT,  10, NULL, false, false,  UNITS_CELSIUM},
+	{"SW",    	  		  0x4200,                  0, 65535,  PAR_IS_BIN,  16, NULL, false, false,  UNITS_VOID},
+	{"SW HEX",    	  	  0x4200,                  0, 65535,  PAR_IS_HEX,   4, NULL, false, false,  UNITS_VOID},
+	{"SW1",    	  		  0x4201,                  0, 65535,  PAR_IS_BIN,  16, NULL, false, false,  UNITS_VOID},
+	{"SW1 HEX",    	  	  0x4201,                  0, 65535,  PAR_IS_HEX,   4, NULL, false, false,  UNITS_VOID},
+	{"FW",    	  		  0x4202,                  0, 65535,  PAR_IS_BIN,  16, NULL, false, false,  UNITS_VOID},
+	{"FW HEX",    	  	  0x4202,                  0, 65535,  PAR_IS_HEX,   4, NULL, false, false,  UNITS_VOID},
+	{"FW1",    	  		  0x4203,                  0, 65535,  PAR_IS_BIN,  16, NULL, false, false,  UNITS_VOID},
+	{"FW1 HEX",    	  	  0x4203,                  0, 65535,  PAR_IS_HEX,   4, NULL, false, false,  UNITS_VOID},
+	{"AW",    	  		  0x4204,                  0, 65535,  PAR_IS_BIN,  16, NULL, false, false,  UNITS_VOID},
+	{"AW HEX",    	  	  0x4204,                  0, 65535,  PAR_IS_HEX,   4, NULL, false, false,  UNITS_VOID}
 
 };
 

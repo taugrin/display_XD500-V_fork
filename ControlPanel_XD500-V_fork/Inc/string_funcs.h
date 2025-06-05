@@ -37,4 +37,6 @@ void my_itoa(int32_t value, char *str);
 
 char* uint16_to_hex_str(uint16_t value, char* str, uint8_t digits);
 
+char* uint16_to_bin_str(uint16_t value, char* str, uint8_t digits);
+
 #endif /* STRING_FUNCS_H_ */

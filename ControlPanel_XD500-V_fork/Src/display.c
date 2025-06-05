@@ -235,20 +235,20 @@ void StatusBarDraw(void)
 	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "L");}
 
 	// Вывод сигнала Fault
-	//if (StatusWord.bit.fault)
-	//{
+	if (StatusWord.bit.fault)
+	{
 		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 5, 0, "E");
 		uint16_to_hex_str(FaultWord.all, CharArray, 2/*4*/);
 		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 6, 0, CharArray); // значение FaultWord в формате hex, 2 символа
-	//}
+	}
 
 	// Вывод сигнала Alarm
-	//if (StatusWord.bit.alarm)
-	//{
+	if (StatusWord.bit.alarm)
+	{
 		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 9, 0, "A");
 		uint16_to_hex_str(AlarmWord.all, CharArray, 2);
 		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 10, 0, CharArray); // значение AlarmWord в формате hex, 2 символа
-	//}
+	}
 
 	// Вывод направления вращения
 	if (StatusWord.bit.dir) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 13, 0, "<-");}
@@ -824,6 +824,14 @@ void SetBufferForDisplayParamData(const tParam* param, uint16_t value, bool with
         } // если не обернуть фигурными скобками, не даст создать const char* list_item
             break;
 
+        case PAR_IS_BIN: // Значение в бинарном виде
+        	uint16_to_bin_str(value, paramDataCharBuf, param->scale);
+            break;
+
+        case PAR_IS_HEX: // Значение в 16-ричном виде
+        	uint16_to_hex_str(value, paramDataCharBuf, param->scale);
+            break;
+
         default:
             // Вывод сообщения, если неправильно указан тип данных.
         	snprintf(paramDataCharBuf, sizeof(paramDataCharBuf), "ОШИБКА ТИПА");
@@ -1182,7 +1190,7 @@ void MonitorSettingsScreenEditDraw(void)
 
 	// отрисовываю три пункта списка на экране в зависимости от выбранного
 	uint8_t j = 2;
-	for(uint8_t i = BeginListItem; i <= MonitorCnt && i < EndListItem; i++)
+	for(uint8_t i = BeginListItem; i < MonitorCnt && i < EndListItem; i++)
 	{
 		// Отображение названия пункта
 		DrawStringWithAlign(j, ALIGN_LEFT, Monitor[i].name);
