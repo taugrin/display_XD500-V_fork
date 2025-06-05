@@ -605,6 +605,7 @@ void GroupViewScreenDraw(void)
 	{
 		if (param->writeEn)
 		{
+			PrevChildScreen = ChildScreen; // дл€ возврата либо в группы, либо в быстрые настройки
 			ChildScreen = ParameterEditScr;
 			ParameterEditScreen1stStep = true;
 			editDigitBlink = false;
@@ -1073,13 +1074,13 @@ void ParameterEditScreenDraw(void)
 	if (CheckKeySem(xButtonEnterSemaphore))
 	{
 		UsbWriteReg(param->adr, paramData);
-		ChildScreen = GroupViewScr;
+		ChildScreen = PrevChildScreen; // возврат либо в группы, либо в быстрые настройки
 	}
 
 	//  нопка reset
 	if (CheckKeySem(xButtonResetSemaphore))
 	{
-		ChildScreen = GroupViewScr;
+		ChildScreen = PrevChildScreen; // возврат либо в группы, либо в быстрые настройки
 	}
 
 }
@@ -1178,8 +1179,18 @@ void FastSettingsScreenDraw(void)
 	//  нопка enter
 	if (CheckKeySem(xButtonEnterSemaphore))
 	{
-		//MonitorVal = MonitorSelect[MonitorNum];
-		//ChildScreen = MonitorSettingsEditScr;
+		if (param->writeEn)
+		{
+			PrevChildScreen = ChildScreen; // дл€ возврата либо в группы, либо в быстрые настройки
+			ChildScreen = ParameterEditScr;
+			ParameterEditScreen1stStep = true;
+			editDigitBlink = false;
+			editDigitBlinkCnt = 0;
+			SetBufferForDisplayParamData(param, paramData, false, true);
+			paramDataEditDigit = strlen(paramDataCharBuf) - 1;
+			paramDataEditStepU = 1;
+			paramDataEditStepI = 1;
+		}
 	}
 
 	//  нопка reset

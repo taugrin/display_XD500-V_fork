@@ -14,7 +14,7 @@
 
 tMainScreens MainScreen = MonitorScr;
 
-tChildScreens ChildScreen = MenuScr;
+tChildScreens ChildScreen = MenuScr, PrevChildScreen;
 
 //
 // Local Variables

@@ -49,7 +49,7 @@ typedef enum
 
 extern tMainScreens MainScreen;
 
-extern tChildScreens ChildScreen;
+extern tChildScreens ChildScreen, PrevChildScreen;
 
 //
 // Functions for other files
