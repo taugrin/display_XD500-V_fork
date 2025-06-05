@@ -172,6 +172,9 @@ const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
+const tParam* const FastSettings[] = {&group10_params[0], &group10_params[2], &group11_params[0], &group11_params[1]};
+const uint16_t FastSettingsCnt = sizeof(FastSettings)/sizeof(tParam*);
+uint8_t FastSettingsNum = 0; // индекс выбранного параметра быстрых настроек
 
 //--------------------------------------------------------------------
 /*

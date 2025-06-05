@@ -227,6 +227,9 @@ extern const uint16_t AllGroupsCnt;
 extern const tGroup* const MenuGroups[];
 extern const uint16_t MenuGroupsCnt;
 
+extern const tParam* const FastSettings[];
+extern const uint16_t FastSettingsCnt;
+extern uint8_t FastSettingsNum;
 
 //
 // Functions for other files

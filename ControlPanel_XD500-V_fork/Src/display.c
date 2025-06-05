@@ -46,6 +46,8 @@ void ParameterEditScreenDraw(void);
 
 void EventArciveScreenDraw(void);
 
+void FastSettingsScreenDraw(void);
+
 void MonitorSettingsScreenViewDraw(void);
 
 void MonitorSettingsScreenEditDraw(void);
@@ -347,6 +349,7 @@ void SettingsScreenDraw(void)
 		paramIdx = 0; // сброс номера параметра, чтобы при входе в группу начиналось с 0
 		EventNum = 0; // сброс номера события, чтобы при входе в меню начиналось с 0
 		MonitorNum = 0; // сброс номера мониторинга, чтобы при входи в меню мониторинг всегда начиналось с 0
+		FastSettingsNum = 0; // сброс номера параметра быстрых настроек, чтобы при входи в меню мониторинг всегда начиналось с 0
 
 		break;
 
@@ -363,6 +366,11 @@ void SettingsScreenDraw(void)
 	// экран для отображения архива событий
 	case EventArciveScr:
 		EventArciveScreenDraw();
+		break;
+
+	// экран для отображения быстрых настроек
+	case FastSettingsScr:
+		FastSettingsScreenDraw();
 		break;
 
 	// экран для отображения значения настроек мониторинга
@@ -1125,6 +1133,65 @@ void EventArciveScreenDraw(void)
 
 //--------------------------------------------------------------------
 /*
+* FastSettingsScreenDraw - экран для отображения быстрых настроек
+*/
+void FastSettingsScreenDraw(void)
+{
+	char CharArray[21];
+	param = FastSettings[FastSettingsNum];
+
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+	// Вывод номера параметра
+	DrawStringWithAlign(2, ALIGN_LEFT, "ПАРАМЕТР ");
+	// вывожу номер параметра на основе его адреса в формате №группы."параметра
+	snprintf(CharArray, sizeof(CharArray), "%u.%u",
+			((param->adr >> 8) & 0xFF),
+			((param->adr) & 0xFF));
+	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 9, 2, CharArray);
+
+	// название параметра, без номера в начале (т.е. начиная с третьего символа)
+	DrawStringWithAlign(4, ALIGN_LEFT, ((FastSettings[FastSettingsNum]->name)+3));
+
+	// считывание значения параметра
+	UsbReadData(param->adr, 1, ReadData);
+	paramData = ReadData[0];
+
+	// вывод значения параметра
+	DisplayParameterValue(DISP_LEFT_BOUND + FONT_GAP * 0, 6, param, paramData);
+
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		if (FastSettingsNum == (FastSettingsCnt-1)) {FastSettingsNum = 0;}
+		else {FastSettingsNum++;}
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		if (FastSettingsNum == 0) {FastSettingsNum = FastSettingsCnt-1;}
+		else {FastSettingsNum--;}
+	}
+
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+		//MonitorVal = MonitorSelect[MonitorNum];
+		//ChildScreen = MonitorSettingsEditScr;
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MenuScr;
+	}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 * MonitorSettingsScreenViewDraw - экран для отображения значения настроек мониторинга
 */
 void MonitorSettingsScreenViewDraw(void)
@@ -1267,13 +1334,6 @@ void SoftVersionsScreenDraw(void)
 	vTaskDelay(200);
 
 }
-//--------------------------------------------------------------------
-
-//--------------------------------------------------------------------
-/*
-*
-*/
-
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------
