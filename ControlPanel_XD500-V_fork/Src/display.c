@@ -153,6 +153,8 @@ void ControlSystem(void)
 {
 	//---Формирую ControlWord---
 
+
+	// Бит Run
 	// Сброс бита Run при аварии или отсутствии готовности
 	if ((StatusWord.bit.fault) || (!StatusWord.bit.ready))
 	{
@@ -173,8 +175,27 @@ void ControlSystem(void)
 		}
 	}
 
-	if (ControlWordOld.all != ControlWord.all) {UsbWriteReg(CW_ADR, ControlWord.all);}
-	ControlWordOld.all = ControlWord.all;
+	// Бит Reset
+	if (StatusWord.bit.fault)
+	{
+		// Удержание кнопки Reset
+		if (CheckKeySem(xButtonResetAlarmsSemaphore))
+		{
+			ControlWord.bit.reset = true;
+		}
+	}
+	if (ControlWordOld.bit.reset)
+	{
+		// сброс бита reset после записи
+		ControlWord.bit.reset = false;
+	}
+
+	// Запись CW
+	if (ControlWordOld.all != ControlWord.all)
+	{
+		UsbWriteReg(CW_ADR, ControlWord.all);
+		ControlWordOld.all = ControlWord.all;
+	}
 	//---
 
 }
