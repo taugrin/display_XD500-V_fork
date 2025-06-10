@@ -8,7 +8,7 @@
 //
 int8_t CheckKeySem(SemaphoreHandle_t semaphore);
 
-void ButtonsCheck(void);
+void ControlSystem(void);
 
 void DrawStringWithAlign(uint8_t line, uint8_t align, const char *c);
 
@@ -103,8 +103,9 @@ void DisplayStatic(void)
 	FaultWord1.all = ReadData[3];
 	AlarmWord.all = ReadData[4];
 
-	// Обработка нажатий кнопок
-	ButtonsCheck();
+	// Управление XD500-V
+	ControlSystem();
+
 
 	// отрисовка экранов
 	switch (MainScreen)
@@ -146,10 +147,35 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore)
 
 //--------------------------------------------------------------------
 /*
-* ButtonsCheck - обработка нажатий кнопок
+* ControlSystem - управление XD500-V
 */
-void ButtonsCheck(void)
+void ControlSystem(void)
 {
+	//---Формирую ControlWord---
+
+	// Сброс бита Run при аварии или отсутствии готовности
+	if ((StatusWord.bit.fault) || (!StatusWord.bit.ready))
+	{
+		ControlWord.bit.run = false;
+	}
+	else
+	{
+		// Кнопка Run
+		if (CheckKeySem(xButtonRunSemaphore))
+		{
+			ControlWord.bit.run = true;
+		}
+
+		// Кнопка Stop
+		if (CheckKeySem(xButtonStopSemaphore))
+		{
+			ControlWord.bit.run = false;
+		}
+	}
+
+	if (ControlWordOld.all != ControlWord.all) {UsbWriteReg(CW_ADR, ControlWord.all);}
+	ControlWordOld.all = ControlWord.all;
+	//---
 
 }
 //--------------------------------------------------------------------

@@ -10,7 +10,7 @@
 //
 // Global Variables
 //
-tControlWord ControlWord;
+tControlWord ControlWord, ControlWordOld;
 tControlWord1 ControlWord1;
 
 tStatusWord StatusWord;

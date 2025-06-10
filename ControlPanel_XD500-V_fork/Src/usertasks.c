@@ -42,6 +42,9 @@ void vTaskDisplay(void const * argument)
 	uint16_t tmpInitBuf[2];
 	for (i = 0; i < 151; i++) {UsbReadData(0x4200, 1, tmpInitBuf);} // всё, дальше USB падать не должно
 
+	// инициализация переменных
+	ControlWord.all = 0; ControlWordOld.all = 0;
+
 	// инициализация корневого меню
 	InitBasicMenu();
 

@@ -48,6 +48,8 @@
 #define FREQ_EST_ADR			0x4401
 #define FREQ_REFERENCE_ADR      0x440E
 
+#define CW_ADR					0x4000
+
 
 //
 // TypeDefs
@@ -95,7 +97,7 @@ typedef union
 {
     struct
     {
-        uint16_t    start:1;                //bit_0
+        uint16_t    run:1;                  //bit_0
         uint16_t    dir:1;                  //bit_1
         uint16_t    reset:1;                //bit_2
         uint16_t    off2:1;                 //bit_3
@@ -202,7 +204,7 @@ typedef union
 //
 // Variables for other files
 //
-extern tControlWord ControlWord;
+extern tControlWord ControlWord, ControlWordOld;
 extern tControlWord1 ControlWord1;
 
 extern tStatusWord StatusWord;
