@@ -88,6 +88,12 @@ int8_t paramDataEditDigit = 0; // Текущий редактируемый разряд (индекс в строке)
 uint16_t paramDataEditStepU = 1; // Шаг изменения значения параметра
 int16_t paramDataEditStepI = 1; // Шаг изменения значения параметра
 
+
+
+bool LocalCtrlMode = false;
+bool ReferenceEditMode = false;
+const tParam* refParam;
+
 //--------------------------------------------------------------------
 /*
 * DisplayStatic - функция обработки связи и отображения данных на экране
@@ -151,7 +157,7 @@ int8_t CheckKeySem(SemaphoreHandle_t semaphore)
 */
 void ControlSystem(void)
 {
-	//---Формирую ControlWord---
+	//---ControlWord---
 
 
 	// Бит Run
@@ -195,6 +201,14 @@ void ControlSystem(void)
 	{
 		UsbWriteReg(CW_ADR, ControlWord.all);
 		ControlWordOld.all = ControlWord.all;
+	}
+	//---
+
+	//---Задание---
+	if (ReferenceOld != Reference)
+	{
+		UsbWriteReg(REFERENCE_ADR, Reference);
+		ReferenceOld = Reference;
 	}
 	//---
 
@@ -280,8 +294,8 @@ void StatusBarDraw(void)
 
 	// Вывод LOCAL/REMOTE
 	UsbReadData(LOC_REM_ADR, 1, ReadData);
-	if (ReadData[0] == 0) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "R");}
-	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "L");}
+	if (ReadData[0] == 0) {LocalCtrlMode = false; ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "R");}
+	else {LocalCtrlMode = true; ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "L");}
 
 	// Вывод сигнала Fault
 	if (StatusWord.bit.fault)
@@ -358,13 +372,49 @@ void ReferenceScreenDraw(void)
 	// отрисовка строки статуса
 	StatusBarDraw();
 
-	DrawStringWithAlign(3, ALIGN_CENTER, "Экран Задание");
+	DrawStringWithAlign(2, ALIGN_CENTER, "Задание");
 
-	// Переключение между экранами по нажатию кнопки F.
-	if (CheckKeySem(xButtonFuncSemaphore))
+	if (ReferenceEditMode) // редактирование задания
 	{
-		NextMainScreen();
+
+
+		// Нажатие кнопки Enter, завершение редактирования параметра
+		if (CheckKeySem(xButtonEnterSemaphore))
+		{
+			ReferenceEditMode = false;
+		}
+
 	}
+	else // просто отображение задания
+	{
+
+		// Переключение между экранами по нажатию кнопки F.
+		if (CheckKeySem(xButtonFuncSemaphore))
+		{
+			NextMainScreen();
+		}
+
+		// Нажатие кнопки Enter, переход к редактированию параметра
+		if (CheckKeySem(xButtonEnterSemaphore))
+		{
+			ReferenceEditMode = true;
+		}
+
+	}
+
+
+
+	// Вывод минального и максимального значений.
+	refParam = &Group64.params[2];
+	SetBufferForDisplayParamData(refParam, refParam->minVal, false, false);
+	DrawStringWithAlign(6, ALIGN_LEFT, paramDataCharBuf);
+
+	SetBufferForDisplayParamData(refParam, refParam->maxVal, false, false);
+	DrawStringWithAlign(6, ALIGN_RIGHT, paramDataCharBuf);
+
+	// подписи мин слева и макс справа
+	DrawStringWithAlign(7, ALIGN_LEFT, "мин             макс");
+
 }
 //--------------------------------------------------------------------
 

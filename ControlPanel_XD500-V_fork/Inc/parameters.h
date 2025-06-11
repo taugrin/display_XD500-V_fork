@@ -49,6 +49,8 @@
 #define FREQ_REFERENCE_ADR      0x440E
 
 #define CW_ADR					0x4000
+#define CW1_ADR					0x4001
+#define REFERENCE_ADR			0x4002
 
 
 //
@@ -78,18 +80,6 @@ typedef struct
 	bool 			saveInEeprom;
 	//bool 			viewInMenu;
 } tGroup;
-
-/*typedef struct
-{
-	char		name[MAX_NAME_LENGTH];
-	uint16_t	adr;
-	uint16_t 	minVal;
-	uint16_t 	maxVal;
-	uint16_t	type;	// 0 - unsigned; 1 - signed; 2 - list; 3 - bin; 4 - hex;
-	uint16_t 	scale;
-	const char	*listItems;
-	char		units[3];
-} tMonitor;*/
 
 
 
@@ -207,6 +197,8 @@ typedef union
 extern tControlWord ControlWord, ControlWordOld;
 extern tControlWord1 ControlWord1;
 
+extern uint16_t Reference, ReferenceOld;
+
 extern tStatusWord StatusWord;
 extern tStatusWord1 StatusWord1;
 extern tFaultWord FaultWord;
@@ -225,6 +217,8 @@ extern uint8_t EventNum;
 
 extern const tGroup* const AllGroups[];
 extern const uint16_t AllGroupsCnt;
+
+extern const tGroup Group64;
 
 extern const tGroup* const MenuGroups[];
 extern const uint16_t MenuGroupsCnt;

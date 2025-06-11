@@ -13,6 +13,8 @@
 tControlWord ControlWord, ControlWordOld;
 tControlWord1 ControlWord1;
 
+uint16_t Reference, ReferenceOld;
+
 tStatusWord StatusWord;
 tStatusWord1 StatusWord1;
 tFaultWord FaultWord;
@@ -106,7 +108,26 @@ const tGroup Group12 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 64---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
 
+
+// Параметры группы 64
+static const tParam group64_params[] = {
+	{"01 CONTROL WORD",  	0x4000, 			     0, 65535,  PAR_IS_UINT,   1, NULL, true, true, UNITS_VOID},
+	{"02 CONTROL WORD1",  	0x4001,   			     0, 65535,  PAR_IS_UINT,   1, NULL, true, true, UNITS_VOID},
+	{"03 REFERENCE",  		0x4002, (uint16_t)(-32767), 32767,  PAR_IS_INT,  100, NULL, true, true, UNITS_HZ}
+
+};
+
+// Группа параметров
+const tGroup Group64 = {
+    "64 ЗАДАНИЕ ПУЛЬТ",
+    group64_params,
+    sizeof(group64_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
 
 
 //--------------------------Мониторинг--------------------------------
@@ -166,7 +187,7 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12};

@@ -23,6 +23,8 @@ SemaphoreHandle_t xButtonStoptSemaphore = NULL;
 
 void InitMonitorSel(void);
 
+void InitDisplayRef(void);
+
 
 void vTaskDisplay(void const * argument)
 {
@@ -51,7 +53,8 @@ void vTaskDisplay(void const * argument)
 	// инициализация переменных мониторинга
 	InitMonitorSel();
 
-    //RefInit(); // считывание задания пульта из eeprom
+    // считывание задания пульта из eeprom
+	InitDisplayRef();
 
 
     for (;;)
@@ -92,4 +95,25 @@ void InitMonitorSel(void)
 	// Монитор 3
 	tmpMonitorSel = readMonitorSel(2);
 	if ((tmpMonitorSel >= 0) && (tmpMonitorSel < MonitorCnt)) {MonitorSelect[2] = tmpMonitorSel;}
+}
+
+void InitDisplayRef(void)
+{
+	// Считываем параметр 17.1 "Выбор режима задания скорости с пульта".
+	// Результаты: 0 - reset to zero; 1 - save to memory;
+	uint16_t tmpInitBuf[2];
+	UsbReadData(0x1100, 1, tmpInitBuf);
+
+	if (tmpInitBuf[0] == 1)
+	{
+		Reference = readDisplayRef();
+		if (Reference == 0xFFFF) {Reference = 0;}
+		ReferenceOld = 0xFFFF; // для 1ой записи в XD500-V
+	}
+	else
+	{
+		Reference = 0;
+		ReferenceOld = 0xFFFF; // для 1ой записи в XD500-V
+	}
+
 }

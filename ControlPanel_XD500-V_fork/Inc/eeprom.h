@@ -27,6 +27,8 @@
 
 #define MONITOR_SEL_BEGIN_ADR	EEPROM_MAX_PAGE * EEPROM_PAGE_SIZE
 
+#define DISPLAY_REF_ADR			EEPROM_MAX_PAGE * EEPROM_PAGE_SIZE + 16
+
 //
 // TypeDefs
 //
@@ -48,5 +50,9 @@ extern I2C_HandleTypeDef hi2c1;
 uint8_t readMonitorSel(uint8_t num);
 
 bool writeMonitorSel(uint8_t num, uint8_t *pData);
+
+uint16_t readDisplayRef(void);
+
+bool writeDisplayRef(uint16_t data);
 
 #endif /* EEPROM_H_ */
