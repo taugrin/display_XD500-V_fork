@@ -93,6 +93,7 @@ int16_t paramDataEditStepI = 1; // Ўаг изменени€ значени€ параметра
 bool LocalCtrlMode = false;
 bool ReferenceEditMode = false;
 tParam refParam;
+uint16_t ReferenceEditData = 0;
 
 //--------------------------------------------------------------------
 /*
@@ -436,6 +437,22 @@ void ReferenceScreenDraw(void)
 	if (ReferenceEditMode) // редактирование задани€
 	{
 
+		// ¬ывод значени€ задани€ (начало).
+		if (editDigitBlinkCnt < EDIT_DIGIT_BLINK_MAX_CNT) {editDigitBlinkCnt++;}
+		else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
+
+		SetBufferForDisplayParamData(&refParam, ReferenceEditData, false, true);
+
+
+
+		// ¬ывод значени€ задани€ (продолжение).
+		if (editDigitBlink)
+		{
+			paramDataCharBuf[paramDataEditDigit] = '_'; // мигаю редактируемым разр€дом
+		}
+
+		DrawStringWithAlign(4, ALIGN_CENTER, paramDataCharBuf);
+
 
 		// Ќажатие кнопки Enter, завершение редактировани€ параметра
 		if (CheckKeySem(xButtonEnterSemaphore))
@@ -460,6 +477,11 @@ void ReferenceScreenDraw(void)
 		if (CheckKeySem(xButtonEnterSemaphore))
 		{
 			ReferenceEditMode = true;
+			ReferenceEditData = Reference;
+			editDigitBlink = false;
+			editDigitBlinkCnt = 0;
+			paramDataEditDigit = strlen(paramDataCharBuf) - 1;
+			paramDataEditStepI = 1;
 		}
 
 	}
@@ -1052,7 +1074,7 @@ void ParameterEditScreenDraw(void)
 			DrawStringWithAlign(2, ALIGN_CENTER, param->name);
 
 			// ¬ывод значени€ параметра (начало).
-			if (editDigitBlinkCnt < 7) {editDigitBlinkCnt++;}
+			if (editDigitBlinkCnt < EDIT_DIGIT_BLINK_MAX_CNT) {editDigitBlinkCnt++;}
 			else {editDigitBlinkCnt = 0; editDigitBlink = !editDigitBlink;}
 
 			SetBufferForDisplayParamData(param, paramData, false, true);
@@ -1163,9 +1185,6 @@ void ParameterEditScreenDraw(void)
 			}
 
 			// ¬ывод значени€ параметра (продолжение).
-			centerPos = DISP_LEFT_BOUND + FONT_GAP * (DISP_CENTER_CHAR_POS - stringLen/2);
-			if (centerPos < 0) {centerPos = 0;}
-
 			if (editDigitBlink)
 			{
 				paramDataCharBuf[paramDataEditDigit] = '_'; // мигаю редактируемым разр€дом

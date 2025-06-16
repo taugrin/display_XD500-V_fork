@@ -56,6 +56,8 @@
 
 #define VISIBLE_ITEMS 3 //  оличество отображаемых пунктов за раз
 
+#define EDIT_DIGIT_BLINK_MAX_CNT 9
+
 //
 // TypeDefs
 //
