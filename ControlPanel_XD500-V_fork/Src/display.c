@@ -92,7 +92,7 @@ int16_t paramDataEditStepI = 1; // Шаг изменения значения параметра
 
 bool LocalCtrlMode = false;
 bool ReferenceEditMode = false;
-const tParam* refParam;
+tParam refParam;
 
 //--------------------------------------------------------------------
 /*
@@ -374,6 +374,65 @@ void ReferenceScreenDraw(void)
 
 	DrawStringWithAlign(2, ALIGN_CENTER, "Задание");
 
+	refParam = Group64.params[2];
+
+	if (LocalCtrlMode) // Local
+	{
+		// Проверка типа задания с пульта
+		UsbReadData(0x0B00, 1, ReadData);
+		if (ReadData[0] == 0) // Hz (ПУ1)
+		{
+			// ПУ1 минимум
+			UsbReadData(0x0B02, 1, ReadData);
+			refParam.minVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ПУ1 максимум
+			UsbReadData(0x0B03, 1, ReadData);
+			refParam.maxVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ед. изм.
+			strncpy(refParam.units, UNITS_HZ, sizeof(refParam.units));
+		}
+		else // ПУ2
+		{
+			// ПУ2 минимум
+			UsbReadData(0x0B05, 1, ReadData);
+			refParam.minVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ПУ2 максимум
+			UsbReadData(0x0B06, 1, ReadData);
+			refParam.maxVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ед. изм.
+			strncpy(refParam.units, UNITS_PROC, sizeof(refParam.units));
+		}
+	}
+	else // Remote
+	{
+		// Проверка ПУ1 или ПУ2
+		// ToDo: Проверку активного в данный момент ПУ надо делать не по P11.5 (0x0A04),
+		// а по какому-то другому признаку, поскольку в P11.5 кроме явного выбора ПУ, есть еще и выбор ПУ по DI.
+		UsbReadData(0x0A04, 1, ReadData);
+		if (ReadData[0] == 0) // ПУ1
+		{
+			// ПУ1 минимум
+			UsbReadData(0x0B02, 1, ReadData);
+			refParam.minVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ПУ1 максимум
+			UsbReadData(0x0B03, 1, ReadData);
+			refParam.maxVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ед. изм.
+			strncpy(refParam.units, UNITS_HZ, sizeof(refParam.units));
+		}
+		else // ПУ2
+		{
+			// ПУ2 минимум
+			UsbReadData(0x0B05, 1, ReadData);
+			refParam.minVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ПУ2 максимум
+			UsbReadData(0x0B06, 1, ReadData);
+			refParam.maxVal = ReadData[0]*10; // масштаб refParam 100, а у значения только 10, поэтому еще умножаем на 10
+			// ед. изм.
+			strncpy(refParam.units, UNITS_PROC, sizeof(refParam.units));
+		}
+	}
+
 	if (ReferenceEditMode) // редактирование задания
 	{
 
@@ -387,6 +446,9 @@ void ReferenceScreenDraw(void)
 	}
 	else // просто отображение задания
 	{
+		// Вывод значения задания.
+		SetBufferForDisplayParamData(&refParam, Reference, true, false);
+		DrawStringWithAlign(4, ALIGN_CENTER, paramDataCharBuf);
 
 		// Переключение между экранами по нажатию кнопки F.
 		if (CheckKeySem(xButtonFuncSemaphore))
@@ -402,14 +464,11 @@ void ReferenceScreenDraw(void)
 
 	}
 
-
-
 	// Вывод минального и максимального значений.
-	refParam = &Group64.params[2];
-	SetBufferForDisplayParamData(refParam, refParam->minVal, false, false);
+	SetBufferForDisplayParamData(&refParam, refParam.minVal, false, false);
 	DrawStringWithAlign(6, ALIGN_LEFT, paramDataCharBuf);
 
-	SetBufferForDisplayParamData(refParam, refParam->maxVal, false, false);
+	SetBufferForDisplayParamData(&refParam, refParam.maxVal, false, false);
 	DrawStringWithAlign(6, ALIGN_RIGHT, paramDataCharBuf);
 
 	// подписи мин слева и макс справа
