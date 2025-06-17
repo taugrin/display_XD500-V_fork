@@ -93,7 +93,7 @@ int16_t paramDataEditStepI = 1; // Шаг изменения значения параметра
 bool LocalCtrlMode = false;
 bool ReferenceEditMode = false;
 tParam refParam;
-uint16_t ReferenceEditData = 0;
+int16_t ReferenceEditData = 0;
 
 //--------------------------------------------------------------------
 /*
@@ -443,6 +443,77 @@ void ReferenceScreenDraw(void)
 
 		SetBufferForDisplayParamData(&refParam, ReferenceEditData, false, true);
 
+		stringLen = strlen(paramDataCharBuf);
+
+		// Кнопка вниз
+		if (CheckKeySem(xButtonDownSemaphore))
+		{
+			if (paramDataCharBuf[paramDataEditDigit] == '-')
+			{
+				ReferenceEditData = -ReferenceEditData;
+				if (ReferenceEditData >= (int16_t)(refParam.maxVal)) {ReferenceEditData = (int16_t)(refParam.maxVal);}
+				if (ReferenceEditData <= (int16_t)(refParam.minVal)) {ReferenceEditData = (int16_t)(refParam.minVal);}
+			}
+			else if (paramDataCharBuf[paramDataEditDigit] == '+')
+			{
+				ReferenceEditData = -ReferenceEditData;
+				if (ReferenceEditData >= (int16_t)(refParam.maxVal)) {ReferenceEditData = (int16_t)(refParam.maxVal);}
+				if (ReferenceEditData <= (int16_t)(refParam.minVal)) {ReferenceEditData = (int16_t)(refParam.minVal);}
+			}
+			else
+			{
+
+				if (ReferenceEditData <= (int16_t)(refParam.minVal)) {ReferenceEditData = (int16_t)(refParam.minVal);}
+				else
+				{
+					if (ReferenceEditData <= (int16_t)(refParam.minVal) + paramDataEditStepI) {ReferenceEditData = (int16_t)(refParam.minVal);}
+					else {ReferenceEditData -= paramDataEditStepI;}
+				}
+
+			}
+		}
+
+		// Кнопка вверх
+		if (CheckKeySem(xButtonUpSemaphore))
+		{
+			if (paramDataCharBuf[paramDataEditDigit] == '-')
+			{
+				ReferenceEditData = -ReferenceEditData;
+				if (ReferenceEditData >= (int16_t)(refParam.maxVal)) {ReferenceEditData = (int16_t)(refParam.maxVal);}
+				if (ReferenceEditData <= (int16_t)(refParam.minVal)) {ReferenceEditData = (int16_t)(refParam.minVal);}
+			}
+			else if (paramDataCharBuf[paramDataEditDigit] == '+')
+			{
+				ReferenceEditData = -ReferenceEditData;
+				if (ReferenceEditData >= (int16_t)(refParam.maxVal)) {ReferenceEditData = (int16_t)(refParam.maxVal);}
+				if (ReferenceEditData <= (int16_t)(refParam.minVal)) {ReferenceEditData = (int16_t)(refParam.minVal);}
+			}
+			else
+			{
+
+				if (ReferenceEditData >= (int16_t)(refParam.maxVal)) {ReferenceEditData = (int16_t)(refParam.maxVal);}
+				else
+				{
+					if (ReferenceEditData >= (int16_t)(refParam.maxVal) - paramDataEditStepI) {ReferenceEditData = (int16_t)(refParam.maxVal);}
+					else {ReferenceEditData += paramDataEditStepI;}
+				}
+
+			}
+		}
+
+		// Кнопка F
+		if (CheckKeySem(xButtonFuncSemaphore))
+		{
+			//editDigitBlinkCnt = 0; editDigitBlink = true;
+			paramDataEditDigit--; // перемещаю курсор влево
+			paramDataEditStepI *= 10; // увеличиваю шаг изменения параметр в 10 раз
+			if (paramDataCharBuf[paramDataEditDigit] == '.') {paramDataEditDigit--;} // если попалась точка, перемещаю еще влево
+			if (paramDataEditDigit < 0) // если крайняя левая позиция
+			{
+				paramDataEditDigit = stringLen - 1; // перемещаю в крайнюю правую позицию
+				paramDataEditStepI = 1; // сбрасываю шаг изменения параметра в наименьшее значение
+			}
+		}
 
 
 		// Вывод значения задания (продолжение).

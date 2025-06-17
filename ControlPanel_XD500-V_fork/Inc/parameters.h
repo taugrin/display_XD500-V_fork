@@ -197,7 +197,7 @@ typedef union
 extern tControlWord ControlWord, ControlWordOld;
 extern tControlWord1 ControlWord1;
 
-extern uint16_t Reference, ReferenceOld;
+extern int16_t Reference, ReferenceOld;
 
 extern tStatusWord StatusWord;
 extern tStatusWord1 StatusWord1;

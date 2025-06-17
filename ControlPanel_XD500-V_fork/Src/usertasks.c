@@ -107,8 +107,8 @@ void InitDisplayRef(void)
 	if (tmpInitBuf[0] == 1)
 	{
 		Reference = readDisplayRef();
-		if (Reference == 0xFFFF) {Reference = 0;}
-		ReferenceOld = 0xFFFF; // для 1ой записи в XD500-V
+		if (Reference == (int16_t)(0xFFFF)) {Reference = 0;} // если eeprom пустая, то значение будет 0xFFFF
+		ReferenceOld = (int16_t)(0xFFFF); // для 1ой записи в XD500-V
 	}
 	else
 	{

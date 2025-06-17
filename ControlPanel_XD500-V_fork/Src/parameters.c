@@ -13,7 +13,7 @@
 tControlWord ControlWord, ControlWordOld;
 tControlWord1 ControlWord1;
 
-uint16_t Reference, ReferenceOld;
+int16_t Reference, ReferenceOld;
 
 tStatusWord StatusWord;
 tStatusWord1 StatusWord1;
