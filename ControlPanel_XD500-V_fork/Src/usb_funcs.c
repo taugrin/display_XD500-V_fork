@@ -95,14 +95,10 @@ void UsbReadData(uint16_t ParamAdr, uint16_t ParamCnt, uint16_t *ParamData)
 
 		if (noResponseCount > USB_MAX_REQUEST)
 		{
-			/*
-			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 2, 5, "40 no resp RESET!");
+			ST7565_drawstring(10, 5, "USB 50 no resp, RESET!");
 			ST7565_display();
 			vTaskDelay(500);
 			NVIC_SystemReset();
-			*/
-			//ToDo: Закомментировал код перезагрузки на время отладки. Потом вернуть!
-			while(1) {}
 		}
 
 	}
@@ -155,14 +151,10 @@ void UsbWriteReg(uint16_t ParamAdr, uint16_t ParamData)
 
 		if (noResponseCount > USB_MAX_REQUEST)
 		{
-			/*
-			ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 2, 5, "40 no resp RESET!");
+			ST7565_drawstring(10, 5, "USB 50 no resp, RESET!");
 			ST7565_display();
 			vTaskDelay(500);
 			NVIC_SystemReset();
-			*/
-			//ToDo: Закомментировал код перезагрузки на время отладки. Потом вернуть!
-			while(1) {}
 		}
 
 	}
