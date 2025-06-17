@@ -529,6 +529,8 @@ void ReferenceScreenDraw(void)
 		if (CheckKeySem(xButtonEnterSemaphore))
 		{
 			ReferenceEditMode = false;
+			Reference = ReferenceEditData;
+			writeDisplayRef(Reference);
 		}
 
 	}
