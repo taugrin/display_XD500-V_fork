@@ -89,7 +89,7 @@ uint16_t paramDataEditStepU = 1; // Шаг изменения значения параметра
 int16_t paramDataEditStepI = 1; // Шаг изменения значения параметра
 
 
-
+bool Ext1IsSel = true;
 bool LocalCtrlMode = false;
 bool ReferenceEditMode = false;
 tParam refParam;
@@ -102,7 +102,9 @@ int16_t ReferenceEditData = 0;
 void DisplayStatic(void)
 {
 
-	// Вычитываю SW, SW1, FW, FW1, AW.
+	//---Вычитываю необходимые данные---
+
+	// SW, SW1, FW, FW1, AW.
 	UsbReadData(0x4200, 5, ReadData);
 	StatusWord.all = ReadData[0];
 	StatusWord1.all = ReadData[1];
@@ -110,11 +112,66 @@ void DisplayStatic(void)
 	FaultWord1.all = ReadData[3];
 	AlarmWord.all = ReadData[4];
 
-	// Управление XD500-V
+	// EXT1/EXT2 и LOCAL/REMOTE
+	UsbReadData(PU1_PU2_SELECT_ADR, 2, ReadData);
+	switch (ReadData[0])
+	{
+	// EXT1
+	case 0: Ext1IsSel = true;
+		break;
+
+	// EXT2
+	case 1: Ext1IsSel = false;
+		break;
+
+	// DI1
+	case 2: UsbReadData(0x441E, 1, ReadData);
+			if (ReadData[0] & 0x01) {Ext1IsSel = false;}
+			else {Ext1IsSel = true;}
+		break;
+
+	// DI2
+	case 3: UsbReadData(0x441E, 1, ReadData);
+			if (ReadData[0] & 0x02) {Ext1IsSel = false;}
+			else {Ext1IsSel = true;}
+		break;
+
+	// DI3
+	case 4: UsbReadData(0x441E, 1, ReadData);
+			if (ReadData[0] & 0x04) {Ext1IsSel = false;}
+			else {Ext1IsSel = true;}
+		break;
+
+	// DI4
+	case 5: UsbReadData(0x441E, 1, ReadData);
+			if (ReadData[0] & 0x08) {Ext1IsSel = false;}
+			else {Ext1IsSel = true;}
+		break;
+
+	// DI5
+	case 6: UsbReadData(0x441E, 1, ReadData);
+			if (ReadData[0] & 0x10) {Ext1IsSel = false;}
+			else {Ext1IsSel = true;}
+		break;
+
+	// DI6
+	case 7: UsbReadData(0x441E, 1, ReadData);
+			if (ReadData[0] & 0x20) {Ext1IsSel = false;}
+			else {Ext1IsSel = true;}
+		break;
+
+	}
+
+	if (ReadData[1] == 0) {LocalCtrlMode = false;}
+	else {LocalCtrlMode = true;}
+
+	//---
+
+	//---Управление XD500-V---
 	ControlSystem();
+	//---
 
-
-	// отрисовка экранов
+	//---Отрисовка экранов---
 	switch (MainScreen)
 	{
 	case MonitorScr:
@@ -129,6 +186,7 @@ void DisplayStatic(void)
 		SettingsScreenDraw();
 		break;
 	}
+	//---
 
 }
 //--------------------------------------------------------------------
@@ -294,9 +352,8 @@ void StatusBarDraw(void)
 	ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 0, CharArray);
 
 	// Вывод LOCAL/REMOTE
-	UsbReadData(LOC_REM_ADR, 1, ReadData);
-	if (ReadData[0] == 0) {LocalCtrlMode = false; ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "R");}
-	else {LocalCtrlMode = true; ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "L");}
+	if (LocalCtrlMode) {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "L");}
+	else {ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 3, 0, "R");}
 
 	// Вывод сигнала Fault
 	if (StatusWord.bit.fault)
@@ -409,8 +466,7 @@ void ReferenceScreenDraw(void)
 		// Проверка ПУ1 или ПУ2
 		// ToDo: Проверку активного в данный момент ПУ надо делать не по P11.5 (0x0A04),
 		// а по какому-то другому признаку, поскольку в P11.5 кроме явного выбора ПУ, есть еще и выбор ПУ по DI.
-		UsbReadData(0x0A04, 1, ReadData);
-		if (ReadData[0] == 0) // ПУ1
+		if (Ext1IsSel) // ПУ1
 		{
 			// ПУ1 минимум
 			UsbReadData(0x0B02, 1, ReadData);
@@ -553,6 +609,7 @@ void ReferenceScreenDraw(void)
 			ReferenceEditData = Reference;
 			editDigitBlink = false;
 			editDigitBlinkCnt = 0;
+			SetBufferForDisplayParamData(&refParam, ReferenceEditData, false, true);
 			paramDataEditDigit = strlen(paramDataCharBuf) - 1;
 			paramDataEditStepI = 1;
 		}
