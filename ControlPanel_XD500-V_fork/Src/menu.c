@@ -40,8 +40,8 @@ void InitBasicMenu(void)
 	Menu_AddItem("БЫСТРЫЙ СТАРТ", -1, 3, FastSettingsScr); //[2]
 	Menu_AddItem("ФУНКЦИИ КОПИРОВАНИЯ", -1, 4, NoScr); //[3]
 	Menu_AddItem("ВЕРСИИ ПО", -1, 5, SoftVersionsScr); //[4]
-	Menu_AddItem("МОНИТОРИНГ", -1, 6, MonitorSettingsViewScr); //[5]
-	MenuItemsCnt = Menu_AddItem("ПОКАЗАНИЯ ТАЙМЕРОВ", -1, 0, NoScr); //[6]
+	MenuItemsCnt = Menu_AddItem("МОНИТОРИНГ", -1, 0/*6*/, MonitorSettingsViewScr); //[5]
+	//MenuItemsCnt = Menu_AddItem("ПОКАЗАНИЯ ТАЙМЕРОВ", -1, 0, NoScr); //[6]
 
 
 	// Добавляю элементы в меню "ПАРАМЕТРЫ" группы для отображения в меню (parentIdx = 0)
