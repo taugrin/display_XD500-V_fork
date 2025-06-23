@@ -61,7 +61,12 @@
 //
 // TypeDefs
 //
-
+typedef enum
+{
+	RstToFactoryStateSetBit = 0,
+	RstToFactoryStateResetBit,
+	RstToFactoryStateDone
+}tRstToFactoryState;
 
 
 //

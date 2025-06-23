@@ -48,6 +48,8 @@ void EventArciveScreenDraw(void);
 
 void FastSettingsScreenDraw(void);
 
+void RestoreToDefaultScreenDraw(void);
+
 void MonitorSettingsScreenViewDraw(void);
 
 void MonitorSettingsScreenEditDraw(void);
@@ -94,6 +96,9 @@ bool LocalCtrlMode = false;
 bool ReferenceEditMode = false;
 tParam refParam;
 int16_t ReferenceEditData = 0;
+
+bool RstToFactory = false;
+tRstToFactoryState RstToFactoryState = RstToFactoryStateSetBit;
 
 //--------------------------------------------------------------------
 /*
@@ -253,6 +258,32 @@ void ControlSystem(void)
 	{
 		// сброс бита reset после записи
 		ControlWord.bit.reset = false;
+	}
+
+	// Бит RstToFactory
+	if (RstToFactory)
+	{
+		switch (RstToFactoryState)
+		{
+		case RstToFactoryStateSetBit:
+			ControlWord.bit.rstToFactory = true;
+			if (ControlWordOld.bit.rstToFactory == true)
+			{
+				RstToFactoryState = RstToFactoryStateResetBit;
+			}
+			break;
+
+		case RstToFactoryStateResetBit:
+			ControlWord.bit.rstToFactory = false;
+			if (ControlWordOld.bit.rstToFactory == false)
+			{
+				RstToFactoryState = RstToFactoryStateDone;
+			}
+			break;
+
+		case RstToFactoryStateDone:
+			break;
+		}
 	}
 
 	// Запись CW
@@ -679,6 +710,11 @@ void SettingsScreenDraw(void)
 	// экран для отображения быстрых настроек
 	case FastSettingsScr:
 		FastSettingsScreenDraw();
+		break;
+
+	// экран сброса настроек параметров на заводские
+	case RestoreToDefaultScr:
+		RestoreToDefaultScreenDraw();
 		break;
 
 	// экран для отображения значения настроек мониторинга
@@ -1508,6 +1544,45 @@ void FastSettingsScreenDraw(void)
 
 //--------------------------------------------------------------------
 /*
+* RestoreToDefaultScreenDraw - экран для отображения сбора настроек параметров на заводские
+*/
+void RestoreToDefaultScreenDraw(void)
+{
+	// отрисовка строки статуса
+	StatusBarDraw();
+
+	// Текст
+	DrawStringWithAlign(2, ALIGN_CENTER, "СБРОС НА ЗАВОДСКИЕ");
+	DrawStringWithAlign(4, ALIGN_CENTER, "НАСТРОЙКИ");
+
+	if (RstToFactoryState != RstToFactoryStateDone)
+	{
+		RstToFactory = true;
+	}
+	else
+	{
+		DrawStringWithAlign(6, ALIGN_CENTER, "ВЫПОЛНЕН");
+		ST7565_display();
+
+		vTaskDelay(1000);
+		RstToFactory = false;
+		RstToFactoryState = RstToFactoryStateSetBit;
+		ChildScreen = MenuScr;
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		RstToFactory = false;
+		RstToFactoryState = RstToFactoryStateSetBit;
+		ChildScreen = MenuScr;
+	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
 * MonitorSettingsScreenViewDraw - экран для отображения значения настроек мониторинга
 */
 void MonitorSettingsScreenViewDraw(void)
@@ -1651,6 +1726,7 @@ void SoftVersionsScreenDraw(void)
 
 }
 //--------------------------------------------------------------------
+
 
 //--------------------------------------------------------------------
 /*

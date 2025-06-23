@@ -34,6 +34,7 @@ typedef enum
 	MonitorSettingsViewScr,
 	EventArciveScr,
 	FastSettingsScr,
+	RestoreToDefaultScr,
 	MonitorSettingsEditScr,
 	SoftVersionsScr
 }tChildScreens;
