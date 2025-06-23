@@ -55,6 +55,12 @@ void InitBasicMenu(void)
 		i++;
 	}
 
+	// Äîáàâëÿş ıëåìåíòû ìåíş "ÔÓÍÊÖÈÈ ÊÎÏÈĞÎÂÀÍÈß"
+	MenuNextIdx = MenuItemsCnt+2;
+	MenuItemsCnt = Menu_AddItem("ÇÀÂÎÄÑÊÈÅ ÍÀÑÒĞÎÉÊÈ", 3, MenuNextIdx, NoScr); MenuFirstIdx = MenuItemsCnt;
+	MenuNextIdx = MenuItemsCnt+2;
+	MenuItemsCnt = Menu_AddItem("ÊÎÏÈĞÎÂÀÒÜ Â ÏÓËÜÒ", 3, MenuNextIdx, NoScr);
+	MenuItemsCnt = Menu_AddItem("ÇÀÃĞÓÇÈÒÜ Â ÏĞÈÂÎÄ", 3, MenuFirstIdx, NoScr);
 
 }
 //--------------------------------------------------------------------
