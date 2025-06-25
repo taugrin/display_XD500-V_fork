@@ -336,6 +336,35 @@ const tGroup Group40 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 50---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static char listG50P02[] =  "9600 x19200 x38400 x57600 x115200";
+static const char listG50P03[] =  "NONE\0EVEN\0ODD";
+static const char listG50P04[] =  "ONE\0TWO";
+static const char listG50P08[] =  "нет\0да";
+
+// Параметры группы 50
+static const tParam group50_params[] = {
+    {"01 АДРЕС УСТРОЙСТВА", 0x3200,		1,   247,  PAR_IS_UINT,   1,		NULL, true, false, UNITS_VOID},
+	{"02 СКОРОСТЬ COM1", 	 	0x3201,		0,     4,  PAR_IS_LIST,   1,  listG50P02, true, false, UNITS_VOID},
+	{"03 ЧЕТНОСТЬ COM1", 	 	0x3202,		0,     2,  PAR_IS_LIST,   1,  listG50P03, true, false, UNITS_VOID},
+	{"04 СТОП БИТ COM1", 	 	0x3203,		0,     1,  PAR_IS_LIST,   1,  listG50P04, true, false, UNITS_VOID},
+	{"05 СКОРОСТЬ COM2", 	 	0x3204,		0,     4,  PAR_IS_LIST,   1,  listG50P02, true, false, UNITS_VOID},
+	{"06 ЧЕТНОСТЬ COM2", 	 	0x3205,		0,     2,  PAR_IS_LIST,   1,  listG50P03, true, false, UNITS_VOID},
+	{"07 СТОП БИТ COM2", 	 	0x3206,		0,     1,  PAR_IS_LIST,   1,  listG50P04, true, false, UNITS_VOID},
+	{"08 ОБНОВИТЬ", 	 		0x3207,		0,     1,  PAR_IS_LIST,   1,  listG50P08, true, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group50 = {
+	"50 MODBUS",
+    group50_params,
+    sizeof(group50_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -416,11 +445,11 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22,
-		&Group31, &Group40, &Group64};
+		&Group31, &Group40, &Group50, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22,
-		&Group31, &Group40};
+		&Group31, &Group40, &Group50};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
@@ -473,6 +502,8 @@ void InitParams(void)
 	listG13P02[7] = '\0'; listG13P05[4] = '\0'; listG13P09[4] = '\0';
 
 	listG15P02[7] = '\0';
+
+	listG50P02[5] = '\0'; listG50P02[12] = '\0'; listG50P02[19] = '\0'; listG50P02[26] = '\0';
 
 }
 
