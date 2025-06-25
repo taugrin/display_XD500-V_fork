@@ -227,10 +227,10 @@ static const char listG20P07[] =  "OFF\0ON";
 static const tParam group20_params[] = {
 	{"01 МИН СКОРОСТЬ",		0x1400, (uint16_t)(-1000), 1000,  PAR_IS_INT,  10,  	  NULL,	true, false, UNITS_HZ},
 	{"02 МАКС СКОРОСТЬ",	0x1401, (uint16_t)(-1000), 1000,  PAR_IS_INT,  10,  	  NULL,	true, false, UNITS_HZ},
-	{"03 МАКС ТОК",			0x1402, 				0,  200,  PAR_IS_UINT,  0,  	  NULL,	true, false, UNITS_PROC},
-	{"04 МАКС МОМЕНТ",		0x1403, 			   50,  400,  PAR_IS_UINT,  0,  	  NULL,	true, false, UNITS_PROC},
-	{"05 МИН НАПРЯЖЕНИЕ",	0x1404, 			   70,  100,  PAR_IS_UINT,  0,  	  NULL,	true, false, UNITS_PROC},
-	{"06 МАКС НАПРЯЖЕНИЕ",	0x1405, 			  100,  150,  PAR_IS_UINT,  0,  	  NULL,	true, false, UNITS_PROC},
+	{"03 МАКС ТОК",			0x1402, 				0,  200,  PAR_IS_UINT,  1,  	  NULL,	true, false, UNITS_PROC},
+	{"04 МАКС МОМЕНТ",		0x1403, 			   50,  400,  PAR_IS_UINT,  1,  	  NULL,	true, false, UNITS_PROC},
+	{"05 МИН НАПРЯЖЕНИЕ",	0x1404, 			   70,  100,  PAR_IS_UINT,  1,  	  NULL,	true, false, UNITS_PROC},
+	{"06 МАКС НАПРЯЖЕНИЕ",	0x1405, 			  100,  150,  PAR_IS_UINT,  1,  	  NULL,	true, false, UNITS_PROC},
 	{"07 РЕГУЛЯТОР Vmin",  	0x1406,					0,    1,  PAR_IS_LIST,  1,  listG20P07, true, false, UNITS_VOID},
 	{"08 РЕГУЛЯТОР Vmax",  	0x1407,					0,    1,  PAR_IS_LIST,  1,  listG20P07, true, false, UNITS_VOID},
 
@@ -241,6 +241,34 @@ const tGroup Group20 = {
 	"20 ПРЕДЕЛЫ",
     group20_params,
     sizeof(group20_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
+//--------------------------Группа 22---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG22P01[] =  "ACC/DEC_1\0ACC/DEC_2\0DI1\0DI2\0DI3\0DI4\0DI5";
+static const char listG22P06[] =  "LINEAR\0S-CURVE";
+static const char listG22P07[] =  "S01-CURVE\0S02-CURVE\0S03-CURVE";
+
+// Параметры группы 22
+static const tParam group22_params[] = {
+	{"01 ВЫБ ПАРЫ УСК/ЗАМ",  0x1600,		0,     6,  PAR_IS_LIST,   1, listG22P01, true, false, UNITS_VOID},
+	{"02 ВРЕМЯ УСКОРЕНИЯ 1", 0x1601,		1, 60000,  PAR_IS_UINT,  10,   	   NULL, true, false, UNITS_SEC},
+	{"03 ВРЕМЯ ЗАМЕДЛЕН 1",  0x1602,	    1, 60000,  PAR_IS_UINT,  10,   	   NULL, true, false, UNITS_SEC},
+	{"04 ВРЕМЯ УСКОРЕНИЯ 2", 0x1603,		1, 60000,  PAR_IS_UINT,  10,   	   NULL, true, false, UNITS_SEC},
+	{"05 ВРЕМЯ ЗАМЕДЛЕН 2",  0x1604,	    1, 60000,  PAR_IS_UINT,  10,   	   NULL, true, false, UNITS_SEC},
+	{"06 КРИВАЯ РАЗГОНА",  	 0x1605,		0,     1,  PAR_IS_LIST,   1, listG22P06, true, false, UNITS_VOID},
+	{"07 ФОРМА S-КРИВОЙ",  	 0x1606,		0,     2,  PAR_IS_LIST,   1, listG22P07, true, false, UNITS_VOID},
+	{"08 ВРЕМЯ ЗАМ АВАР",  	 0x1607,		0,  1000,  PAR_IS_UINT, 100, 	   NULL, true, false, UNITS_SEC},
+
+};
+
+// Группа параметров
+const tGroup Group22 = {
+	"22 УСКОР/ТОРМОЖЕНИЕ",
+    group22_params,
+    sizeof(group22_params)/sizeof(tParam),
 	true
 };
 //--------------------------------------------------------------------
@@ -324,10 +352,10 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group64};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
