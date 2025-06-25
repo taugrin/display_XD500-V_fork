@@ -297,6 +297,45 @@ const tGroup Group31 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 40---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG40P05[] =  "NO\0YES";
+static const char listG40P06[] =  "ACT1\0ACT1-ACT2\0ACT1+ACT2\0ACT1*ACT2\0ACT1/ACT2\0MIN(ACT1, ACT2)\0MAX(ACT1, ACT2)";
+static const char listG40P07[] =  "AI1\0AI2\0AI3\0POWER";
+static const char listG40P14[] =  "OFF\0INTERNAL\0DI1\0DI2\0DI3\0DI4\0DI5\0DI6";
+
+// Параметры группы 40
+static const tParam group40_params[] = {
+    {"01 ПИД Kp", 		 	0x2800,					1,  1000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_VOID},
+    {"02 ПИД Ki", 	 	 	0x2801,					1,  1000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_VOID},
+    {"03 ПИД Kd", 	 	 	0x2802,					0,  1000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_VOID},
+	{"04 ФИЛЬТР ДИФФ", 	 	0x2803, 				4, 10000,  PAR_IS_UINT, 100,     	NULL, true, false, UNITS_SEC},
+	{"05 ИНВЕРТ ОШИБ", 	 	0x2804,					0,     1,  PAR_IS_LIST,   1,  listG40P05, true, false, UNITS_VOID},
+	{"06 ВЫБОР СИГН ОС", 	0x2805,					0,     6,  PAR_IS_LIST,   1,  listG40P06, true, false, UNITS_VOID},
+	{"07 ВХОД СИГН ОС1",	0x2806,					0,     3,  PAR_IS_LIST,   1,  listG40P07, true, false, UNITS_VOID},
+	{"08 ВХОД СИГН ОС2", 	0x2807,					0,     3,  PAR_IS_LIST,   1,  listG40P07, true, false, UNITS_VOID},
+	{"09 СИГН ОС1 МИН",		0x2808, (uint16_t)(-1000),  1000,   PAR_IS_INT,  10,  	  	NULL, true, false, UNITS_PROC},
+	{"10 СИГН ОС1 МАКС",	0x2809, (uint16_t)(-1000),  1000,   PAR_IS_INT,  10,  	  	NULL, true, false, UNITS_PROC},
+	{"11 СИГН ОС2 МИН",		0x280A, (uint16_t)(-1000),  1000,   PAR_IS_INT,  10,  	  	NULL, true, false, UNITS_PROC},
+	{"12 СИГН ОС2 МАКС",	0x280B, (uint16_t)(-1000),  1000,   PAR_IS_INT,  10,  	  	NULL, true, false, UNITS_PROC},
+	{"13 ФИЛЬТР СИГН ОС", 	0x280C, 				0,  1000,  PAR_IS_UINT, 100,     	NULL, true, false, UNITS_SEC},
+	{"14 ВЫБОР ФУНК. СОН", 	0x280D,					0,     7,  PAR_IS_LIST,   1,  listG40P14, true, false, UNITS_VOID},
+	{"15 УРОВЕНЬ АКТИВ", 	0x280E,					0, 60000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_RPM},
+	{"16 ЗАДЕРЖКА АКТИВ", 	0x280F,					0, 36000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_SEC},
+	{"17 УРОВЕНЬ ОТКЛ", 	0x2810,					0,  1000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_PROC},
+	{"18 ЗАДЕРЖКА ОТКЛ", 	0x2811,					0, 36000,  PAR_IS_UINT,  10,		NULL, true, false, UNITS_SEC},
+
+};
+
+// Группа параметров
+const tGroup Group40 = {
+	"40 ПИД-РЕГУЛЯТОР",
+    group40_params,
+    sizeof(group40_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -377,11 +416,11 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22,
-		&Group31, &Group64};
+		&Group31, &Group40, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22,
-		&Group31};
+		&Group31, &Group40};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
