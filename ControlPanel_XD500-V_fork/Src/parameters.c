@@ -144,6 +144,27 @@ const tGroup Group13 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 14---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG14P01[] =  "NOT SEL\0READY\0RUN\0FAULT\0FAULT(-1)\0ALARM";
+
+// Параметры группы 14
+static const tParam group14_params[] = {
+	{"01 ТИП ВыХОДА RO1",  	0x0E00, 			    0,     5,  PAR_IS_LIST, 1,     listG14P01, true, false, UNITS_VOID},
+	{"02 ТИП ВыХОДА RO2",  	0x0E01, 			    0,     5,  PAR_IS_LIST, 1,     listG14P01, true, false, UNITS_VOID},
+	{"03 ТИП ВыХОДА RO3",  	0x0E02, 			    0,     5,  PAR_IS_LIST, 1,     listG14P01, true, false, UNITS_VOID}
+
+};
+
+// Группа параметров
+const tGroup Group14 = {
+	"14 РЕЛЕЙНЫЕ ВыХОДЫ",
+    group14_params,
+    sizeof(group14_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -223,10 +244,10 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group64};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
