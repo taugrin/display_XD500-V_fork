@@ -233,5 +233,6 @@ extern uint8_t FastSettingsNum;
 
 const char* GetParamListItem(const tParam* param, uint8_t index);
 
+void InitParams(void);
 
 #endif /* PARAMETERS_H_ */

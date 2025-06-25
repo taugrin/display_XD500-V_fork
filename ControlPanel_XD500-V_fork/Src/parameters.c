@@ -108,6 +108,30 @@ const tGroup Group12 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 13---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG13P01[] =  "НАПРЯЖЕНИЕ\0ТОК";
+static char listG13P02[] =  "0В/0мА x2В/4мА \0TUNED VALUE\0TUNE";// listG13P02[7] = '\0';
+static const char listG13P03[] =  "10В/20мА \0TUNED VALUE\0TUNE";
+
+// Параметры группы 13
+static const tParam group13_params[] = {
+	{"01 ТИП ВХОДА AI1",  	0x0D00, 			    0,     1,  PAR_IS_LIST, 1,     listG13P01, true, false, UNITS_VOID},
+	{"02 МИНИМУМ AI1",  	0x0D01, 			    0,     3,  PAR_IS_LIST, 1,     listG13P02, true, false, UNITS_VOID},
+	{"03 МАКСИМУМ AI1",  	0x0D02, 			    0,     2,  PAR_IS_LIST, 1,     listG13P03, true, false, UNITS_VOID},
+	{"04 T ФИЛЬТРА AI1", 	0x0D03, 				1, 65535,  PAR_IS_UINT, 1000,  NULL,       true, false, UNITS_SEC},
+
+};
+
+// Группа параметров
+const tGroup Group13 = {
+    "13 АНАЛОГОВЫЕ ВХОДЫ",
+    group13_params,
+    sizeof(group13_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -187,10 +211,10 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group64};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
@@ -229,5 +253,16 @@ const char* listItem = GetParamListItem(param, 2); // Получаем 3-й элемент (инде
 
 //--------------------------------------------------------------------
 
+//--------------------------------------------------------------------
+/*
+* InitParams - инициализация параметров
+*/
+void InitParams(void)
+{
+	// Приходится заменяеть 'x' (7-й символ) на '\0', иначе если писать \02мА, воспрнимается не как \0, а как \02
+	listG13P02[7] = '\0';
+}
+
+//--------------------------------------------------------------------
 
 

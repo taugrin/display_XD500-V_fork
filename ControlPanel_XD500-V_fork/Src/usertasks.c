@@ -47,6 +47,9 @@ void vTaskDisplay(void const * argument)
 	// инициализация переменных
 	ControlWord.all = 0; ControlWordOld.all = 0;
 
+	// инициализация параметров
+	InitParams();
+
 	// инициализация корневого меню
 	InitBasicMenu();
 
