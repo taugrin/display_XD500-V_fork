@@ -111,8 +111,13 @@ const tGroup Group12 = {
 //--------------------------Группа 13---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 static const char listG13P01[] =  "НАПРЯЖЕНИЕ\0ТОК";
-static char listG13P02[] =  "0В/0мА x2В/4мА \0TUNED VALUE\0TUNE";// listG13P02[7] = '\0';
+static char listG13P02[] =  "0В/0мА x2В/4мА \0TUNED VALUE\0TUNE";
 static const char listG13P03[] =  "10В/20мА \0TUNED VALUE\0TUNE";
+static char listG13P05[] =  "0мА x4мА \0TUNED VALUE\0TUNE";
+static const char listG13P06[] =  "20мА \0TUNED VALUE\0TUNE";
+static const char listG13P08[] =  "ТОК\0ТЕМПЕРАТУРА";
+static char listG13P09[] =  "0мА x4мА \0TUNED VALUE\0TUNE";
+static const char listG13P10[] =  "20мА \0TUNED VALUE\0TUNE";
 
 // Параметры группы 13
 static const tParam group13_params[] = {
@@ -120,6 +125,13 @@ static const tParam group13_params[] = {
 	{"02 МИНИМУМ AI1",  	0x0D01, 			    0,     3,  PAR_IS_LIST, 1,     listG13P02, true, false, UNITS_VOID},
 	{"03 МАКСИМУМ AI1",  	0x0D02, 			    0,     2,  PAR_IS_LIST, 1,     listG13P03, true, false, UNITS_VOID},
 	{"04 T ФИЛЬТРА AI1", 	0x0D03, 				1, 65535,  PAR_IS_UINT, 1000,  NULL,       true, false, UNITS_SEC},
+	{"05 МИНИМУМ AI2",  	0x0D04, 			    0,     3,  PAR_IS_LIST, 1,     listG13P05, true, false, UNITS_VOID},
+	{"06 МАКСИМУМ AI2",  	0x0D05, 			    0,     2,  PAR_IS_LIST, 1,     listG13P06, true, false, UNITS_VOID},
+	{"07 T ФИЛЬТРА AI2", 	0x0D06, 				1, 65535,  PAR_IS_UINT, 1000,  NULL,       true, false, UNITS_SEC},
+	{"08 ТИП ВХОДА AI3",  	0x0D07, 			    0,     1,  PAR_IS_LIST, 1,     listG13P08, true, false, UNITS_VOID},
+	{"09 МИНИМУМ AI3",  	0x0D08, 			    0,     3,  PAR_IS_LIST, 1,     listG13P09, true, false, UNITS_VOID},
+	{"10 МАКСИМУМ AI3",  	0x0D09, 			    0,     2,  PAR_IS_LIST, 1,     listG13P10, true, false, UNITS_VOID},
+	{"11 T ФИЛЬТРА AI3", 	0x0D0A, 				1, 65535,  PAR_IS_UINT, 1000,  NULL,       true, false, UNITS_SEC}
 
 };
 
@@ -259,8 +271,13 @@ const char* listItem = GetParamListItem(param, 2); // Получаем 3-й элемент (инде
 */
 void InitParams(void)
 {
-	// Приходится заменяеть 'x' (7-й символ) на '\0', иначе если писать \02мА, воспрнимается не как \0, а как \02
-	listG13P02[7] = '\0';
+	/* В некторых списках встречаются друг за другом нуль-терминатор,а потом цифра.
+	 * Эта ситуация воспринимается неправильно, потому что вместо \0 записывается \02 (или другая цифра).
+	 * Поэтому для обхода этой ситуации приходится вместо \0 записывать "левый" символ, например x.
+	 * А потом менять x на \0.
+	 */
+	listG13P02[7] = '\0'; listG13P05[4] = '\0'; listG13P09[4] = '\0';
+
 }
 
 //--------------------------------------------------------------------
