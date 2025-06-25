@@ -194,6 +194,31 @@ const tGroup Group15 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 17---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG17P01[] =  "RESET TO ZERO\0SAVE TO MEMORY";
+static const char listG17P02[] =  "LOCAL\0LOCAL/REMOTE";
+static const char listG17P03[] =  "STOP\0OPERATION\0OPERATION AND REF";
+static const char listG17P04[] =  "NOT SEL\0DI1\0DI2\0DI3\0DI4\0DI5\0DI6";
+
+// Параметры группы 17
+static const tParam group17_params[] = {
+	{"01 ЗАДАНИЕ ПУЛЬТ",  		0x1100,		0,     1,  PAR_IS_LIST, 1,     listG17P01, true, false, UNITS_VOID},
+	{"02 РЕЖИМ КНОПКИ СТОП",	0x1101, 	0,     1,  PAR_IS_LIST, 1,     listG17P02, true, false, UNITS_VOID},
+	{"03 ПЕРЕХОД ДИСТ/МЕСТ",	0x1101, 	0,     2,  PAR_IS_LIST, 1,     listG17P03, true, false, UNITS_VOID},
+	{"04 ПЕРЕХОД ДИСТ/МЕСТ",	0x1101, 	0,     6,  PAR_IS_LIST, 1,     listG17P04, true, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group17 = {
+	"17 НАСТРОЙКИ УПРАВЛ",
+    group17_params,
+    sizeof(group17_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -273,10 +298,10 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group64};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
