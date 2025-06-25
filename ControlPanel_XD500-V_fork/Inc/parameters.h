@@ -36,6 +36,7 @@
 #define UNITS_OHM 			"Ohm"
 #define UNITS_SEC 			"s"
 #define UNITS_MSEC 			"ms"
+#define UNITS_USEC 			"us"
 
 
 #define MODBUSADR_ADR           0x3200

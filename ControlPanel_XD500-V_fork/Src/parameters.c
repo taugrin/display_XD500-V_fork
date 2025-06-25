@@ -165,6 +165,35 @@ const tGroup Group14 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 15---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG15P01[] =  "NOT SEL\0SPEED\0FREQUENCY\0CURRENT\0VOLTAGE\0DC BUS VOLTAGE";
+static char listG15P02[] =  "0-20мА x4-20мА";
+
+// Параметры группы 15
+static const tParam group15_params[] = {
+	{"01 ТИП ВыХОДА AO1",  	0x0F00, 			    0,     5,  PAR_IS_LIST, 1,     listG15P01, true, false, UNITS_VOID},
+	{"02 ДИАПАЗОН AO1",  	0x0F01, 			    0,     1,  PAR_IS_LIST, 1,     listG15P02, true, false, UNITS_VOID},
+	{"03 T ФИЛЬТРА AO1", 	0x0F02, 				1, 10000,  PAR_IS_UINT, 1,     NULL,       true, false, UNITS_MSEC},
+	{"04 ТИП ВыХОДА AO2",  	0x0F03, 			    0,     5,  PAR_IS_LIST, 1,     listG15P01, true, false, UNITS_VOID},
+	{"05 ДИАПАЗОН AO2",  	0x0F04, 			    0,     1,  PAR_IS_LIST, 1,     listG15P02, true, false, UNITS_VOID},
+	{"06 T ФИЛЬТРА AO2", 	0x0F05, 				1, 10000,  PAR_IS_UINT, 1,     NULL,       true, false, UNITS_MSEC},
+	{"07 СКОРОСТЬ 20мА", 	0x0F06, 				0, 65535,  PAR_IS_UINT, 1,     NULL,       true, false, UNITS_RPM},
+	{"08 ЧАСТОТА 20мА", 	0x0F07, 				0, 65535,  PAR_IS_UINT, 1,     NULL,       true, false, UNITS_HZ},
+	{"09 ТОК 20мА", 		0x0F08, 				0, 65535,  PAR_IS_UINT, 1,     NULL,       true, false, UNITS_AMP},
+	{"10 НАПРЯЖЕНИЕ 20мА", 	0x0F09, 				0, 65535,  PAR_IS_UINT, 1,     NULL,       true, false, UNITS_VOLT},
+
+};
+
+// Группа параметров
+const tGroup Group15 = {
+	"15 АНАЛОГОВЫЕ ВыХОДЫ",
+    group15_params,
+    sizeof(group15_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -244,10 +273,10 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group64};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
@@ -298,6 +327,8 @@ void InitParams(void)
 	 * А потом менять x на \0.
 	 */
 	listG13P02[7] = '\0'; listG13P05[4] = '\0'; listG13P09[4] = '\0';
+
+	listG15P02[7] = '\0';
 
 }
 
