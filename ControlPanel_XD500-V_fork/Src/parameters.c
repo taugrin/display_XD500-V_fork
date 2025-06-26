@@ -373,6 +373,29 @@ const tGroup Group27 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 28---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 28
+static const tParam group28_params[] = {
+	{"01 ЗАДАНИЕ",			0x1C00, (uint16_t)(-30000), 30000,   PAR_IS_INT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"02 Kp",				0x1C01,                  0, 10000,  PAR_IS_UINT, 100, NULL,	true, 	false, UNITS_VOID},
+	{"03 Ki",				0x1C02,                  0, 10000,  PAR_IS_UINT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"04 ОГР. МИН",			0x1C03,  (uint16_t)(-1000),    0,    PAR_IS_INT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"05 ОГР. МАКС",		0x1C04,                  0, 1000,    PAR_IS_INT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"06 ЧАСТ. СРЕЗА ФНЧ",	0x1C05,                 10, 1000,   PAR_IS_UINT,   1, NULL,	true, 	false, UNITS_HZ},
+
+};
+
+// Группа параметров
+const tGroup Group28 = {
+	"28 РЕГ. СКОРОСТИ",
+    group28_params,
+    sizeof(group28_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 31---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 static const char listG31P04[] =  "NO\0YES";
@@ -545,11 +568,11 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
-		&Group22, &Group25, &Group26, &Group27, &Group31, &Group40, &Group50, &Group64};
+		&Group22, &Group25, &Group26, &Group27, &Group28, &Group31, &Group40, &Group50, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
-		&Group22, &Group25, &Group26, &Group27, &Group31, &Group40, &Group50};
+		&Group22, &Group25, &Group26, &Group27, &Group28, &Group31, &Group40, &Group50};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
