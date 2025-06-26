@@ -396,15 +396,37 @@ const tGroup Group28 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 29---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 29
+static const tParam group29_params[] = {
+	{"01 ЗАДАНИЕ",			0x1D00, (uint16_t)(-30000), 30000,   PAR_IS_INT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"02 Ki",				0x1D01,                  0, 30000,  PAR_IS_UINT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"03 ОГР. МИН",			0x1D02,  (uint16_t)(-1000),    0,    PAR_IS_INT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"04 ОГР. МАКС",		0x1D03,                  0, 1000,    PAR_IS_INT,  10, NULL,	true, 	false, UNITS_VOID},
+	{"05 ОГР. СКОРОСТИ",	0x1D04,                  0, 6000,   PAR_IS_UINT,   1, NULL,	true, 	false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group29 = {
+	"29 РЕГ. МОМЕНТА",
+    group29_params,
+    sizeof(group29_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 31---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 static const char listG31P04[] =  "NO\0YES";
 
 // Параметры группы 31
 static const tParam group31_params[] = {
-	{"01 КОЛИЧ ПОПЫТОК", 	0x1F00,		0,    10,  PAR_IS_UINT,  1,		NULL, true, false, UNITS_VOID},
-	{"02 ВРЕМЯ АПВ", 		0x1F01,		0,  6000,  PAR_IS_UINT, 10,   	NULL, true, false, UNITS_SEC},
-	{"03 ЗАДЕРЖКА АПВ", 	0x1F02,		0,  6000,  PAR_IS_UINT, 10,   	NULL, true, false, UNITS_SEC},
+	{"01 КОЛИЧ ПОПЫТОК", 	0x1F00,		0,    10,  PAR_IS_UINT,   1,	   NULL, true, false, UNITS_VOID},
+	{"02 ВРЕМЯ АПВ", 		0x1F01,		0,  6000,  PAR_IS_UINT,  10,   	   NULL, true, false, UNITS_SEC},
+	{"03 ЗАДЕРЖКА АПВ", 	0x1F02,		0,  6000,  PAR_IS_UINT,  10,   	   NULL, true, false, UNITS_SEC},
 	{"04 ПЕРЕГРУЗКА", 		0x1F03,		0,     1,  PAR_IS_LIST,   1, listG31P04, true, false, UNITS_VOID},
 	{"05 МИН НАПРЯЖЕНИЕ", 	0x1F04,		0,     1,  PAR_IS_LIST,   1, listG31P04, true, false, UNITS_VOID},
 	{"06 МАКС НАПРЯЖЕН", 	0x1F05,		0,     1,  PAR_IS_LIST,   1, listG31P04, true, false, UNITS_VOID},
@@ -568,11 +590,11 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
-		&Group22, &Group25, &Group26, &Group27, &Group28, &Group31, &Group40, &Group50, &Group64};
+		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group40, &Group50, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
-		&Group22, &Group25, &Group26, &Group27, &Group28, &Group31, &Group40, &Group50};
+		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group40, &Group50};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
