@@ -532,6 +532,28 @@ const tGroup Group50 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 61---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG61P01[] =  "HAND\0AUTOMATIC";
+static const char listG61P03[] =  "ТEST\0MOTOR CONTROL";
+
+// Параметры группы 61
+static const tParam group61_params[] = {
+	{"01 РЕЖ ВЕНТИЛЯТОРА", 	0x3D00,		0,     1,  PAR_IS_LIST,   1, listG61P01, true, false, UNITS_VOID},
+	{"02 РУЧН ЗАД ВЕНТ", 	0x3D01,		0,   100,  PAR_IS_UINT,   1,	   NULL, true, false, UNITS_PROC},
+	{"03 РЕЖИМ ШИМ", 		0x3D02,		0,     1,  PAR_IS_LIST,   1, listG61P03, true, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group61 = {
+	"61 ШИМ И ВЕНТИЛЯТОР",
+    group61_params,
+    sizeof(group61_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------Группа 64---------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
 
@@ -612,11 +634,11 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
-		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group64};
+		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group61, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
-		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50};
+		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group61};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
