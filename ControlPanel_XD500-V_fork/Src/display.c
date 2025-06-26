@@ -50,6 +50,10 @@ void FastSettingsScreenDraw(void);
 
 void RestoreToDefaultScreenDraw(void);
 
+void CopyToPultScreenDraw(void);
+
+void LoadToDriveScreenDraw(void);
+
 void MonitorSettingsScreenViewDraw(void);
 
 void MonitorSettingsScreenEditDraw(void);
@@ -715,6 +719,16 @@ void SettingsScreenDraw(void)
 	// экран сброса настроек параметров на заводские
 	case RestoreToDefaultScr:
 		RestoreToDefaultScreenDraw();
+		break;
+
+	// экран копирования параметров из привода в пульт
+	case CopyToPultScr:
+		CopyToPultScreenDraw();
+		break;
+
+	// экран загрузки параметров из пульта в привод
+	case LoadToDriveScr:
+		LoadToDriveScreenDraw();
 		break;
 
 	// экран для отображения значения настроек мониторинга
@@ -1575,6 +1589,40 @@ void RestoreToDefaultScreenDraw(void)
 	{
 		RstToFactory = false;
 		RstToFactoryState = RstToFactoryStateSetBit;
+		ChildScreen = MenuScr;
+	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* CopyToPultScreenDraw - экран копирования параметров из привода в пульт
+*/
+void CopyToPultScreenDraw(void)
+{
+
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		ChildScreen = MenuScr;
+	}
+
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+* LoadToDriveScreenDraw - экран загрузки параметров из пульта в привод
+*/
+void LoadToDriveScreenDraw(void)
+{
+
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
 		ChildScreen = MenuScr;
 	}
 

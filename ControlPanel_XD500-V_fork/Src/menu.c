@@ -59,8 +59,8 @@ void InitBasicMenu(void)
 	MenuNextIdx = MenuItemsCnt+2;
 	MenuItemsCnt = Menu_AddItem("гюбндяйхе мюярпнийх", 3, MenuNextIdx, RestoreToDefaultScr); MenuFirstIdx = MenuItemsCnt;
 	MenuNextIdx = MenuItemsCnt+2;
-	MenuItemsCnt = Menu_AddItem("йнохпнбюрэ б оскэр", 3, MenuNextIdx, NoScr);
-	MenuItemsCnt = Menu_AddItem("гюцпсгхрэ б опхбнд", 3, MenuFirstIdx, NoScr);
+	MenuItemsCnt = Menu_AddItem("йнохпнбюрэ б оскэр", 3, MenuNextIdx, CopyToPultScr);
+	MenuItemsCnt = Menu_AddItem("гюцпсгхрэ б опхбнд", 3, MenuFirstIdx, LoadToDriveScr);
 
 }
 //--------------------------------------------------------------------
