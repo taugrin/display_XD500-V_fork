@@ -245,6 +245,33 @@ const tGroup Group20 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------√руппа 21---------------------------------
+// —писки параметров (одной строкой с \0 разделител€ми)
+static const char listG21P01[] =  "SCALAR\0VECTOR\0DTC\0EMF CONTROL\0ID_RUN";
+static const char listG21P02[] =  "SPEED CTRL\0TORQUE CTRL";
+static const char listG21P03[] =  "COAST\0RAMP";
+static char listG21P04[] =  "2к√ц x3к√ц x4к√ц x5к√ц x6к√ц x8к√ц x10к√ц x12к√ц x16к√ц";
+static const char listG21P05[] =  "SENSORLESS DRIVE\0SPEED SENSOR DRIVE\0WIDE SP. RANGE DRIVE";
+
+// ѕараметры группы 21
+static const tParam group21_params[] = {
+	{"01 –≈∆»ћ ”ѕ–ј¬Ћ≈Ќ»я",  	0x1500,		0,    4,  PAR_IS_LIST,  1,  listG21P01, true, false, UNITS_VOID},
+	{"02 ћј –ќѕ–ќ√–јћћј",  	0x1501,		0,    1,  PAR_IS_LIST,  1,  listG21P02, true, false, UNITS_VOID},
+	{"03 “ќ–ћќ∆≈Ќ»≈",  		0x1502,		0,    1,  PAR_IS_LIST,  1,  listG21P03, true, false, UNITS_VOID},
+	{"04 „ј—“ќ“ј Ў»ћ",  	0x1503,		0,    8,  PAR_IS_LIST,  1,  listG21P04, true, false, UNITS_VOID},
+	{"05 “»ѕ ѕ–»¬ќƒј",  	0x1504,		0,    2,  PAR_IS_LIST,  1,  listG21P05, true, false, UNITS_VOID},
+
+};
+
+// √руппа параметров
+const tGroup Group21 = {
+	"21 ”ѕ–ј¬Ћ≈Ќ»≈ ƒ¬»√",
+    group21_params,
+    sizeof(group21_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 //--------------------------√руппа 22---------------------------------
 // —писки параметров (одной строкой с \0 разделител€ми)
 static const char listG22P01[] =  "ACC/DEC_1\0ACC/DEC_2\0DI1\0DI2\0DI3\0DI4\0DI5";
@@ -444,12 +471,12 @@ uint8_t EventNum = 0; // индекс просматриваемого событи€
 
 
 
-const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22,
-		&Group31, &Group40, &Group50, &Group64};
+const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
+		&Group22, &Group31, &Group40, &Group50, &Group64};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
-const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group22,
-		&Group31, &Group40, &Group50};
+const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
+		&Group22, &Group31, &Group40, &Group50};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
@@ -502,6 +529,9 @@ void InitParams(void)
 	listG13P02[7] = '\0'; listG13P05[4] = '\0'; listG13P09[4] = '\0';
 
 	listG15P02[7] = '\0';
+
+	listG21P04[5] = '\0'; listG21P04[11] = '\0'; listG21P04[17] = '\0'; listG21P04[23] = '\0';
+	listG21P04[29] = '\0'; listG21P04[35] = '\0'; listG21P04[42] = '\0'; listG21P04[49] = '\0';
 
 	listG50P02[5] = '\0'; listG50P02[12] = '\0'; listG50P02[19] = '\0'; listG50P02[26] = '\0';
 
