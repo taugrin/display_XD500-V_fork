@@ -129,9 +129,41 @@ bool writeDisplayRef(uint16_t data)
 
 //--------------------------------------------------------------------
 /*
-*
+* readParamFromEeprom - чтение данных параметра из eeprom
 */
+bool readParamFromEeprom(uint16_t param_adr, uint16_t *pdata)
+{
+	uint16_t dataAdress;
+	uint8_t data[2];
+	HAL_StatusTypeDef readRes;
 
+	uint16_t param_adr_hi, param_adr_lo;
+
+	param_adr_hi = (param_adr >> 8) & 0xFF;
+	param_adr_lo = param_adr & 0xFF;
+
+	if (param_adr_lo < 31)
+	{
+		dataAdress = (param_adr_hi * EEPROM_PAGE_SIZE) + (param_adr_lo * 2);
+	}
+	else
+	{
+		dataAdress = (param_adr_hi * EEPROM_PAGE_SIZE + 1) + ((param_adr_lo - 31) * 2);
+	}
+
+	readRes = HAL_I2C_Mem_Read(&hi2c1, EEPROM_ADR, dataAdress, I2C_MEMADD_SIZE_16BIT, data, 2, EEPROM_TIME_OUT);
+	*pdata = (data[1] << 8) | (data[0]);
+
+	if (readRes == HAL_OK)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+
+}
 //--------------------------------------------------------------------
 
 //--------------------------------------------------------------------

@@ -55,6 +55,7 @@ uint16_t readDisplayRef(void);
 
 bool writeDisplayRef(uint16_t data);
 
+bool readParamFromEeprom(uint16_t param_adr, uint16_t *pdata);
 
 bool writeParamToEeprom(uint16_t param_adr, uint16_t data);
 
