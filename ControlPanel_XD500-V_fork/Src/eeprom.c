@@ -134,3 +134,50 @@ bool writeDisplayRef(uint16_t data)
 
 //--------------------------------------------------------------------
 
+//--------------------------------------------------------------------
+/*
+* writeParamToEeprom - запись данных параметра в eeprom
+*/
+bool writeParamToEeprom(uint16_t param_adr, uint16_t data)
+{
+	uint16_t dataAdress;
+	HAL_StatusTypeDef writeRes;
+	uint8_t pData[2];
+
+	uint16_t param_adr_hi, param_adr_lo;
+
+	param_adr_hi = (param_adr >> 8) & 0xFF;
+	param_adr_lo = param_adr & 0xFF;
+
+	if (param_adr_lo < 31)
+	{
+		dataAdress = (param_adr_hi * EEPROM_PAGE_SIZE) + (param_adr_lo * 2);
+	}
+	else
+	{
+		dataAdress = (param_adr_hi * EEPROM_PAGE_SIZE + 1) + ((param_adr_lo - 31) * 2);
+	}
+
+	pData[0] = data & 0xFF;
+	pData[1] = (data >> 8) & 0xFF;
+
+	writeRes = HAL_I2C_Mem_Write(&hi2c1, EEPROM_ADR, dataAdress, I2C_MEMADD_SIZE_16BIT, pData, 2, EEPROM_TIME_OUT);
+
+	if (writeRes == HAL_OK)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+*
+*/
+
+//--------------------------------------------------------------------
+

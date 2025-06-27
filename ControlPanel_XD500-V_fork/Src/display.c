@@ -1601,13 +1601,69 @@ void RestoreToDefaultScreenDraw(void)
 */
 void CopyToPultScreenDraw(void)
 {
+	bool res = false;
+	uint8_t err_cnt = 0;
+	bool notDone = false;
+	uint16_t notDoneAdr = 0xFFFF;
 
+	// отрисовка строки статуса
+	StatusBarDraw();
 
-	// Кнопка reset
-	if (CheckKeySem(xButtonResetSemaphore))
+	// Текст
+	DrawStringWithAlign(2, ALIGN_CENTER, "КОПИРОВАНИЕ");
+	DrawStringWithAlign(4, ALIGN_CENTER, "ПРИВОД -> ПУЛЬТ");
+	ST7565_display();
+
+	uint8_t i = 0;
+	while (i < AllGroupsCnt)
 	{
-		ChildScreen = MenuScr;
+		uint8_t j = 0;
+		if (AllGroups[i]->saveInEeprom) // группа сохраняется в eeprom
+		{
+			while (j < AllGroups[i]->paramCnt) // перебираем параметры группы
+			{
+				UsbReadData(AllGroups[i]->params[j].adr, 1, ReadData);
+				res = writeParamToEeprom(AllGroups[i]->params[j].adr, ReadData[0]);
+				if (res)
+				{
+					err_cnt = 0;
+					j++;
+				}
+				else
+				{
+					if (err_cnt < 10) {err_cnt++;}
+					else
+					{
+						notDone = true;
+						notDoneAdr = AllGroups[i]->params[j].adr;
+					}
+				}
+
+				if (notDone) {break;}
+
+			}
+		}
+
+		if (notDone) {break;}
+		else {i++;}
 	}
+
+	if (notDone) // была ошибка при сохранении
+	{
+		char CharArray[12];
+
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 0, 6, "ОШИБКА: ");
+		uint16_to_hex_str(notDoneAdr, CharArray, 4);
+		ST7565_drawstring(DISP_LEFT_BOUND + FONT_GAP * 7, 6, CharArray);
+	}
+	else // сохранение выполнено
+	{
+		DrawStringWithAlign(6, ALIGN_CENTER, "ВЫПОЛНЕНО");
+	}
+	ST7565_display();
+	vTaskDelay(1000);
+
+	ChildScreen = MenuScr;
 
 }
 //--------------------------------------------------------------------

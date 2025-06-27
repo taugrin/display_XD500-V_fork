@@ -55,4 +55,7 @@ uint16_t readDisplayRef(void);
 
 bool writeDisplayRef(uint16_t data);
 
+
+bool writeParamToEeprom(uint16_t param_adr, uint16_t data);
+
 #endif /* EEPROM_H_ */
