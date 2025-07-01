@@ -611,6 +611,27 @@ const tGroup Group90 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 92---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 92
+static const tParam group92_params[] = {
+	{"01 TCV ON",			0x5C00,		0,     1,  PAR_IS_UINT,    1,		 NULL, true, false, UNITS_VOID},
+	{"02 TCV LagTime",		0x5C01,		0,   200,  PAR_IS_UINT,   10,		 NULL, true, false, UNITS_USEC},
+	{"03 TCV Gain",			0x5C02,		0, 10000,  PAR_IS_UINT,   10,		 NULL, true, false, UNITS_VOID},
+	{"04 TCV Lim",			0x5C03,		0,   500,  PAR_IS_UINT,   10,		 NULL, true, false, UNITS_VOLT},
+
+};
+
+// Группа параметров
+const tGroup Group92 = {
+	"92 НАСТРОЙКИ TCV",
+    group92_params,
+    sizeof(group92_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 
 //--------------------------Мониторинг--------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
@@ -671,12 +692,12 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
 		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group61, &Group64,
-		&Group90};
+		&Group90, &Group92};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, /*&Group21,*/
 		&Group22, /*&Group25, &Group26, &Group27, &Group28, &Group29,*/ &Group31, /*&Group34,*/ &Group40, &Group50, /*&Group61,*/
-		&Group90};
+		&Group90, &Group92};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
