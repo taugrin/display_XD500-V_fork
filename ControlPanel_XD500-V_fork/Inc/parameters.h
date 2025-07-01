@@ -16,9 +16,6 @@
 // максимальная длина символов в названии группы или параметра
 #define MAX_NAME_LENGTH		21
 
-// максимальное количество элементов в списке
-#define MAX_LIST_CNT		12
-
 #define PAR_IS_UINT			0
 #define PAR_IS_INT			1
 #define PAR_IS_LIST			2

@@ -16,7 +16,7 @@
 //
 // Defines
 //
-#define MENU_NAME_MAXLENGTH	20
+#define MENU_NAME_MAXLENGTH	21
 
 #define MAX_MENU_ITEMS 64   // Максимум пунктов меню
 

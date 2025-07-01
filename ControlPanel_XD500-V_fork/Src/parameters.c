@@ -632,6 +632,28 @@ const tGroup Group92 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 93---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 93
+static const tParam group93_params[] = {
+	{"01 ВКЛ. ДИН. ТОРМ.",		0x5D00,		0,     1,  PAR_IS_UINT,    1,		 NULL, true, false, UNITS_VOID},
+	{"02 НИЖ. ПРЕДЕЛ НАПР",		0x5D01,  5000, 10000,  PAR_IS_UINT,   10,		 NULL, true, false, UNITS_VOLT},
+	{"03 ВЕРХ. ПРЕДЕЛ НАПР",	0x5D02,	 5000, 10000,  PAR_IS_UINT,   10,		 NULL, true, false, UNITS_VOLT},
+	{"04 КОЭФФИЦИЕНТ Kp",		0x5D03,		0,  1000,  PAR_IS_UINT,   10,		 NULL, true, false, UNITS_VOID},
+	{"05 ЧАСТОТА ШИМ",			0x5D04,	 1000, 10000,  PAR_IS_UINT,    1,		 NULL, true, false, UNITS_HZ},
+
+};
+
+// Группа параметров
+const tGroup Group93 = {
+	"93 ФУНКЦ. ДИН. ТОРМ.",
+    group93_params,
+    sizeof(group93_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 
 //--------------------------Мониторинг--------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
@@ -692,12 +714,12 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
 		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group61, &Group64,
-		&Group90, &Group92};
+		&Group90, &Group92, &Group93};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, /*&Group21,*/
 		&Group22, /*&Group25, &Group26, &Group27, &Group28, &Group29,*/ &Group31, /*&Group34,*/ &Group40, &Group50, /*&Group61,*/
-		&Group90, &Group92};
+		&Group90, &Group92, &Group93};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
