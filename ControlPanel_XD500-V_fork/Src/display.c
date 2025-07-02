@@ -452,6 +452,30 @@ void MonitorScreenDraw(void)
 		NextMainScreen();
 	}
 
+	// Кнопка вниз
+	if (CheckKeySem(xButtonDownSemaphore))
+	{
+		// просто сброс семафора нажатия кнопки
+	}
+
+	// Кнопка вверх
+	if (CheckKeySem(xButtonUpSemaphore))
+	{
+		// просто сброс семафора нажатия кнопки
+	}
+
+	// Кнопка enter
+	if (CheckKeySem(xButtonEnterSemaphore))
+	{
+		// просто сброс семафора нажатия кнопки
+	}
+
+	// Кнопка reset
+	if (CheckKeySem(xButtonResetSemaphore))
+	{
+		// просто сброс семафора нажатия кнопки
+	}
+
 	vTaskDelay(200);
 }
 //--------------------------------------------------------------------
