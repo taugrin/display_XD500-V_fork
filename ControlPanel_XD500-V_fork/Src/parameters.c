@@ -708,6 +708,90 @@ const tGroup Group96 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 97---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 97
+static const tParam group97_params[] = {
+	{"01 ВЫБОР АКТ. ДВИГ", 	 	0x6100,		0,    10,  PAR_IS_LIST,    1,  listG96P01,  true, false, UNITS_VOID},
+	{"02 НОМ. НАПРЯЖЕНИЕ",		0x6101,		0,  1000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_VOLT},
+	{"03 НОМ. ЧАСТОТА",			0x6102,		0,   100,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_HZ},
+	{"04 НОМ. МОЩНОСТЬ",		0x6103,		0,   600,  PAR_IS_UINT,   10,		 NULL,  true, false, UNITS_KWT},
+	{"05 НОМ. СКОРОСТЬ",		0x6104,		0,  6000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_RPM},
+	{"06 НОМ. ТОК",				0x6105,		0,   100,  PAR_IS_UINT,  100,		 NULL,  true, false, UNITS_AMP},
+	{"07 СОПР. СТАТОРА Rs",		0x6106,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+	{"08 ИНД. НАМАГН. M",		0x6107,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"09 ИНД. РАССЕЯНИЯ Lg",	0x6108,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"10 СОПР. РОТОРА Rr",		0x6109,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+    {"11 СТАТУС ДВИГАТЕЛЯ",		0x610A,		0,     2,  PAR_IS_LIST,    1,  listG96P11, false, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group97 = {
+	"97 ПАРАМ. ДВИГ. #2",
+    group97_params,
+    sizeof(group97_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
+//--------------------------Группа 98---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 98
+static const tParam group98_params[] = {
+	{"01 ВЫБОР АКТ. ДВИГ", 	 	0x6200,		0,    10,  PAR_IS_LIST,    1,  listG96P01,  true, false, UNITS_VOID},
+	{"02 НОМ. НАПРЯЖЕНИЕ",		0x6201,		0,  1000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_VOLT},
+	{"03 НОМ. ЧАСТОТА",			0x6202,		0,   100,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_HZ},
+	{"04 НОМ. МОЩНОСТЬ",		0x6203,		0,   600,  PAR_IS_UINT,   10,		 NULL,  true, false, UNITS_KWT},
+	{"05 НОМ. СКОРОСТЬ",		0x6204,		0,  6000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_RPM},
+	{"06 НОМ. ТОК",				0x6205,		0,   100,  PAR_IS_UINT,  100,		 NULL,  true, false, UNITS_AMP},
+	{"07 СОПР. СТАТОРА Rs",		0x6206,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+	{"08 ИНД. НАМАГН. M",		0x6207,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"09 ИНД. РАССЕЯНИЯ Lg",	0x6208,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"10 СОПР. РОТОРА Rr",		0x6209,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+    {"11 СТАТУС ДВИГАТЕЛЯ",		0x620A,		0,     2,  PAR_IS_LIST,    1,  listG96P11, false, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group98 = {
+	"98 ПАРАМ. ДВИГ. #3",
+    group98_params,
+    sizeof(group98_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
+//--------------------------Группа 99---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+
+// Параметры группы 99
+static const tParam group99_params[] = {
+	{"01 ВЫБОР АКТ. ДВИГ", 	 	0x6300,		0,    10,  PAR_IS_LIST,    1,  listG96P01,  true, false, UNITS_VOID},
+	{"02 НОМ. НАПРЯЖЕНИЕ",		0x6301,		0,  1000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_VOLT},
+	{"03 НОМ. ЧАСТОТА",			0x6302,		0,   100,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_HZ},
+	{"04 НОМ. МОЩНОСТЬ",		0x6303,		0,   600,  PAR_IS_UINT,   10,		 NULL,  true, false, UNITS_KWT},
+	{"05 НОМ. СКОРОСТЬ",		0x6304,		0,  6000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_RPM},
+	{"06 НОМ. ТОК",				0x6305,		0,   100,  PAR_IS_UINT,  100,		 NULL,  true, false, UNITS_AMP},
+	{"07 СОПР. СТАТОРА Rs",		0x6306,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+	{"08 ИНД. НАМАГН. M",		0x6307,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"09 ИНД. РАССЕЯНИЯ Lg",	0x6308,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"10 СОПР. РОТОРА Rr",		0x6309,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+    {"11 СТАТУС ДВИГАТЕЛЯ",		0x630A,		0,     2,  PAR_IS_LIST,    1,  listG96P11, false, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group99 = {
+	"99 ПАРАМ. ДВИГ. #4",
+    group99_params,
+    sizeof(group99_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 
 //--------------------------Мониторинг--------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
@@ -768,12 +852,12 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
 		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group61, &Group64,
-		&Group90, &Group92, &Group93, &Group94, &Group96};
+		&Group90, &Group92, &Group93, &Group94, &Group96, &Group97, &Group98, &Group99};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, /*&Group21,*/
 		&Group22, /*&Group25, &Group26, &Group27, &Group28, &Group29,*/ &Group31, /*&Group34,*/ &Group40, &Group50, /*&Group61,*/
-		&Group90, &Group92, &Group93, &Group94, &Group96};
+		&Group90, &Group92, &Group93, &Group94, &Group96, &Group97, &Group98, &Group99};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
