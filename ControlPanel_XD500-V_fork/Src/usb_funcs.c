@@ -101,15 +101,15 @@ void UsbReadData(uint16_t ParamAdr, uint16_t ParamCnt, uint16_t *ParamData)
 
 		if (noResponseCount > USB_MAX_REQUEST)
 		{
-			/*ST7565_clear();
+			ST7565_clear();
 			ST7565_drawstring(6, 4, "USB long no response");
 			ST7565_drawstring(6, 5, "RESET!");
 			ST7565_display();
-			vTaskDelay(1000);*/
-			//NVIC_SystemReset();
-			noResponseCount = 0;
+			vTaskDelay(1000);
+			NVIC_SystemReset();
+			/*noResponseCount = 0;
 			USBH_Restart();  // Перезапуск USB Host
-			//return;
+			*/
 		}
 
 	}
@@ -162,15 +162,15 @@ void UsbWriteReg(uint16_t ParamAdr, uint16_t ParamData)
 
 		if (noResponseCount > USB_MAX_REQUEST)
 		{
-			/*ST7565_clear();
+			ST7565_clear();
 			ST7565_drawstring(6, 4, "USB long no response");
 			ST7565_drawstring(6, 5, "RESET!");
 			ST7565_display();
-			vTaskDelay(1000);*/
-			//NVIC_SystemReset();
-			noResponseCount = 0;
+			vTaskDelay(1000);
+			NVIC_SystemReset();
+			/*noResponseCount = 0;
 			USBH_Restart();  // Перезапуск USB Host
-			//return;
+			*/
 		}
 
 	}
