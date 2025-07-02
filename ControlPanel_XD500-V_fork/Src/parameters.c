@@ -857,7 +857,7 @@ const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, /*&Group21,*/
 		&Group22, /*&Group25, &Group26, &Group27, &Group28, &Group29,*/ &Group31, /*&Group34,*/ &Group40, &Group50, /*&Group61,*/
-		&Group90, &Group92, &Group93, &Group94, &Group96, &Group97, &Group98, &Group99};
+		&Group90, /*&Group92,*/ /*&Group93,*/ /*&Group94,*/ &Group96, &Group97, &Group98, &Group99};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
