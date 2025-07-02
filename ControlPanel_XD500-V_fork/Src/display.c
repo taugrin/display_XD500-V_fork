@@ -616,12 +616,18 @@ void ReferenceScreenDraw(void)
 		DrawStringWithAlign(4, ALIGN_CENTER, paramDataCharBuf);
 
 
-		// Нажатие кнопки Enter, завершение редактирования параметра
+		// Нажатие кнопки Enter,  запись задания и завершение редактирования
 		if (CheckKeySem(xButtonEnterSemaphore))
 		{
 			ReferenceEditMode = false;
 			Reference = ReferenceEditData;
 			writeDisplayRef(Reference);
+		}
+
+		// Нажатие кнопки reset, завершение редактирования без записи задания
+		if (CheckKeySem(xButtonResetSemaphore))
+		{
+			ReferenceEditMode = false;
 		}
 
 	}
