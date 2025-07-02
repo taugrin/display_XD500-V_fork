@@ -2,11 +2,17 @@
 // Included Files
 //
 #include "usb_funcs.h"
+#include "usb_host.h"
+#include "usbh_core.h"
+
+extern USBH_HandleTypeDef hUsbHostFS;  // Дескриптор USB Host (объявлен в usb_host.c)
 
 //
 // Function Prototypes
 //
 uint8_t get_crc8(uint8_t *addr, uint8_t len);
+
+void USBH_Restart(void);
 
 //
 // Global Variables
@@ -95,10 +101,15 @@ void UsbReadData(uint16_t ParamAdr, uint16_t ParamCnt, uint16_t *ParamData)
 
 		if (noResponseCount > USB_MAX_REQUEST)
 		{
-			ST7565_drawstring(10, 5, "USB 50 no resp, RESET!");
+			/*ST7565_clear();
+			ST7565_drawstring(6, 4, "USB long no response");
+			ST7565_drawstring(6, 5, "RESET!");
 			ST7565_display();
-			vTaskDelay(500);
-			NVIC_SystemReset();
+			vTaskDelay(1000);*/
+			//NVIC_SystemReset();
+			noResponseCount = 0;
+			USBH_Restart();  // Перезапуск USB Host
+			//return;
 		}
 
 	}
@@ -151,12 +162,71 @@ void UsbWriteReg(uint16_t ParamAdr, uint16_t ParamData)
 
 		if (noResponseCount > USB_MAX_REQUEST)
 		{
-			ST7565_drawstring(10, 5, "USB 50 no resp, RESET!");
+			/*ST7565_clear();
+			ST7565_drawstring(6, 4, "USB long no response");
+			ST7565_drawstring(6, 5, "RESET!");
 			ST7565_display();
-			vTaskDelay(500);
-			NVIC_SystemReset();
+			vTaskDelay(1000);*/
+			//NVIC_SystemReset();
+			noResponseCount = 0;
+			USBH_Restart();  // Перезапуск USB Host
+			//return;
 		}
 
 	}
 }
+//--------------------------------------------------------------------
+
+//--------------------------------------------------------------------
+/*
+ * USBH_Restart - полный перезапуск USB Host
+ */
+void USBH_Restart(void)
+{
+    // 1. Остановка и деинициализация USB Host
+    USBH_Stop(&hUsbHostFS);
+    USBH_DeInit(&hUsbHostFS);
+
+    // 2. Задержка для сброса питания (если нужно)
+    //HAL_Delay(200);  // 200 мс для гарантированного детекта отключения
+    vTaskDelay(50);
+
+    // 3. Повторная инициализация
+    MX_USB_HOST_Init();  // Функция, сгенерированная CubeMX
+
+    // 4. Запуск USB Host
+    USBH_Start(&hUsbHostFS);
+}
+/*void USBH_Restart(void) {
+    // 1. Остановка USB Host
+    USBH_Stop(&hUsbHostFS);
+
+    // 2. Принудительный сброс USB периферии (критично для GD32!)
+    __HAL_RCC_USB_OTG_FS_FORCE_RESET();
+    HAL_Delay(50);
+    __HAL_RCC_USB_OTG_FS_RELEASE_RESET();
+    HAL_Delay(10);
+
+    // 3. Деинициализация
+    USBH_DeInit(&hUsbHostFS);
+
+    // 4. Очистка всех URBs (если есть доступ)
+    //for (int i = 0; i < USBH_MAX_PIPES; i++) {
+    //    if (hHCD->hc[i].state != HC_IDLE) {
+    //        hHCD->hc[i].state = HC_HALTED;
+    //    }
+    //}
+
+    // 5. Задержка для сброса линии USB (GD32 требует больше времени!)
+    HAL_Delay(300);
+
+    // 6. Повторная инициализация
+    MX_USB_HOST_Init();
+    USBH_Start(&hUsbHostFS);
+
+    // 7. Проверка успешности
+    if (hUsbHostFS.gState == USBH_FAIL) {
+        Error_Handler();
+    }
+}*/
 //--------------------------------------------------------------------
