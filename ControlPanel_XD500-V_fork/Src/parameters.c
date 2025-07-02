@@ -677,6 +677,37 @@ const tGroup Group94 = {
 };
 //--------------------------------------------------------------------
 
+//--------------------------Группа 96---------------------------------
+// Списки параметров (одной строкой с \0 разделителями)
+static const char listG96P01[] =  "NEW MOTOR\0АИР160S2(15k)\0АИР132M2(11k)\0AИР112M2(7k5)\0АИР100L2(5k5)\0АИР100S2(4k)\0АИР90L2(3k)\0АИР160M2(18k5)\0АИР132S4(7k5)\0АИР80B4(1k5)\0АИР71В4(750W)\0АИР63A4(250W)";
+static const char listG96P11[] =  "NOT IDENTIFIED\0IDENTIFIED\0LIBRARY";
+
+
+// Параметры группы 96
+static const tParam group96_params[] = {
+	{"01 ВЫБОР АКТ. ДВИГ", 	 	0x6000,		0,    10,  PAR_IS_LIST,    1,  listG96P01,  true, false, UNITS_VOID},
+	{"02 НОМ. НАПРЯЖЕНИЕ",		0x6001,		0,  1000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_VOLT},
+	{"03 НОМ. ЧАСТОТА",			0x6002,		0,   100,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_HZ},
+	{"04 НОМ. МОЩНОСТЬ",		0x6003,		0,   600,  PAR_IS_UINT,   10,		 NULL,  true, false, UNITS_KWT},
+	{"05 НОМ. СКОРОСТЬ",		0x6004,		0,  6000,  PAR_IS_UINT,    1,		 NULL,  true, false, UNITS_RPM},
+	{"06 НОМ. ТОК",				0x6005,		0,   100,  PAR_IS_UINT,  100,		 NULL,  true, false, UNITS_AMP},
+	{"07 СОПР. СТАТОРА Rs",		0x6006,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+	{"08 ИНД. НАМАГН. M",		0x6007,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"09 ИНД. РАССЕЯНИЯ Lg",	0x6008,		0, 10000,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_HENRI},
+	{"10 СОПР. РОТОРА Rr",		0x6009,		0, 65535,  PAR_IS_UINT, 1000,		 NULL, false, false, UNITS_OHM},
+    {"11 СТАТУС ДВИГАТЕЛЯ",		0x600A,		0,     2,  PAR_IS_LIST,    1,  listG96P11, false, false, UNITS_VOID},
+
+};
+
+// Группа параметров
+const tGroup Group96 = {
+	"96 ПАРАМ. ДВИГ. #1",
+    group96_params,
+    sizeof(group96_params)/sizeof(tParam),
+	true
+};
+//--------------------------------------------------------------------
+
 
 //--------------------------Мониторинг--------------------------------
 // Списки параметров (одной строкой с \0 разделителями)
@@ -737,12 +768,12 @@ uint8_t EventNum = 0; // индекс просматриваемого события
 
 const tGroup* const AllGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, &Group21,
 		&Group22, &Group25, &Group26, &Group27, &Group28, &Group29, &Group31, &Group34, &Group40, &Group50, &Group61, &Group64,
-		&Group90, &Group92, &Group93, &Group94};
+		&Group90, &Group92, &Group93, &Group94, &Group96};
 const uint16_t AllGroupsCnt = sizeof(AllGroups)/sizeof(tGroup*);
 
 const tGroup* const MenuGroups[] = {&Group10, &Group11, &Group12, &Group13, &Group14, &Group15, &Group17, &Group20, /*&Group21,*/
 		&Group22, /*&Group25, &Group26, &Group27, &Group28, &Group29,*/ &Group31, /*&Group34,*/ &Group40, &Group50, /*&Group61,*/
-		&Group90, &Group92, &Group93, &Group94};
+		&Group90, &Group92, &Group93, &Group94, &Group96};
 const uint16_t MenuGroupsCnt = sizeof(MenuGroups)/sizeof(tGroup*);
 
 const tParam* const FastSettings[] = {
